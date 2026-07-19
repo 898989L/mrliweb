@@ -653,40 +653,26 @@
 
 
 @media (max-width: 960px) {
-
   .lab-overlay {
-
     padding: 8px;
-
   }
-
-
 
   .lab {
-
     height: calc(100vh - 16px);
-
   }
-
-
 
   .lab__body {
-
     grid-template-columns: 1fr;
-
     grid-template-rows: auto 1fr;
-
   }
 
-
-
   .lab__side {
-
     border-right: 0;
-
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-
     max-height: 220px;
+  }
+}
+
 /* Motionsites-inspired liquid glass lab shell */
 .lab {
   border-radius: 22px !important;
