@@ -1,8 +1,11 @@
-# MrLi · 个人作品集网站
+﻿# MrLi · 个人作品集网站
 
 暗色系、科技感个人作品集，面向 **视觉设计 / AI 设计 / Java 后端** 求职与兼职合作展示。基于 React + Vite 构建，PC 端优先，版心约 **1700px**。
 
 项目名：**MrLi**（npm package: `mrli`）
+
+部署说明见：**[部署文档.md](./部署文档.md)**  
+线上地址：https://898989l.github.io/mrliweb/
 
 ---
 
