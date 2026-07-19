@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { profile } from '../data/profile'
+import { asset } from '../utils/asset'
 import './About.css'
 
 function StatCounter({ value, suffix }: { value: number; suffix: string }) {
@@ -56,7 +57,7 @@ export default function About() {
             transition={{ duration: 0.7, delay: 0.1 }}
           >
             <div className="about__avatar-wrap">
-              <img src="/avatar.jpg" alt={profile.name} className="about__avatar" loading="lazy" decoding="async" />
+              <img src={asset('avatar.jpg')} alt={profile.name} className="about__avatar" loading="lazy" decoding="async" />
               <div className="about__avatar-ring" />
             </div>
             <h3 className="about__name font-name">{profile.name}</h3>

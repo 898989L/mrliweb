@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { profile } from '../data/profile'
+import { asset } from '../utils/asset'
 import SplitText from './SplitText'
 import RoleRotator from './RoleRotator'
 import './Hero.css'
@@ -72,7 +73,7 @@ export default function Hero() {
             </a>
             {profile.links.resumePdf && (
               <a
-                href={profile.links.resumePdf}
+                href={asset(profile.links.resumePdf)}
                 className="btn-ghost"
                 download={profile.links.resumeFileName}
               >

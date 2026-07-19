@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { profile } from '../data/profile'
+import { asset } from '../utils/asset'
 import ContactForm from './ContactForm'
 import MotionToggle from './MotionToggle'
 import './Contact.css'
@@ -35,7 +36,7 @@ export default function Contact() {
             </a>
             {profile.links.resumePdf && (
               <a
-                href={profile.links.resumePdf}
+                href={asset(profile.links.resumePdf)}
                 className="btn-ghost"
                 download={profile.links.resumeFileName}
               >
@@ -64,7 +65,7 @@ export default function Contact() {
           transition={{ duration: 0.7, delay: 0.2 }}
         >
           <div className="contact__wechat-profile">
-            <img src="/wechat-avatar.jpg" alt={`${profile.name} 微信头像`} className="contact__wechat-avatar" loading="lazy" decoding="async" />
+            <img src={asset('wechat-avatar.jpg')} alt={`${profile.name} 微信头像`} className="contact__wechat-avatar" loading="lazy" decoding="async" />
             <div className="contact__wechat-info">
               <strong className="font-name">{profile.name}</strong>
               <span>扫码添加好友</span>
@@ -72,7 +73,7 @@ export default function Contact() {
           </div>
           <div className="contact__qr-zone">
             <div className="contact__qr-wrap">
-              <img src="/wechat-qr.jpg" alt="微信二维码" className="contact__qr-img" loading="lazy" decoding="async" />
+              <img src={asset('wechat-qr.jpg')} alt="微信二维码" className="contact__qr-img" loading="lazy" decoding="async" />
             </div>
             <p className="contact__qr-label">悬停放大 · 扫码添加微信</p>
           </div>

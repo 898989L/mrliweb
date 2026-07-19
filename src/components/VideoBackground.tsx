@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import { asset } from '../utils/asset'
 import './VideoBackground.css'
 
-const VIDEOS = ['/videos/video1.mp4', '/videos/video2.mp4'] as const
+const VIDEOS = [asset('videos/video1.mp4'), asset('videos/video2.mp4')] as const
 
 export default function VideoBackground() {
   const [active, setActive] = useState(0)
@@ -32,4 +33,3 @@ export default function VideoBackground() {
     </div>
   )
 }
-

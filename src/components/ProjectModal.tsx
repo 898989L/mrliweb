@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { ProjectItem } from '../data/projects'
+import { asset } from '../utils/asset'
 import ProjectDemoHost from './ProjectDemoHost'
 import './ProjectModal.css'
 
@@ -79,7 +80,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           </div>
           <div className="lab__top-actions">
             {demoSrc && (
-              <a className="lab__link" href={demoSrc} target="_blank" rel="noreferrer" onPointerDown={stopDrag}>
+              <a className="lab__link" href={asset(demoSrc)} target="_blank" rel="noreferrer" onPointerDown={stopDrag}>
                 新窗口全屏 ↗
               </a>
             )}

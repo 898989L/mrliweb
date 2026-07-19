@@ -2,11 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { projects } from '../data/projects'
 import type { ProjectItem } from '../data/projects'
+import { asset } from '../utils/asset'
 import ProjectCard from './ProjectCard'
 import './ProjectCarousel.css'
 
 const projectImages: Record<string, string> = {
-  renyixuan: '/project-renyixuan.jpg',
+  renyixuan: 'project-renyixuan.jpg',
 }
 
 const CARD_SPREAD = 440
@@ -119,7 +120,7 @@ export default function ProjectCarousel() {
               active={active}
               count={count}
               dragX={dragX}
-              imageSrc={projectImages[project.id]}
+              imageSrc={projectImages[project.id] ? asset(projectImages[project.id]) : undefined}
               onSelect={() => onCardClick(index)}
             />
           ))}
