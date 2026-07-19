@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>我的水电 · 智慧园区企业端</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .water-hero {
+      background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%);
+      color: #fff;
+      padding: 16px 16px 22px;
+      border-radius: 0 0 16px 16px;
+      margin-bottom: 12px;
+    }
+    .water-hero .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .water-hero .top-row .l { font-size: 12px; opacity: 0.9; }
+    .water-hero .badge-thresh {
+      background: rgba(255, 200, 0, 0.95);
+      color: #6b4400;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .water-hero .balance-label {
+      font-size: 12px;
+      opacity: 0.92;
+      margin-bottom: 4px;
+    }
+    .water-hero .balance-num {
+      font-size: 32px;
+      font-weight: 700;
+      font-family: -apple-system, sans-serif;
+      line-height: 1.1;
+      margin-bottom: 4px;
+      display: flex; align-items: baseline;
+    }
+    .water-hero .balance-num .sym { font-size: 16px; opacity: 0.85; margin-right: 4px; font-weight: 500; }
+    .water-hero .sub {
+      font-size: 12px;
+      opacity: 0.92;
+      margin-bottom: 14px;
+    }
+    .water-hero .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .water-hero .stats .cell {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      border-radius: 10px;
+      padding: 10px 4px;
+      text-align: center;
+    }
+    .water-hero .stats .cell .l { font-size: 10px; opacity: 0.92; }
+    .water-hero .stats .cell .v {
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .water-hero .stats .cell .vf { font-size: 9px; opacity: 0.85; }
+
+    /* 余额预警条 */
+    .alert-bar {
+      margin: -8px 12px 12px;
+      background: linear-gradient(135deg, #fff7e6 0%, #fff 100%);
+      border: 1px solid #ffd591;
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px;
+      color: var(--warning);
+    }
+    .alert-bar .icon {
+      width: 24px; height: 24px;
+      flex-shrink: 0;
+      color: var(--warning);
+    }
+    .alert-bar .body { flex: 1; }
+    .alert-bar .action {
+      color: var(--warning);
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* 用量概览卡 */
+    .usage-card {
+      margin: 0 12px 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+    .usage-card .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .usage-card .hd .ttl { font-size: 14px; font-weight: 600; color: var(--text-1); }
+    .usage-card .hd .more { font-size: 12px; color: var(--primary); }
+    .usage-card .grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .usage-card .grid .item {
+      background: linear-gradient(135deg, #f0f7ff 0%, #fff 100%);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .usage-card .grid .item .l { font-size: 11px; color: var(--text-3); }
+    .usage-card .grid .item .v {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-1);
+      margin-top: 2px;
+    }
+    .usage-card .grid .item .v .unit { font-size: 12px; color: var(--text-3); font-weight: normal; margin-left: 2px; }
+    .usage-card .grid .item .vf { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+
+    /* tab 切换 */
+    .seg-tabs {
+      display: flex;
+      margin: 0 12px 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 4px;
+      box-shadow: var(--shadow);
+    }
+    .seg-tabs .seg {
+      flex: 1;
+      text-align: center;
+      padding: 8px 0;
+      font-size: 13px;
+      color: var(--text-2);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .seg-tabs .seg.active {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* 列表 */
+    .record-list { margin: 0 12px; }
+    .record-item {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+    .record-item .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .record-item .hd .period {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-1);
+    }
+    .record-item .hd .period .badge {
+      font-size: 10px;
+      padding: 1px 6px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 4px;
+      font-weight: normal;
+      margin-left: 6px;
+    }
+    .record-item .body {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .record-item .cell .l { color: var(--text-3); font-size: 11px; }
+    .record-item .cell .v {
+      font-weight: 600;
+      font-size: 13px;
+      margin-top: 2px;
+    }
+    .record-item .cell .v.blue { color: var(--primary); }
+    .record-item .cell .v.orange { color: var(--warning); }
+    .record-item .cell .v.red { color: var(--danger); font-size: 16px; }
+    .record-item .cell .v.green { color: var(--success); font-size: 16px; }
+    .record-item .meta {
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+      font-size: 11px;
+      color: var(--text-3);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* 详情 sheet */
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1100;
+      display: none;
+      align-items: flex-end;
+    }
+    .modal-mask.show { display: flex; }
+    .modal-sheet {
+      width: 100%;
+      max-width: 750px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 16px 16px 0 0;
+      padding: 18px 18px calc(24px + 60px + env(safe-area-inset-bottom));
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-sheet .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .modal-sheet .hd .ttl { font-size: 17px; font-weight: 600; color: var(--text-1); }
+    .modal-sheet .hd .close { color: var(--text-3); font-size: 22px; cursor: pointer; }
+
+    .modal-sheet .ttl {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-1);
+      margin-bottom: 4px;
+    }
+    .modal-sheet .sub {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 16px;
+    }
+    .modal-sheet .table .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-sheet .table .row .l { color: var(--text-3); }
+    .modal-sheet .table .row .v { color: var(--text-1); font-weight: 500; }
+    .modal-sheet .table .row.total {
+      border-bottom: none;
+      padding-top: 12px;
+      font-size: 14px;
+    }
+    .modal-sheet .table .row.total .v { color: var(--danger); font-size: 18px; font-weight: 700; }
+    .modal-sheet .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .modal-sheet .actions .btn { flex: 1; padding: 12px 0; }
+
+    /* 详情 tabs */
+    .detail-tabs {
+      display: flex;
+      background: #f5f6f8;
+      border-radius: 10px;
+      padding: 3px;
+      margin-bottom: 14px;
+    }
+    .detail-tabs .dtab {
+      flex: 1;
+      text-align: center;
+      padding: 8px 0;
+      font-size: 13px;
+      color: var(--text-2);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .detail-tabs .dtab.active {
+      background: var(--white);
+      color: var(--primary);
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    /* 每日用量列表 */
+    .daily-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .daily-summary .item {
+      background: #fafbfc;
+      border-radius: 8px;
+      padding: 8px 4px;
+      text-align: center;
+    }
+    .daily-summary .item .l { font-size: 10px; color: var(--text-3); }
+    .daily-summary .item .v {
+      font-size: 13px; font-weight: 600; color: var(--text-1);
+      margin-top: 2px;
+    }
+    .daily-list {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px 12px;
+    }
+    .daily-list .dh {
+      display: flex; align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-3);
+    }
+    .daily-list .dh .h-day { width: 48px; }
+    .daily-list .dh .h-start { flex: 1; text-align: right; padding-right: 12px; }
+    .daily-list .dh .h-end { flex: 1; text-align: right; padding-right: 12px; }
+    .daily-list .dh .h-val { width: 80px; text-align: right; }
+    .daily-list .dh .h-fee { width: 60px; text-align: right; }
+    .daily-list .drow {
+      display: flex; align-items: center;
+      padding: 6px 0;
+      font-size: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .daily-list .drow:last-child { border-bottom: none; }
+    .daily-list .drow .day { width: 48px; color: var(--text-2); }
+    .daily-list .drow .start {
+      flex: 1; text-align: right; padding-right: 12px;
+      color: var(--text-3); font-size: 12px;
+      font-family: -apple-system, monospace;
+    }
+    .daily-list .drow .end {
+      flex: 1; text-align: right; padding-right: 12px;
+      color: var(--text-2); font-size: 12px;
+      font-family: -apple-system, monospace;
+    }
+    .daily-list .drow .val {
+      width: 80px; text-align: right;
+      font-weight: 600; color: var(--text-1);
+    }
+    .daily-list .drow .fee {
+      width: 60px; text-align: right;
+      color: var(--text-2); font-size: 11px;
+    }
+    .daily-list .drow.peak .day,
+    .daily-list .drow.peak .val { color: var(--danger); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div id="topbar"></div>
+
+    <div class="water-hero" id="waterHero"></div>
+
+    <div id="alertWrap"></div>
+
+    <div class="usage-card" onclick="location.href='water-chart.html'">
+      <div class="hd">
+        <div class="ttl">本月用量</div>
+        <span class="more">查看用量分析 ›</span>
+      </div>
+      <div class="grid" id="usageGrid"></div>
+    </div>
+
+    <div class="seg-tabs" id="segTabs">
+      <div class="seg active" data-value="deduction">扣减记录</div>
+      <div class="seg" data-value="recharge">充值记录</div>
+    </div>
+
+    <div class="record-list" id="recordList"></div>
+
+    <div style="height:12px;"></div>
+
+    <div id="tabbar"></div>
+  </div>
+
+  <!-- 详情 sheet -->
+  <div class="modal-mask" id="detailMask" onclick="closeDetail(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="hd">
+        <div class="ttl" id="detailTitle"></div>
+        <span class="close" onclick="closeDetail()">×</span>
+      </div>
+      <div class="sub" id="detailSub"></div>
+
+      <div class="detail-tabs" id="detailTabs">
+        <div class="dtab active" data-tab="deduction" onclick="switchDetailTab('deduction')">扣减明细</div>
+        <div class="dtab" data-tab="water" onclick="switchDetailTab('water')">水表明细</div>
+        <div class="dtab" data-tab="electricity" onclick="switchDetailTab('electricity')">电表明细</div>
+      </div>
+
+      <div id="tabDeduction"><div class="table" id="detailTable"></div></div>
+      <div id="tabWater" style="display:none;"></div>
+      <div id="tabElectricity" style="display:none;"></div>
+
+      <div class="actions" id="detailActions"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.getElementById('topbar').outerHTML = renderTopBar('我的水电');
+    document.getElementById('tabbar').outerHTML = renderTabBar('water');
+
+    const acc = MOCK.utilityAccount;
+    const u = MOCK.utilityCurrent;
+    const low = acc.balance < acc.lowBalanceThreshold;
+
+    // Hero
+    document.getElementById('waterHero').innerHTML = `
+      <div class="top-row">
+        <span class="l">预存账户</span>
+        ${low ? '<span class="badge-thresh">余额不足</span>' : ''}
+      </div>
+      <div class="balance-label">当前可用余额</div>
+      <div class="balance-num"><span class="sym">¥</span>${acc.balance.toFixed(2)}</div>
+      <div class="sub">最后充值 ${acc.lastRechargeTime} · ¥${acc.lastRechargeAmount.toLocaleString()}</div>
+      <div class="stats">
+        <div class="cell">
+          <div class="l">本月扣减</div>
+          <div class="v">¥${MOCK.utilityDeductions[0].total.toFixed(0)}</div>
+          <div class="vf">${MOCK.utilityDeductions[0].period}</div>
+        </div>
+        <div class="cell">
+          <div class="l">累计充值</div>
+          <div class="v">¥${(acc.totalRecharged/10000).toFixed(2)}</div>
+          <div class="vf">万元</div>
+        </div>
+        <div class="cell">
+          <div class="l">累计扣减</div>
+          <div class="v">¥${(acc.totalDeducted/10000).toFixed(2)}</div>
+          <div class="vf">万元</div>
+        </div>
+        <div class="cell">
+          <div class="l">预计下月</div>
+          <div class="v">¥${Math.round(MOCK.utilityDeductions.slice(0,3).reduce((s,d)=>s+d.total,0)/3)}</div>
+          <div class="vf">3月均值</div>
+        </div>
+      </div>
+    `;
+
+    // 余额预警
+    if (low) {
+      document.getElementById('alertWrap').innerHTML = `
+        <div class="alert-bar">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <div class="body">当前余额 ¥${acc.balance.toFixed(2)}，低于预警值 ¥${acc.lowBalanceThreshold}，请联系物业办理充值</div>
+          <a href="tel:02112345678" class="action">联系物业 ›</a>
+        </div>
+      `;
+    }
+
+    // 用量概览
+    document.getElementById('usageGrid').innerHTML = `
+      <div class="item">
+        <div class="l">💧 本月用水</div>
+        <div class="v">${u.water}<span class="unit">吨</span></div>
+        <div class="vf">¥${u.waterFee.toFixed(2)} · 单价 ¥${u.waterUnit}/吨</div>
+      </div>
+      <div class="item">
+        <div class="l">⚡ 本月用电</div>
+        <div class="v">${u.electricity}<span class="unit">度</span></div>
+        <div class="vf">¥${u.electricityFee.toFixed(2)} · 单价 ¥${u.electricityUnit}/度</div>
+      </div>
+    `;
+
+    // 列表渲染
+    let currentSeg = 'deduction';
+    function renderList() {
+      const target = document.getElementById('recordList');
+      if (currentSeg === 'deduction') {
+        const list = MOCK.utilityDeductions;
+        if (!list.length) { target.innerHTML = '<div class="empty">暂无扣减记录</div>'; return; }
+        target.innerHTML = list.map((d, idx) => `
+          <div class="record-item" onclick="showDeduction('${d.id}')">
+            <div class="hd">
+              <div class="period">${d.period} 扣减${idx === 0 ? '<span class="badge">最新</span>' : ''}</div>
+              <span class="tag success">已扣减</span>
+            </div>
+            <div class="body">
+              <div class="cell">
+                <div class="l">💧 用水</div>
+                <div class="v blue">${d.water} 吨</div>
+                <div class="vf">${formatMoney(d.waterFee)}</div>
+              </div>
+              <div class="cell">
+                <div class="l">⚡ 用电</div>
+                <div class="v orange">${d.electricity} 度</div>
+                <div class="vf">${formatMoney(d.electricityFee)}</div>
+              </div>
+              <div class="cell" style="text-align:right;">
+                <div class="l">合计扣减</div>
+                <div class="v red">${formatMoney(d.total)}</div>
+                <div class="vf">${d.deductedAt.split(' ')[0]}</div>
+              </div>
+            </div>
+            <div class="meta">
+              <span>扣减后余额 ¥${d.balanceAfter.toFixed(2)}</span>
+              <span>查看明细 ›</span>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        const list = MOCK.rechargeHistory;
+        if (!list.length) { target.innerHTML = '<div class="empty">暂无充值记录</div>'; return; }
+        target.innerHTML = list.map((r, idx) => `
+          <div class="record-item" onclick="showRecharge('${r.id}')">
+            <div class="hd">
+              <div class="period">${r.method}${idx === 0 ? '<span class="badge">最新</span>' : ''}</div>
+              <span class="tag success">充值成功</span>
+            </div>
+            <div class="body" style="grid-template-columns: 1fr 1fr;">
+              <div class="cell">
+                <div class="l">充值金额</div>
+                <div class="v green">+¥${r.amount.toLocaleString()}</div>
+                <div class="vf">${r.id}</div>
+              </div>
+              <div class="cell" style="text-align:right;">
+                <div class="l">本次后余额</div>
+                <div class="v">¥${r.balanceAfter.toFixed(2)}</div>
+                <div class="vf">${r.time.split(' ')[0]}</div>
+              </div>
+            </div>
+            <div class="meta">
+              <span>本次前余额 ¥${r.balanceBefore.toFixed(2)}</span>
+              <span>查看明细 ›</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // tab 切换
+    document.querySelectorAll('#segTabs .seg').forEach(s => {
+      s.addEventListener('click', () => {
+        document.querySelectorAll('#segTabs .seg').forEach(x => x.classList.remove('active'));
+        s.classList.add('active');
+        currentSeg = s.dataset.value;
+        renderList();
+      });
+    });
+    renderList();
+
+    // 当前详情所属期间（用于 tab 切换时取数）
+    let currentDetailPeriod = null;
+
+    // 切换详情 tab
+    function switchDetailTab(tab) {
+      document.querySelectorAll('#detailTabs .dtab').forEach(t => {
+        t.classList.toggle('active', t.dataset.tab === tab);
+      });
+      document.getElementById('tabDeduction').style.display = tab === 'deduction' ? '' : 'none';
+      document.getElementById('tabWater').style.display = tab === 'water' ? '' : 'none';
+      document.getElementById('tabElectricity').style.display = tab === 'electricity' ? '' : 'none';
+    }
+
+    // 渲染每日用量（type: 'water' | 'electricity'）
+    function renderDaily(type) {
+      const period = currentDetailPeriod;
+      const data = getDailyUsage(period, type);
+      if (!data.length) return '<div class="empty" style="padding:30px 0;">暂无数据</div>';
+      const total = data.reduce((s, d) => s + d.value, 0);
+      const totalFee = data.reduce((s, d) => s + d.fee, 0);
+      const avg = total / data.length;
+      const max = Math.max(...data.map(d => d.value));
+      const maxDay = data.find(d => d.value === max);
+      const isWater = type === 'water';
+      const unit = isWater ? '吨' : '度';
+      const mm = period.slice(5);
+      const barClass = isWater ? 'water' : 'electricity';
+      const fixed = isWater ? 1 : 0;
+      return `
+        <div class="daily-summary">
+          <div class="item"><div class="l">合计</div><div class="v">${total.toFixed(fixed)} ${unit}</div></div>
+          <div class="item"><div class="l">日均</div><div class="v">${avg.toFixed(fixed)} ${unit}</div></div>
+          <div class="item"><div class="l">最高</div><div class="v">${max} ${unit}<br><span style="font-size:10px;font-weight:normal;color:var(--text-3);">${mm}-${String(maxDay.day).padStart(2,'0')}</span></div></div>
+        </div>
+        <div class="daily-list">
+          <div class="dh">
+            <span class="h-day">日期</span>
+            <span class="h-start">开始数值</span>
+            <span class="h-end">抄表数值</span>
+            <span class="h-val">用量</span>
+            <span class="h-fee">金额</span>
+          </div>
+          ${data.map(d => `
+            <div class="drow ${d.value === max ? 'peak' : ''}">
+              <span class="day">${mm}-${String(d.day).padStart(2,'0')}</span>
+              <span class="start">${d.start}</span>
+              <span class="end">${d.end}</span>
+              <span class="val">${d.value} ${unit}</span>
+              <span class="fee">¥${d.fee.toFixed(2)}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // 扣减详情
+    function showDeduction(id) {
+      const d = getDeductionById(id);
+      if (!d) return;
+      currentDetailPeriod = d.period;
+      document.getElementById('detailTitle').textContent = `${d.period} 水电扣减`;
+      document.getElementById('detailSub').textContent = `扣减时间：${d.deductedAt}`;
+      document.getElementById('detailTable').innerHTML = `
+        <div class="row"><span class="l">用水量</span><span class="v">${d.water} 吨</span></div>
+        <div class="row"><span class="l">水费单价</span><span class="v">¥${u.waterUnit} / 吨</span></div>
+        <div class="row"><span class="l">水费小计</span><span class="v">${formatMoney(d.waterFee)}</span></div>
+        <div class="row"><span class="l">用电量</span><span class="v">${d.electricity} 度</span></div>
+        <div class="row"><span class="l">电费单价</span><span class="v">¥${u.electricityUnit} / 度</span></div>
+        <div class="row"><span class="l">电费小计</span><span class="v">${formatMoney(d.electricityFee)}</span></div>
+        <div class="row"><span class="l">扣减方式</span><span class="v">预存账户自动扣减</span></div>
+        <div class="row"><span class="l">扣减后余额</span><span class="v">¥${d.balanceAfter.toFixed(2)}</span></div>
+        <div class="row total"><span class="l">本次扣减合计</span><span class="v">${formatMoney(d.total)}</span></div>
+      `;
+      document.getElementById('tabWater').innerHTML = renderDaily('water');
+      document.getElementById('tabElectricity').innerHTML = renderDaily('electricity');
+      document.getElementById('detailTabs').style.display = '';
+      switchDetailTab('deduction');
+      document.getElementById('detailActions').innerHTML =
+        `<button class="btn btn-outline" onclick="closeDetail()">关闭</button>
+         <button class="btn btn-primary" onclick="showToast('已发起疑问工单，物业将在 24h 内联系')">提交疑问</button>`;
+      document.getElementById('detailMask').classList.add('show');
+    }
+
+    // 充值详情
+    function showRecharge(id) {
+      const r = getRechargeById(id);
+      if (!r) return;
+      currentDetailPeriod = null;
+      document.getElementById('detailTitle').textContent = `${r.method} 充值`;
+      document.getElementById('detailSub').textContent = `订单号：${r.id}`;
+      document.getElementById('detailTabs').style.display = 'none';
+      switchDetailTab('deduction');
+      document.getElementById('detailTable').innerHTML = `
+        <div class="row"><span class="l">充值方式</span><span class="v">${r.method}</span></div>
+        <div class="row"><span class="l">充值时间</span><span class="v">${r.time}</span></div>
+        <div class="row"><span class="l">充值前余额</span><span class="v">¥${r.balanceBefore.toFixed(2)}</span></div>
+        <div class="row"><span class="l">充值后余额</span><span class="v">¥${r.balanceAfter.toFixed(2)}</span></div>
+        <div class="row"><span class="l">状态</span><span class="v" style="color:var(--success);">✓ 充值成功</span></div>
+        <div class="row total"><span class="l">充值金额</span><span class="v" style="color:var(--success);">+¥${r.amount.toLocaleString()}</span></div>
+      `;
+      document.getElementById('detailActions').innerHTML =
+        `<button class="btn btn-outline" onclick="closeDetail()">关闭</button>`;
+      document.getElementById('detailMask').classList.add('show');
+    }
+
+    function closeDetail(e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById('detailMask').classList.remove('show');
+    }
+  </script>
+</body>
+</html>

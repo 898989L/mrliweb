@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>通知公告 · 智慧园区企业端</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .notify-stat {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 12px;
+    }
+    .notify-stat .item {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px 8px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .notify-stat .item .v {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-1);
+    }
+    .notify-stat .item .v.danger { color: var(--danger); }
+    .notify-stat .item .v.primary { color: var(--primary); }
+    .notify-stat .item .l { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 0 12px 12px;
+      overflow-x: auto;
+    }
+    .filter-tabs .chip {
+      flex-shrink: 0;
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 14px;
+      background: var(--white);
+      color: var(--text-2);
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+    }
+    .filter-tabs .chip.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .toolbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 16px 8px;
+      font-size: 12px;
+      color: var(--text-3);
+    }
+    .toolbar .action { color: var(--primary); cursor: pointer; }
+
+    .notify-list { margin: 0 12px; }
+    .notify-item {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 8px;
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+      position: relative;
+    }
+    .notify-item.unread { box-shadow: 0 2px 8px rgba(22,119,255,0.12); }
+    .notify-item.unread::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 14px; bottom: 14px;
+      width: 3px;
+      background: var(--primary);
+      border-radius: 0 2px 2px 0;
+    }
+    .notify-item .tag-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .notify-item .tag-icon.公告 { background: linear-gradient(135deg, #1677ff, #4096ff); }
+    .notify-item .tag-icon.提醒 { background: linear-gradient(135deg, #ff9500, #ffb049); }
+    .notify-item .tag-icon.通知 { background: linear-gradient(135deg, #722ed1, #9254de); }
+    .notify-item .tag-icon.账单 { background: linear-gradient(135deg, #ff4d4f, #ff7875); }
+    .notify-item .body { flex: 1; min-width: 0; }
+    .notify-item .ttl {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-1);
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+    .notify-item.read .ttl { color: var(--text-2); font-weight: 500; }
+    .notify-item .summary {
+      font-size: 12px;
+      color: var(--text-3);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .notify-item .meta {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 6px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .notify-item .meta .dot-unread {
+      width: 6px; height: 6px;
+      background: var(--danger);
+      border-radius: 50%;
+    }
+
+    /* 详情弹层 */
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1100;
+      display: none;
+      align-items: flex-end;
+    }
+    .modal-mask.show { display: flex; }
+    .modal-sheet {
+      width: 100%;
+      max-width: 750px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 16px 16px 0 0;
+      padding: 18px 18px calc(30px + 60px + env(safe-area-inset-bottom));
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-sheet .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .modal-sheet .hd .tag-s {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #fff;
+    }
+    .modal-sheet .hd .close { color: var(--text-3); font-size: 22px; cursor: pointer; }
+    .modal-sheet .ttl {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-1);
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .modal-sheet .meta {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-sheet .content {
+      font-size: 14px;
+      color: var(--text-1);
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div id="topbar"></div>
+
+    <!-- 统计 -->
+    <div class="notify-stat" id="notifyStat"></div>
+
+    <!-- 筛选 -->
+    <div class="filter-tabs" id="filterTabs">
+      <div class="chip active" data-value="all">全部</div>
+      <div class="chip" data-value="unread">未读</div>
+      <div class="chip" data-value="公告">公告</div>
+      <div class="chip" data-value="提醒">提醒</div>
+      <div class="chip" data-value="通知">通知</div>
+      <div class="chip" data-value="账单">账单</div>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <span id="listCount">共 0 条</span>
+      <span class="action" onclick="markAllRead()">全部已读</span>
+    </div>
+
+    <!-- 列表 -->
+    <div class="notify-list" id="notifyList"></div>
+
+    <div style="height:12px;"></div>
+
+    <div id="tabbar"></div>
+  </div>
+
+  <!-- 详情弹层 -->
+  <div class="modal-mask" id="modalMask" onclick="closeDetail(event)">
+    <div class="modal-sheet" id="modalSheet" onclick="event.stopPropagation()">
+      <div class="hd">
+        <span class="tag-s" id="detailTag">公告</span>
+        <span class="close" onclick="closeDetail()">×</span>
+      </div>
+      <div class="ttl" id="detailTitle"></div>
+      <div class="meta" id="detailMeta"></div>
+      <div class="content" id="detailContent"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.getElementById('topbar').outerHTML = renderTopBar('通知公告');
+    document.getElementById('tabbar').outerHTML = renderTabBar('notify');
+
+    function renderStat() {
+      const unread = MOCK.notifications.filter(n => !n.read).length;
+      const total = MOCK.notifications.length;
+      const billCount = MOCK.notifications.filter(n => n.tag === '账单').length;
+      document.getElementById('notifyStat').innerHTML = `
+        <div class="item">
+          <div class="v">${total}</div>
+          <div class="l">全部通知</div>
+        </div>
+        <div class="item">
+          <div class="v danger">${unread}</div>
+          <div class="l">未读</div>
+        </div>
+        <div class="item">
+          <div class="v primary">${billCount}</div>
+          <div class="l">账单类</div>
+        </div>
+      `;
+    }
+
+    let currentFilter = 'all';
+    function renderList() {
+      let list = MOCK.notifications.slice();
+      if (currentFilter === 'unread') list = list.filter(n => !n.read);
+      else if (currentFilter !== 'all') list = list.filter(n => n.tag === currentFilter);
+
+      document.getElementById('listCount').textContent = `共 ${list.length} 条`;
+
+      const target = document.getElementById('notifyList');
+      if (!list.length) {
+        target.innerHTML = '<div class="empty">暂无通知</div>';
+        return;
+      }
+      target.innerHTML = list.map(n => `
+        <div class="notify-item ${n.read ? 'read' : 'unread'}" onclick="showDetail('${n.id}')">
+          <div class="tag-icon ${n.tag}">${n.tag}</div>
+          <div class="body">
+            <div class="ttl">${n.title}</div>
+            <div class="summary">${n.summary}</div>
+            <div class="meta">
+              ${!n.read ? '<span class="dot-unread"></span><span>未读</span> · ' : ''}
+              <span>${n.time}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function showDetail(id) {
+      const n = getNotificationById(id);
+      if (!n) return;
+      n.read = true;
+      const tagColors = { '公告': '#1677ff', '提醒': '#ff9500', '通知': '#722ed1', '账单': '#ff4d4f' };
+      document.getElementById('detailTag').textContent = n.tag;
+      document.getElementById('detailTag').style.background = tagColors[n.tag];
+      document.getElementById('detailTitle').textContent = n.title;
+      document.getElementById('detailMeta').textContent = `${n.time} · 来自智慧园区物业管理处`;
+      document.getElementById('detailContent').textContent = n.content || n.summary;
+      document.getElementById('modalMask').classList.add('show');
+      renderStat();
+      renderList();
+    }
+
+    function closeDetail(e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById('modalMask').classList.remove('show');
+    }
+
+    function markAllRead() {
+      const unread = MOCK.notifications.filter(n => !n.read).length;
+      if (!unread) { showToast('暂无未读通知'); return; }
+      MOCK.notifications.forEach(n => n.read = true);
+      renderStat();
+      renderList();
+      showToast(`已标记 ${unread} 条为已读`);
+    }
+
+    bindChips(document.getElementById('filterTabs'), v => {
+      currentFilter = v;
+      renderList();
+    });
+
+    renderStat();
+    renderList();
+
+    // 支持 ?id=N01 自动打开详情
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('id')) {
+      setTimeout(() => showDetail(params.get('id')), 200);
+    }
+  </script>
+</body>
+</html>

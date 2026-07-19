@@ -1,0 +1,135 @@
+/* ========= 顶部导航栏(多页模式) ========= */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: linear-gradient(135deg, #1d3a6e 0%, #2d5191 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.top-nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.top-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-size: var(--fs-md);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.top-nav-brand .brand-mark {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.top-nav-brand .brand-text {
+  white-space: nowrap;
+}
+
+.top-nav-controls {
+  display: flex;
+  gap: 12px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.top-nav-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.top-nav-field > span {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.top-nav-select {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--c-text);
+  border: none;
+  border-radius: var(--r-sm);
+  padding: 5px 8px;
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  min-width: 100px;
+  max-width: 180px;
+}
+
+.top-nav-select:focus {
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.top-nav-select optgroup {
+  font-weight: 700;
+  color: var(--c-text-sub);
+  background: #fff;
+}
+
+.top-nav-select option {
+  font-weight: 500;
+  color: var(--c-text);
+  background: #fff;
+  padding: 2px 0;
+}
+
+/* 多页模式: 把 phone-frame 居中显示,加 stage 边距 */
+body {
+  background: var(--c-bg);
+  min-height: 100vh;
+}
+
+.stage {
+  padding: 24px 20px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  min-height: calc(100vh - 60px);
+}
+
+/* 多页模式只显示中间手机 */
+.stage > .info-panel,
+.stage > .role-legend {
+  display: none;
+}
+
+/* 列表/详情等不需要 app-bar 顶部 */
+.app-bar-placeholder {
+  display: none;
+}
+
+/* 当 content 里已经包含 sub-bar 时,phone-screen 不需要额外 app bar */
+.phone-screen {
+  background: var(--c-bg);
+}
+
+/* 让内容区占满 */
+#content {
+  min-height: 200px;
+}

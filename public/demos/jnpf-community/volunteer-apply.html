@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智慧社区 - 志愿者申请</title>
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <style>
+    .form-card {
+      background: white;
+      margin: 12px;
+      border-radius: 12px;
+      padding: 4px 16px;
+    }
+    .form-hint {
+      background: var(--color-primary-bg);
+      color: var(--color-primary);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+    }
+    .form-hint svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; }
+
+    .submit-bar {
+      padding: 16px 12px;
+      background: white;
+      position: sticky;
+      bottom: 0;
+      border-top: 1px solid var(--color-divider);
+    }
+
+    /* 协议确认区 */
+    .agreement {
+      margin: 12px 12px 0;
+      padding: 12px 14px;
+      background: #F7F8FA;
+      border-radius: 10px;
+    }
+    .agreement label {
+      display: flex;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--color-text-sub);
+      line-height: 1.7;
+      align-items: flex-start;
+    }
+    .agreement input[type="checkbox"] {
+      margin-top: 4px;
+      accent-color: var(--color-primary);
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+    }
+    .agreement a {
+      color: var(--color-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="right" style="display:flex;gap:6px;align-items:center;color:#333;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="7" width="18" height="11" rx="2"/><line x1="22" y1="11" x2="22" y2="13"/><line x1="6" y1="11" x2="6" y2="13"/><line x1="11" y1="11" x2="11" y2="13"/><line x1="16" y1="11" x2="16" y2="13"/></svg>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <a href="volunteer.html" class="back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      <div class="title">志愿者申请</div>
+      <div class="right"></div>
+    </div>
+
+    <div class="form-hint" style="margin: 12px 12px 0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26A7 7 0 0 0 12 2z"/></svg>
+      <span>提交申请后，社区工作人员会主动与您联系确认</span>
+    </div>
+
+    <form id="applyForm" onsubmit="return handleSubmit(event)">
+      <div class="form-card">
+        <div class="form-item form-item-col">
+          <label class="form-label"><span class="required">*</span>姓名</label>
+          <input type="text" class="form-input" id="name" placeholder="请输入您的真实姓名">
+        </div>
+        <div class="form-item form-item-col">
+          <label class="form-label"><span class="required">*</span>手机号</label>
+          <input type="tel" class="form-input" id="phone" placeholder="请输入 11 位手机号" maxlength="11">
+        </div>
+        <div class="form-item form-item-col">
+          <label class="form-label">身份证号</label>
+          <input type="text" class="form-input" id="idcard" placeholder="选填，便于核实身份" maxlength="18">
+        </div>
+        <div class="form-item form-item-col">
+          <label class="form-label">所在楼栋</label>
+          <input type="text" class="form-input" placeholder="如：1 号楼 2 单元 301">
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-item form-item-col">
+          <label class="form-label"><span class="required">*</span>意向服务方向（可多选）</label>
+          <div class="checkbox-group" id="directionGroup">
+            <span class="checkbox" data-value="扶老助残">扶老助残</span>
+            <span class="checkbox" data-value="文化宣传">文化宣传</span>
+            <span class="checkbox" data-value="环境保护">环境保护</span>
+            <span class="checkbox" data-value="社区治安">社区治安</span>
+            <span class="checkbox" data-value="爱心公益">爱心公益</span>
+            <span class="checkbox" data-value="教育辅导">教育辅导</span>
+          </div>
+        </div>
+        <div class="form-item form-item-col">
+          <label class="form-label"><span class="required">*</span>可服务时间（可多选）</label>
+          <div class="checkbox-group" id="timeGroup">
+            <span class="checkbox" data-value="工作日">工作日</span>
+            <span class="checkbox" data-value="周末">周末</span>
+            <span class="checkbox" data-value="节假日">节假日</span>
+            <span class="checkbox" data-value="随时">随时</span>
+          </div>
+        </div>
+        <div class="form-item form-item-col">
+          <label class="form-label">个人特长或备注</label>
+          <textarea class="form-textarea" placeholder="可填写您的特长、希望参与的服务类型等"></textarea>
+        </div>
+      </div>
+
+      <div class="form-card">
+      <div class="agreement">
+        <label>
+          <input type="checkbox" id="agree" checked>
+          <span>我已阅读并同意 <a href="javascript:;">《志愿者服务协议》</a>，所填信息真实有效</span>
+        </label>
+      </div>
+
+      <div class="submit-bar">
+        <button type="submit" class="btn btn-primary btn-block btn-lg">提交申请</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script>
+    bindCheckboxGroup('#directionGroup');
+    bindCheckboxGroup('#timeGroup');
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const directions = document.querySelectorAll('#directionGroup .checkbox.active');
+      const times = document.querySelectorAll('#timeGroup .checkbox.active');
+      const agreed = document.getElementById('agree').checked;
+
+      if (!name) { showToast('请输入姓名'); return false; }
+      if (!phone) { showToast('请输入手机号'); return false; }
+      if (!validatePhone(phone)) { showToast('手机号格式不正确'); return false; }
+      if (directions.length === 0) { showToast('请选择至少一个意向服务方向'); return false; }
+      if (times.length === 0) { showToast('请选择可服务时间'); return false; }
+      if (!agreed) { showToast('请先同意志愿者服务协议'); return false; }
+
+      showModal({
+        title: '提交申请',
+        content: '请确认所填信息无误，提交后社区工作人员会尽快与您联系。',
+        confirmText: '确认提交',
+        onConfirm: () => {
+          showToast('提交中...', 1200);
+          setTimeout(() => {
+            showToast('申请提交成功！');
+            setTimeout(() => location.href = 'volunteer-history.html', 800);
+          }, 1000);
+        }
+      });
+      return false;
+    }
+  </script>
+</body>
+</html>

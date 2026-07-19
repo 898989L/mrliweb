@@ -1,0 +1,10 @@
+.role-rotator {
+  display: inline-block;
+  position: relative;
+  min-width: 6em;
+  color: var(--accent);
+}
+
+.role-rotator__text {
+  display: inline-block;
+}

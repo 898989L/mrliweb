@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智慧社区 - 首页</title>
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <style>
+    .home-header {
+      background: linear-gradient(135deg, #1677ff, #4096ff);
+      color: white;
+      padding: 12px 16px 20px;
+    }
+    .home-header .row1 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .home-header .community {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    .home-header .community .name {
+      font-size: 18px;
+      font-weight: 600;
+      opacity: 1;
+      margin-top: 2px;
+    }
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      position: relative;
+    }
+    .icon-btn svg { width: 22px; height: 22px; }
+    .icon-btn .badge-dot {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #FFE132;
+      box-shadow: 0 0 0 2px var(--color-primary);
+    }
+    .search-box {
+      background: rgba(255,255,255,0.95);
+      border-radius: 20px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--color-text-weak);
+      font-size: 13px;
+    }
+
+    /* 公告滚动 */
+    .notice-bar {
+      background: white;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--color-divider);
+    }
+    .notice-bar .label {
+      flex-shrink: 0;
+    }
+    .notice-bar .text {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+      color: var(--color-text-sub);
+    }
+    .notice-bar .icon-megaphone {
+      font-size: 16px;
+    }
+
+    /* Banner 轮播 */
+    .banner {
+      margin: 12px;
+      height: 140px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4096ff, #1677ff);
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .banner::before {
+      content: '';
+      position: absolute;
+      right: -30px;
+      bottom: -40px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .banner .title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .banner .subtitle {
+      font-size: 13px;
+      opacity: 0.92;
+      margin-top: 4px;
+    }
+    .banner .btn-go {
+      align-self: flex-start;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      padding: 6px 14px;
+      border-radius: 14px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    .banner .dots {
+      position: absolute;
+      bottom: 12px;
+      right: 16px;
+      display: flex;
+      gap: 4px;
+    }
+    .banner .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+    }
+    .banner .dot.active { background: white; width: 18px; border-radius: 3px; }
+
+    /* 办事预约快捷入口 */
+    .appointment-banner {
+      margin: 12px;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, #13c2c2, #36cfc9);
+      color: white;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 4px 12px rgba(19, 194, 194, 0.25);
+    }
+    .appointment-banner .left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+    .appointment-banner .icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .appointment-banner .icon svg { width: 24px; height: 24px; }
+    .appointment-banner .text {
+      flex: 1;
+      min-width: 0;
+    }
+    .appointment-banner .title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .appointment-banner .desc {
+      font-size: 12px;
+      opacity: 0.92;
+    }
+    .appointment-banner .btn-go {
+      background: rgba(255,255,255,0.25);
+      padding: 6px 12px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* 活动列表包装 */
+    .card-list {
+      margin: 0 12px;
+    }
+    .notice-list-wrap {
+      background: white;
+      margin: 0 12px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <!-- 状态栏 -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="right" style="display:flex;gap:6px;align-items:center;color:white;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="7" width="18" height="11" rx="2"/><line x1="22" y1="11" x2="22" y2="13"/><line x1="6" y1="11" x2="6" y2="13"/><line x1="11" y1="11" x2="11" y2="13"/><line x1="16" y1="11" x2="16" y2="13"/></svg>
+      </div>
+    </div>
+
+    <!-- 顶部欢迎区 -->
+    <div class="home-header">
+      <div class="row1">
+        <div class="community">
+          您好，欢迎回来
+          <div class="name">阳光花园小区</div>
+        </div>
+        <div class="flex gap-sm">
+          <a href="message.html" class="icon-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="badge-dot"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 公告滚动 -->
+    <div class="notice-bar">
+      <span class="badge badge-primary">公告</span>
+      <span class="text">关于端午节放假安排的通知，请各位居民注意查看~</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" style="color: var(--color-text-faint); flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+
+    <!-- 轮播 Banner -->
+    <a href="activity-detail.html" class="banner">
+      <div>
+        <div class="title">端午节包粽子活动</div>
+        <div class="subtitle">6月8日 14:00 · 社区文化中心</div>
+      </div>
+      <div class="btn-go">立即报名 ›</div>
+      <div class="dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </a>
+
+    <!-- 6 大入口 -->
+    <div class="entry-grid" style="margin: 0 12px;">
+      <a href="notice-list.html" class="entry-item">
+        <div class="icon" style="background: linear-gradient(135deg, #1677ff, #4096ff);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+        </div>
+        <div class="label">通告公告</div>
+      </a>
+      <a href="activity-list.html" class="entry-item">
+        <div class="icon" style="background: linear-gradient(135deg, #ff9500, #ffb049);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>
+        </div>
+        <div class="label">社区活动</div>
+      </a>
+      <a href="volunteer.html" class="entry-item">
+        <div class="icon" style="background: linear-gradient(135deg, #00b578, #4ddba6);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 14h1v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M21 6V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 2v4"/></svg>
+        </div>
+        <div class="label">志愿者申请</div>
+      </a>
+      <a href="affairs.html" class="entry-item">
+        <div class="icon" style="background: linear-gradient(135deg, #13c2c2, #36cfc9);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div class="label">办事指南</div>
+      </a>
+      <a href="party.html" class="entry-item">
+        <div class="icon" style="background: linear-gradient(135deg, #C8102E, #E83A52);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        </div>
+        <div class="label">党建活动</div>
+      </a>
+      <a href="business-list.html" class="entry-item">
+        <div class="icon" style="background: linear-gradient(135deg, #722ed1, #9254de);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M8 9V5"/><path d="M16 9V5"/><path d="M3 9h18"/></svg>
+        </div>
+        <div class="label">便民周边</div>
+      </a>
+    </div>
+
+    <!-- 办事预约快捷入口 -->
+    <a href="affairs-appointment.html" class="appointment-banner">
+      <div class="left">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="text">
+          <div class="title">办事预约</div>
+          <div class="desc">在线预约办事时间，免去排队</div>
+        </div>
+      </div>
+      <div class="btn-go">立即预约 ›</div>
+    </a>
+
+    <!-- 推荐活动 -->
+    <div class="section-title" style="padding: 0 16px;">
+      <span>热门活动</span>
+      <a href="activity-list.html" class="more">更多</a>
+    </div>
+    <div class="card-list">
+      <a href="activity-detail.html" class="activity-card">
+        <div class="cover cover-orange">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="body">
+          <div>
+            <div class="title">端午节包粽子活动</div>
+            <div class="meta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" style="vertical-align:-2px;margin-right:2px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2026-06-08 14:00
+            </div>
+            <div class="meta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" style="vertical-align:-2px;margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>社区文化中心
+            </div>
+          </div>
+          <div class="footer">
+            <span class="badge badge-success">报名中</span>
+            <span style="color: var(--color-primary); font-size: 12px;">立即报名 ›</span>
+          </div>
+        </div>
+      </a>
+      <a href="activity-detail.html" class="activity-card">
+        <div class="cover cover-purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125 0-.939.726-1.688 1.667-1.688h1.875c2.857 0 5.187-2.331 5.187-5.187C21.5 5.831 17.169 2 12 2z"/></svg>
+        </div>
+        <div class="body">
+          <div>
+            <div class="title">亲子绘画比赛</div>
+            <div class="meta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" style="vertical-align:-2px;margin-right:2px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2026-06-15 09:30
+            </div>
+            <div class="meta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" style="vertical-align:-2px;margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>社区广场
+            </div>
+          </div>
+          <div class="footer">
+            <span class="badge badge-success">报名中</span>
+            <span style="color: var(--color-primary); font-size: 12px;">立即报名 ›</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 最新通告 -->
+    <div class="section-title" style="padding: 0 16px;">
+      <span>最新通告</span>
+      <a href="notice-list.html" class="more">更多</a>
+    </div>
+    <div class="notice-list-wrap">
+      <a href="notice-detail.html" class="notice-item">
+        <div class="title">
+          <span class="badge badge-warning">置顶</span>
+          关于端午节放假安排的通知
+        </div>
+        <div class="summary">根据国家法定节假日规定，结合本社区实际情况，现将端午节放假安排通知如下，请各位居民提前知悉...</div>
+        <div class="meta">2026-06-02 · 社区办公室</div>
+      </a>
+      <a href="notice-detail.html" class="notice-item">
+        <div class="title">社区电梯年检通知</div>
+        <div class="summary">为保障居民出行安全，本周将对小区所有电梯进行年度安全检查，届时部分电梯将分时段停用...</div>
+        <div class="meta">2026-06-01 · 物业中心</div>
+      </a>
+      <a href="notice-detail.html" class="notice-item">
+        <div class="title">夏季防火安全提示</div>
+        <div class="summary">夏季高温天气来临，用电用气量增大，请居民注意用电用气安全，共同维护社区安全...</div>
+        <div class="meta">2026-05-30 · 安保部</div>
+      </a>
+    </div>
+
+    <div style="height: 30px;"></div>
+
+    <!-- 底部 Tab -->
+    <div class="tab-bar">
+      <a href="index.html" class="tab-item active">
+        <span class="icon" style="display:flex;align-items:center;justify-content:center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </span>
+        <span>首页</span>
+      </a>
+      <a href="profile.html" class="tab-item">
+        <span class="icon" style="display:flex;align-items:center;justify-content:center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </span>
+        <span>我的</span>
+      </a>
+    </div>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+</body>
+</html>

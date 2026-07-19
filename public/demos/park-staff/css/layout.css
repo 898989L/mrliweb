@@ -1,0 +1,566 @@
+/* ========= 舞台/桌面背景 ========= */
+.stage {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 280px 1fr 240px;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .stage {
+    grid-template-columns: 1fr;
+    place-items: center;
+  }
+  .info-panel, .role-legend {
+    width: 100%;
+    max-width: 380px;
+  }
+}
+
+/* ========= 左侧说明面板 ========= */
+.info-panel {
+  background: #fff;
+  border-radius: var(--r-lg);
+  padding: 20px;
+  box-shadow: var(--sh-sm);
+  position: sticky;
+  top: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  background: var(--c-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.brand-title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.brand-sub {
+  font-size: var(--fs-xs);
+  color: var(--c-text-sub);
+  margin-top: 2px;
+}
+
+.info-block {
+  margin-bottom: 18px;
+}
+
+.info-block-title {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--c-text-sub);
+  margin-bottom: 10px;
+  letter-spacing: 0.4px;
+}
+
+.role-card {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: var(--c-primary-soft);
+  border-radius: var(--r-md);
+  align-items: center;
+}
+
+.role-card-avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--c-primary);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-md);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.role-card-name {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--c-primary);
+}
+
+.role-card-desc {
+  font-size: var(--fs-xs);
+  color: var(--c-text-sub);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.how-list {
+  padding-left: 18px;
+}
+
+.how-list li {
+  font-size: var(--fs-sm);
+  color: var(--c-text-sub);
+  margin-bottom: 6px;
+  line-height: 1.5;
+  list-style: decimal;
+}
+
+.prd-link {
+  font-size: var(--fs-sm);
+  color: var(--c-primary);
+  border-bottom: 1px dashed var(--c-primary);
+  padding-bottom: 2px;
+}
+
+/* ========= 中间手机外壳 ========= */
+.phone-frame {
+  width: 380px;
+  height: 780px;
+  background: #1a1a1a;
+  border-radius: 42px;
+  padding: 8px;
+  box-shadow: 0 20px 60px rgba(20, 38, 74, 0.18), 0 0 0 1px rgba(0,0,0,0.4) inset;
+  position: relative;
+  margin: 0 auto;
+}
+
+.phone-notch {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 22px;
+  background: #1a1a1a;
+  border-radius: 0 0 14px 14px;
+  z-index: 10;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: var(--c-bg);
+  border-radius: 36px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* 状态栏 */
+.status-bar {
+  height: 36px;
+  padding: 0 24px 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--c-primary);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.signal-text {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+/* App Bar */
+.app-bar {
+  height: 48px;
+  padding: 0 12px;
+  background: var(--c-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.park-switcher,
+.role-switcher {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: var(--r-pill);
+  color: #fff;
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.park-switcher:hover,
+.role-switcher:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.park-switcher.readonly,
+.park-switcher.readonly:hover {
+  cursor: default;
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.park-name,
+.role-name-top {
+  font-weight: 500;
+}
+
+.caret {
+  font-size: 10px;
+  margin-left: 1px;
+  opacity: 0.85;
+}
+
+.role-tag {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  color: var(--c-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.app-bar-right {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 50%;
+  position: relative;
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.badge-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c-danger);
+  border: 2px solid var(--c-primary);
+}
+
+/* 内容区 */
+.screen-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 70px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.screen-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.screen-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+/* Tab Bar */
+.tab-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 64px;
+  background: #fff;
+  border-top: 1px solid var(--c-line);
+  display: flex;
+  padding-bottom: 8px;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--c-text-tip);
+  font-size: var(--fs-xs);
+  padding-top: 6px;
+  position: relative;
+  transition: color 0.15s;
+}
+
+.tab-item.active {
+  color: var(--c-primary);
+}
+
+.tab-icon {
+  transition: transform 0.15s;
+}
+
+.tab-item.active .tab-icon {
+  transform: scale(1.08);
+}
+
+.tab-label {
+  font-weight: 500;
+}
+
+.tab-item.active .tab-label {
+  font-weight: 600;
+}
+
+.tab-badge {
+  position: absolute;
+  top: 4px;
+  right: calc(50% - 18px);
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--c-danger);
+  color: #fff;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========= 右侧角色清单 ========= */
+.role-legend {
+  background: #fff;
+  border-radius: var(--r-lg);
+  padding: 20px;
+  box-shadow: var(--sh-sm);
+  position: sticky;
+  top: 24px;
+}
+
+.legend-title {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: var(--c-text);
+}
+
+.legend-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: background 0.15s;
+}
+
+.legend-list li:hover {
+  background: var(--c-line-soft);
+}
+
+.legend-list li.active {
+  background: var(--c-primary-soft);
+}
+
+.legend-list li.active .legend-avatar {
+  background: var(--c-primary);
+  color: #fff;
+}
+
+.legend-list li.active .legend-name {
+  color: var(--c-primary);
+  font-weight: 600;
+}
+
+.legend-avatar {
+  width: 28px;
+  height: 28px;
+  background: var(--c-line);
+  color: var(--c-text-sub);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.legend-name {
+  font-size: var(--fs-sm);
+  color: var(--c-text);
+}
+
+.legend-desc {
+  font-size: 10px;
+  color: var(--c-text-tip);
+  margin-top: 2px;
+}
+
+.legend-tip {
+  font-size: var(--fs-xs);
+  color: var(--c-text-tip);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--c-line);
+  text-align: center;
+}
+
+/* ========= 弹窗 ========= */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal[hidden] {
+  display: none;
+}
+
+.modal-mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+}
+
+.modal-panel {
+  position: relative;
+  width: 340px;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.modal-title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+
+.modal-x {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--c-text-sub);
+}
+
+.modal-x:hover {
+  background: var(--c-line-soft);
+}
+
+.role-modal-list,
+.park-modal-list {
+  padding: 8px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.role-modal-list li,
+.park-modal-list li {
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.role-modal-list li:hover,
+.park-modal-list li:hover {
+  background: var(--c-line-soft);
+}
+
+.role-modal-list li.active,
+.park-modal-list li.active {
+  background: var(--c-primary-soft);
+}
+
+.role-modal-list li.active::after,
+.park-modal-list li.active::after {
+  content: "✓";
+  margin-left: auto;
+  color: var(--c-primary);
+  font-weight: 700;
+}
+
+.role-modal-list .role-card-avatar {
+  width: 32px;
+  height: 32px;
+  background: var(--c-line);
+  color: var(--c-text-sub);
+}
+
+.role-modal-list li.active .role-card-avatar {
+  background: var(--c-primary);
+  color: #fff;
+}
+
+.modal-hint {
+  padding: 10px 20px 16px;
+  font-size: var(--fs-xs);
+  color: var(--c-text-tip);
+  text-align: center;
+  border-top: 1px dashed var(--c-line);
+}

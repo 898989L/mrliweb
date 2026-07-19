@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智慧社区 - 党建活动</title>
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <style>
+    .party-hero {
+      margin: 12px;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--color-party), var(--color-party-light));
+      color: white;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .party-hero::before {
+      content: '';
+      position: absolute;
+      right: -10px;
+      bottom: -10px;
+      width: 120px;
+      height: 120px;
+      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' opacity='0.25'><path d='M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z'/><line x1='4' y1='22' x2='4' y2='15'/></svg>") no-repeat center / contain;
+      transform: rotate(-15deg);
+    }
+    .party-hero .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .party-hero .subtitle {
+      font-size: 13px;
+      opacity: 0.92;
+      line-height: 1.6;
+    }
+
+    .cat-tabs {
+      display: flex;
+      background: white;
+      margin: 0 12px;
+      border-radius: 10px;
+      padding: 4px;
+    }
+    .cat-tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px;
+      font-size: 13px;
+      color: var(--color-text-sub);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .cat-tab.active {
+      background: linear-gradient(135deg, var(--color-party), var(--color-party-light));
+      color: white;
+      font-weight: 500;
+    }
+
+    .article-item {
+      display: flex;
+      gap: 12px;
+      background: white;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--color-divider);
+      cursor: pointer;
+    }
+    .article-item:active { background: #FAFAFA; }
+    .article-item .cover {
+      width: 92px;
+      height: 70px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-party);
+    }
+    .article-item .cover svg { width: 32px; height: 32px; }
+    .article-item .body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .article-item .title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .article-item .meta {
+      font-size: 11px;
+      color: var(--color-text-weak);
+      margin-top: 4px;
+    }
+
+    .activity-block {
+      display: flex;
+      background: white;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--color-divider);
+      gap: 12px;
+    }
+    .activity-block .date {
+      width: 56px;
+      height: 64px;
+      background: linear-gradient(180deg, var(--color-party), var(--color-party-light));
+      color: white;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .activity-block .date .day {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .activity-block .date .month {
+      font-size: 11px;
+      margin-top: 4px;
+      opacity: 0.9;
+    }
+    .activity-block .body {
+      flex: 1;
+      min-width: 0;
+    }
+    .activity-block .title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .activity-block .meta {
+      font-size: 11px;
+      color: var(--color-text-weak);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="right" style="display:flex;gap:6px;align-items:center;color:#333;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="7" width="18" height="11" rx="2"/><line x1="22" y1="11" x2="22" y2="13"/><line x1="6" y1="11" x2="6" y2="13"/><line x1="11" y1="11" x2="11" y2="13"/><line x1="16" y1="11" x2="16" y2="13"/></svg>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <a href="index.html" class="back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      <div class="title">党建活动</div>
+      <div class="right"></div>
+    </div>
+
+    <div class="party-hero">
+      <div class="title">党建引领 服务先锋</div>
+      <div class="subtitle">不忘初心 牢记使命<br>共建和谐美好社区</div>
+    </div>
+
+    <div style="padding: 8px 0 12px;">
+      <div class="cat-tabs" id="partyTabs">
+        <div class="cat-tab active" data-value="news">新闻动态</div>
+        <div class="cat-tab" data-value="activity">党建活动</div>
+        <div class="cat-tab" data-value="study">学习资料</div>
+      </div>
+    </div>
+
+    <!-- 新闻动态 -->
+    <div id="panel-news">
+      <a href="party-detail.html" class="article-item">
+        <div class="cover" style="background: linear-gradient(135deg, var(--color-party-bg), #fff);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8V6z"/></svg></div>
+        <div class="body">
+          <div class="title">社区开展"七一"建党节主题党日活动</div>
+          <div class="meta">2026-06-02 · 党建办公室</div>
+        </div>
+      </a>
+      <a href="party-detail.html" class="article-item">
+        <div class="cover" style="background: linear-gradient(135deg, var(--color-party-bg), #fff);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h.01M9 16h.01M13 12h3M13 16h3"/></svg></div>
+        <div class="body">
+          <div class="title">深入学习党的二十大精神 推动社区治理创新</div>
+          <div class="meta">2026-05-28 · 党委办公室</div>
+        </div>
+      </a>
+      <a href="party-detail.html" class="article-item">
+        <div class="cover" style="background: linear-gradient(135deg, var(--color-party-bg), #fff);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="body">
+          <div class="title">我为群众办实事：党员志愿者在行动</div>
+          <div class="meta">2026-05-20 · 党员先锋岗</div>
+        </div>
+      </a>
+      <a href="party-detail.html" class="article-item">
+        <div class="cover" style="background: linear-gradient(135deg, var(--color-party-bg), #fff);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></div>
+        <div class="body">
+          <div class="title">基层党员轮训工作全面启动</div>
+          <div class="meta">2026-05-15 · 组织科</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 党建活动 -->
+    <div id="panel-activity" style="display: none;">
+      <a href="party-detail.html" class="activity-block">
+        <div class="date">
+          <div class="day">08</div>
+          <div class="month">7月</div>
+        </div>
+        <div class="body">
+          <div class="title">"不忘初心 牢记使命"主题党课</div>
+          <div class="meta" style="display:flex;align-items:center;gap:4px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2026-07-08 09:00</div>
+          <div class="meta" style="display:flex;align-items:center;gap:4px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>社区党员活动室</div>
+        </div>
+      </a>
+      <a href="party-detail.html" class="activity-block">
+        <div class="date">
+          <div class="day">01</div>
+          <div class="month">7月</div>
+        </div>
+        <div class="body">
+          <div class="title">庆"七一"文艺汇演暨表彰大会</div>
+          <div class="meta" style="display:flex;align-items:center;gap:4px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2026-07-01 19:00</div>
+          <div class="meta" style="display:flex;align-items:center;gap:4px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>社区文化广场</div>
+        </div>
+      </a>
+      <a href="party-detail.html" class="activity-block">
+        <div class="date">
+          <div class="day">25</div>
+          <div class="month">6月</div>
+        </div>
+        <div class="body">
+          <div class="title">党员志愿服务日活动</div>
+          <div class="meta" style="display:flex;align-items:center;gap:4px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2026-06-25 14:00</div>
+          <div class="meta" style="display:flex;align-items:center;gap:4px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>社区服务中心</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 学习资料 -->
+    <div id="panel-study" style="display: none;">
+      <a href="party-detail.html" class="article-item">
+        <div class="cover" style="background: linear-gradient(135deg, var(--color-party-bg), #fff);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div class="body">
+          <div class="title">《党的二十大报告》学习辅导百问</div>
+          <div class="meta" style="display:flex;align-items:center;gap:4px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>理论学习 · 12 章</div>
+        </div>
+      </a>
+      <a href="party-detail.html" class="article-item">
+        <div class="cover" style="background: linear-gradient(135deg, var(--color-party-bg), #fff);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div class="body">
+          <div class="title">习近平新时代中国特色社会主义思想专题</div>
+          <div class="meta" style="display:flex;align-items:center;gap:4px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>理论学习 · 8 章</div>
+        </div>
+      </a>
+      <a href="party-detail.html" class="article-item">
+        <div class="cover" style="background: linear-gradient(135deg, var(--color-party-bg), #fff);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div class="body">
+          <div class="title">《中国共产党章程》全文学习</div>
+          <div class="meta" style="display:flex;align-items:center;gap:4px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>党章党规 · 11 章 55 条</div>
+        </div>
+      </a>
+    </div>
+
+    <div style="text-align: center; padding: 16px; color: var(--color-text-weak); font-size: 12px;">
+      — 加载更多 —
+    </div>
+
+    <div class="tab-bar">
+      <a href="index.html" class="tab-item">
+        <span class="icon" style="display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+        <span>首页</span>
+      </a>
+      <a href="profile.html" class="tab-item">
+        <span class="icon" style="display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+        <span>我的</span>
+      </a>
+    </div>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script>
+    bindTabs('#partyTabs', (value) => {
+      document.querySelectorAll('[id^="panel-"]').forEach(p => p.style.display = 'none');
+      document.getElementById('panel-' + value).style.display = 'block';
+    });
+  </script>
+</body>
+</html>

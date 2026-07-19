@@ -1,0 +1,92 @@
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.atmosphere__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.atmosphere__orb--a {
+  width: min(52vw, 680px);
+  height: min(52vw, 680px);
+  top: -12%;
+  left: -8%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.45) 0%, rgba(0, 212, 255, 0) 70%);
+  animation: atmosphereFloatA 18s ease-in-out infinite;
+}
+
+.atmosphere__orb--b {
+  width: min(42vw, 520px);
+  height: min(42vw, 520px);
+  top: 28%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.28) 0%, rgba(14, 165, 233, 0) 70%);
+  animation: atmosphereFloatB 22s ease-in-out infinite;
+}
+
+.atmosphere__orb--c {
+  width: min(36vw, 420px);
+  height: min(36vw, 420px);
+  bottom: 4%;
+  left: 32%;
+  background: radial-gradient(circle, rgba(125, 211, 252, 0.18) 0%, transparent 70%);
+  animation: atmosphereFloatC 26s ease-in-out infinite;
+}
+
+.atmosphere__beam {
+  position: absolute;
+  inset: -20% 20% auto;
+  height: 55%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 42%,
+    rgba(0, 212, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 58%,
+    transparent 100%
+  );
+  filter: blur(28px);
+  animation: atmosphereBeam 14s ease-in-out infinite;
+}
+
+.atmosphere__noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+@keyframes atmosphereFloatA {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(4%, 6%) scale(1.08); }
+}
+
+@keyframes atmosphereFloatB {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-5%, 4%) scale(1.1); }
+}
+
+@keyframes atmosphereFloatC {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(3%, -5%); }
+}
+
+@keyframes atmosphereBeam {
+  0%, 100% { opacity: 0.35; transform: translateX(-4%) rotate(-2deg); }
+  50% { opacity: 0.7; transform: translateX(4%) rotate(2deg); }
+}
+
+html[data-motion='reduced'] .atmosphere__orb,
+html[data-motion='reduced'] .atmosphere__beam {
+  animation: none;
+}
+

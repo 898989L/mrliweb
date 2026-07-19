@@ -1,0 +1,27 @@
+.motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-size: 12px;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.motion-toggle:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.motion-toggle[aria-pressed='true'] {
+  border-color: rgba(0, 212, 255, 0.35);
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.motion-toggle__icon {
+  font-size: 10px;
+}

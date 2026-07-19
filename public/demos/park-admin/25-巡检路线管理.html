@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>巡检路线管理</title><link rel="stylesheet" href="common.css" />
+<style>
+.two-col{display:flex;min-height:calc(100vh - 200px)}
+.left-panel{width:300px;flex-shrink:0;border-right:1px solid var(--line)}
+.right-panel{flex:1;overflow:auto}
+.rt-item{padding:12px 16px;cursor:pointer;border-bottom:1px solid #f0f2f5;transition:.12s}
+.rt-item:hover{background:#f7f9fe}
+.rt-item.active{background:#eaf2ff;color:var(--blue-deep);font-weight:800}
+.tab-bar{display:flex;border-bottom:2px solid var(--line);padding:0 14px}
+.tab-bar span{padding:10px 16px;cursor:pointer;font-weight:800;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
+.tab-bar span.active{color:var(--blue-deep);border-bottom-color:var(--blue-deep)}
+.tab-content{display:none;padding:14px}
+.tab-content.active{display:block}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+<main class="layout"><aside class="primary-side"><a class="primary-item" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item active" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside>
+<aside class="sub-side"><div class="sub-title">巡检管理</div><a class="sub-item" href="15-巡检项目管理.html">巡检项目</a><a class="sub-item" href="11-巡检点管理.html">巡检点</a><a class="sub-item active" href="25-巡检路线管理.html">巡检路线</a><a class="sub-item" href="12-巡检计划管理.html">巡检计划</a><a class="sub-item" href="13-巡检任务管理.html">巡检任务</a><a class="sub-item" href="14-巡检明细.html">巡检明细</a><a class="sub-item" href="24-巡检报表.html">巡检报表</a></aside>
+<section class="workspace"><div class="toast-wrap" id="toastWrap"></div>
+<section class="panel"><div class="panel-head"><span>巡检路线管理</span></div><div class="panel-body" style="padding:0"><div class="two-col">
+<div class="left-panel">
+<div style="padding:14px"><input id="rtSearch" placeholder="请输入路线名称" style="width:100%;height:40px;border:1px solid var(--line);border-radius:4px;padding:0 12px;margin-bottom:10px" oninput="filterRoutes()"><div style="display:flex;gap:10px"><button class="btn" style="flex:1;height:34px" onclick="filterRoutes()">搜索</button><button class="btn light" style="flex:1;height:34px" onclick="openAdd()">添加</button></div></div>
+<div class="scroll-list" style="max-height:calc(100vh - 320px)" id="routeList"></div></div>
+<div class="right-panel" id="routeDetail" style="display:none">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid var(--line)"><span style="font-weight:900;font-size:16px">路线信息</span><div class="btn-row"><a class="btn light" style="height:28px" onclick="openEdit()">编辑</a><a class="btn red" style="height:28px" onclick="openDel()">删除</a></div></div>
+<div class="kv" style="padding:14px 22px"><div class="k">路线名称</div><div class="v" id="rtName">—</div><div class="k">排序序号</div><div class="v" id="rtSeq">—</div><div class="k">创建时间</div><div class="v" id="rtTime">—</div><div class="k">备注</div><div class="v dim" id="rtRemark">—</div></div>
+<div class="tab-bar"><span class="active" onclick="switchTab('point')">巡检点</span><span onclick="switchTab('map')">巡检地图</span><span onclick="switchTab('plan')">巡检计划</span><span onclick="switchTab('task')">巡检任务</span></div>
+<div class="tab-content active" id="tab-point">
+  <div style="margin-bottom:10px;text-align:right"><a class="btn light" style="height:28px" onclick="openChoosePt()">＋ 添加</a></div>
+  <table style="min-width:1100px"><thead><tr><th>巡检点ID</th><th>巡检点名称</th><th>巡检类型</th><th>巡检位置</th><th>开始时间</th><th>结束时间</th><th>排序号</th><th style="width:100px">操作</th></tr></thead><tbody id="tabPointBody"></tbody></table>
+  <div id="ptPager" style="display:flex;justify-content:flex-end;align-items:center;margin-top:14px;font-size:13px;color:var(--muted);gap:10px"></div>
+</div>
+<div class="tab-content" id="tab-map"><div style="text-align:center;padding:40px;color:var(--muted)"><div style="font-size:40px;margin-bottom:8px">🗺️</div><p>路线地图预览（需对接地图服务）</p></div></div>
+<div class="tab-content" id="tab-plan"><table><thead><tr><th>计划名称</th><th>周期</th><th>状态</th><th>操作</th></tr></thead><tbody id="tabPlanBody"></tbody></table></div>
+<div class="tab-content" id="tab-task"><table><thead><tr><th>任务编码</th><th>巡检人</th><th>状态</th><th>操作</th></tr></thead><tbody id="tabTaskBody"></tbody></table></div>
+</div></div></div></section></section></main>
+
+<!-- 添加/编辑路线弹窗 -->
+<div class="modal-overlay" id="modal-edit"><div class="modal"><div class="modal-head"><span id="modalTitle">添加巡检路线</span><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body">
+  <div style="margin-bottom:14px"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">路线名称</label><div class="input"><input id="eName" style="border:0;outline:0;width:100%;background:transparent" placeholder="请输入路线名称"></div></div>
+  <div style="margin-bottom:14px"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">排序序号</label><div class="input"><input id="eSeq" type="number" style="border:0;outline:0;width:100%;background:transparent" value="1"></div></div>
+  <div style="margin-bottom:14px"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">备注</label><textarea id="eRemark" style="width:100%;height:60px;resize:vertical;border:1px solid #d7dfeb;border-radius:4px;padding:10px 15px;font-size:14px;font-family:inherit;color:#1f2d3d;outline:none" placeholder="请输入备注"></textarea></div>
+</div><div class="modal-foot"><a class="btn light" onclick="closeModal()">取消</a><a class="btn" onclick="save()">保存</a></div></div></div>
+
+<!-- 选择巡检点弹窗（仿 ChooseInspectionRoutePoint） -->
+<div class="modal-overlay" id="modal-choose"><div class="modal wide"><div class="modal-head"><span>选择巡检点</span><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body">
+  <div style="display:flex;gap:10px;margin-bottom:14px">
+    <div class="input" style="flex:1"><input id="chooseSearch" placeholder="请输入巡检点名称" style="border:0;outline:0;width:100%;background:transparent" oninput="queryChoose()"></div>
+    <button class="btn" onclick="queryChoose()">搜索</button>
+    <button class="btn gray" onclick="resetChoose()">重置</button>
+  </div>
+  <table><thead><tr><th style="width:40px">选择</th><th>巡检点ID</th><th>巡检点名称</th></tr></thead><tbody id="chooseBody"></tbody></table>
+  <div id="choosePager" style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px;color:var(--muted)"></div>
+</div><div class="modal-foot"><a class="btn light" onclick="closeModal()">取消</a><a class="btn" onclick="confirmChoose()">确定</a></div></div></div>
+
+<!-- 编辑巡检点弹窗（仿 EditInspectionRoutePoint） -->
+<div class="modal-overlay" id="modal-editpt"><div class="modal"><div class="modal-head"><span>编辑巡检点</span><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body">
+  <div style="margin-bottom:14px"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">巡检点名称</label><div class="input"><input id="eptName" style="border:0;outline:0;width:100%;background:transparent" readonly></div></div>
+  <div style="margin-bottom:14px"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">开始时间</label><div class="input"><input id="eptStart" type="time" style="border:0;outline:0;width:100%;background:transparent" value="08:00"></div></div>
+  <div style="margin-bottom:14px"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">结束时间</label><div class="input"><input id="eptEnd" type="time" style="border:0;outline:0;width:100%;background:transparent" value="18:00"></div></div>
+  <div style="margin-bottom:14px"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">排序号</label><div class="input"><input id="eptSort" type="number" style="border:0;outline:0;width:100%;background:transparent" value="1"></div></div>
+</div><div class="modal-foot"><a class="btn light" onclick="closeModal()">取消</a><a class="btn" onclick="savePt()">保存</a></div></div></div>
+
+<!-- 删除确认 -->
+<div class="modal-overlay" id="modal-delete"><div class="modal"><div class="modal-head"><span>确认删除</span><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body"><p id="delMsg">确定要删除吗？</p></div><div class="modal-foot"><a class="btn light" onclick="closeModal()">取消</a><a class="btn red" onclick="confirmDelete()">确认删除</a></div></div></div>
+
+<script src="common.js"></script>
+<script>
+var allAvailable=[{id:'10202604001',name:'6#气膜发电'},{id:'10202604002',name:'5#气膜发电'},{id:'10202604003',name:'1#楼配电房'},{id:'10202604004',name:'6#气膜'},{id:'10202604005',name:'5#气膜'},{id:'10202604006',name:'4#西电梯'},{id:'10202604007',name:'4#东电梯'},{id:'10202604008',name:'3#西电梯'},{id:'10202604009',name:'3#东电梯'},{id:'10202604010',name:'2#西电梯'},{id:'10202604011',name:'2#东电梯'},{id:'10202604012',name:'1#西电梯'},{id:'10202604013',name:'1#东电梯'},{id:'10202604014',name:'2楼西监控'}];
+var routes=[{name:'每月15日柴油发电机测试',points:[{id:'10202604001',name:'6#气膜发电',typeName:'设备巡检',loc:'6#气膜发电',startTime:'08:00',endTime:'17:00',sort:1},{id:'10202604002',name:'5#气膜发电',typeName:'设备巡检',loc:'5#气膜发电',startTime:'08:00',endTime:'17:00',sort:2},{id:'10202604003',name:'1#楼配电房',typeName:'设备巡检',loc:'1#楼配电房',startTime:'08:30',endTime:'17:30',sort:3}],seq:1,time:'2026-04-07 16:30:00',remark:'柴油发电机月度巡检路线'},{name:'气膜设备',points:[{id:'10202604004',name:'6#气膜',typeName:'设备巡检',loc:'6#气膜',startTime:'08:00',endTime:'12:00',sort:1},{id:'10202604005',name:'5#气膜',typeName:'设备巡检',loc:'5#气膜',startTime:'08:00',endTime:'12:00',sort:2}],seq:2,time:'2026-04-07 16:28:00',remark:'气膜设备巡检路线'},{name:'电梯',points:[{id:'10202604006',name:'4#西电梯',typeName:'设备巡检',loc:'4#西电梯',startTime:'09:00',endTime:'11:00',sort:1},{id:'10202604007',name:'4#东电梯',typeName:'设备巡检',loc:'4#东电梯',startTime:'09:00',endTime:'11:00',sort:2},{id:'10202604008',name:'3#西电梯',typeName:'设备巡检',loc:'3#西电梯',startTime:'09:00',endTime:'11:00',sort:3}],seq:3,time:'2026-04-07 16:25:00',remark:'全部电梯设备巡检路线'},{name:'监控设备',points:[{id:'10202604014',name:'2楼西监控',typeName:'设备巡检',loc:'2楼西监控',startTime:'08:00',endTime:'18:00',sort:1}],seq:4,time:'2026-04-07 16:20:00',remark:'监控设备巡检路线'},{name:'变压器巡检',points:[{id:'10202604001',name:'6#气膜发电',typeName:'设备巡检',loc:'6#气膜发电',startTime:'08:00',endTime:'10:00',sort:1}],seq:5,time:'2026-04-07 16:15:00',remark:'变压器巡检路线'},{name:'污水处理厂',points:[{id:'10202604003',name:'1#楼配电房',typeName:'设备巡检',loc:'1#楼配电房',startTime:'08:00',endTime:'16:00',sort:1}],seq:6,time:'2026-04-07 16:10:00',remark:'污水处理设备巡检路线'}];
+var selected=null,eIdx=-1,dType='',dIdx=-1;
+var chooseFiltered=[],choosePage=1,choosePS=10,chooseSelection=[];
+var ptPage=1,ptPS=10,ptEditIdx=-1;
+
+function filterRoutes(){var kw=(document.getElementById('rtSearch').value||'').toLowerCase();var fl=routes.filter(function(r){return!kw||r.name.toLowerCase().indexOf(kw)!==-1});var h='';fl.forEach(function(r){h+='<div class="rt-item'+(r===selected?' active':'')+'" onclick="selectRoute('+routes.indexOf(r)+')"><b>'+r.name+'</b></div>'});document.getElementById('routeList').innerHTML=h}
+function selectRoute(i){selected=routes[i];document.getElementById('rtName').textContent=selected.name;document.getElementById('rtSeq').textContent=selected.seq;document.getElementById('rtTime').textContent=selected.time;document.getElementById('rtRemark').textContent=selected.remark;document.getElementById('routeDetail').style.display='';switchTab('point');ptPage=1;renderPointTab();filterRoutes()}
+
+function switchTab(tab){
+  document.querySelectorAll('.tab-bar span').forEach(function(s){s.classList.remove('active')});
+  document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active')});
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='point'){ptPage=1;renderPointTab()}
+  else if(tab==='plan')document.getElementById('tabPlanBody').innerHTML=selected?'<tr><td>柴油发电机巡检</td><td>按周</td><td><span class="status green">启用</span></td><td><a class="link" href="12-巡检计划管理.html">查看</a></td></tr>':'<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--muted)">请先选择路线</td></tr>';
+  else if(tab==='task')document.getElementById('tabTaskBody').innerHTML='<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--muted)">巡检任务根据计划每晚2点自动生成</td></tr>';
+  ['point','map','plan','task'].forEach(function(l,i){document.querySelectorAll('.tab-bar span')[i].classList.toggle('active',l===tab)});
+}
+
+function renderPointTab(){
+  if(!selected){document.getElementById('tabPointBody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">请先选择路线</td></tr>';document.getElementById('ptPager').innerHTML='';return}
+  var pts=selected.points,total=pts.length,pages=Math.ceil(total/ptPS),s=(ptPage-1)*ptPS,pd=pts.slice(s,s+ptPS);
+  var h='';pd.forEach(function(p,i){h+='<tr><td>'+p.id+'</td><td>'+p.name+'</td><td>'+p.typeName+'</td><td>'+p.loc+'</td><td>'+p.startTime+'</td><td>'+p.endTime+'</td><td>'+p.sort+'</td><td><a class="link" onclick="openEditPt('+(s+i)+')">编辑</a>　<a class="link red-text" onclick="openDelPt('+(s+i)+')">删除</a></td></tr>'});
+  if(!pts.length)h='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">暂未关联巡检点，点击上方按钮添加</td></tr>';
+  document.getElementById('tabPointBody').innerHTML=h;
+  document.getElementById('ptPager').innerHTML='<span>共 <b>'+total+'</b> 条</span><span style="cursor:pointer" onclick="ptPage>1&&(ptPage--,renderPointTab())">‹</span><b>'+ptPage+'</b><span style="cursor:pointer" onclick="ptPage<pages&&(ptPage++,renderPointTab())">›</span>';
+}
+
+// 路线 CRUD
+function openAdd(){eIdx=-1;document.getElementById('modalTitle').textContent='添加巡检路线';document.getElementById('eName').value='';document.getElementById('eSeq').value='1';document.getElementById('eRemark').value='';openM('modal-edit')}
+function openEdit(){if(!selected)return;eIdx=routes.indexOf(selected);document.getElementById('modalTitle').textContent='编辑巡检路线';document.getElementById('eName').value=selected.name;document.getElementById('eSeq').value=selected.seq;document.getElementById('eRemark').value=selected.remark;openM('modal-edit')}
+function save(){
+  var nm=document.getElementById('eName').value.trim();if(!nm){toast('请输入路线名称','warn');return}
+  var d={name:nm,points:eIdx<0?[]:routes[eIdx].points,seq:parseInt(document.getElementById('eSeq').value)||1,time:new Date().toLocaleString('zh-CN').replace(/\//g,'-'),remark:document.getElementById('eRemark').value};
+  if(eIdx<0){routes.unshift(d);toast('巡检路线已添加','ok')}else{routes[eIdx]=d;if(selected===routes[eIdx]){selected=d;selectRoute(eIdx)}toast('已编辑','ok')}
+  closeModal();filterRoutes();
+}
+function openDel(){if(!selected)return;dType='route';dIdx=routes.indexOf(selected);document.getElementById('delMsg').textContent='确定要删除路线「'+selected.name+'」吗？';openM('modal-delete')}
+function confirmDelete(){
+  if(dType==='route'){routes.splice(dIdx,1);selected=null;document.getElementById('routeDetail').style.display='none'}
+  else if(dType==='point'){selected.points.splice(dIdx,1);renderPointTab();toast('巡检点已移除','warn')}
+  dIdx=-1;closeModal();filterRoutes();
+}
+
+// 选择巡检点（仿 ChooseInspectionRoutePoint）
+function openChoosePt(){if(!selected)return;choosePage=1;chooseSelection=[];queryChoose();openM('modal-choose')}
+function queryChoose(){
+  var kw=(document.getElementById('chooseSearch').value||'').toLowerCase();
+  var existingIds=selected.points.map(function(p){return p.id});
+  chooseFiltered=allAvailable.filter(function(p){return(!kw||p.name.toLowerCase().indexOf(kw)!==-1)});
+  renderChooseTable();
+}
+function resetChoose(){document.getElementById('chooseSearch').value='';chooseSelection=[];queryChoose()}
+function renderChooseTable(){
+  var total=chooseFiltered.length,pages=Math.ceil(total/choosePS),s=(choosePage-1)*choosePS,pd=chooseFiltered.slice(s,s+choosePS);
+  var h='';pd.forEach(function(p){var existing=selected.points.find(function(pt){return pt.id===p.id});if(existing){h+='<tr style="opacity:.4"><td><input type="checkbox" disabled checked></td><td>'+p.id+'</td><td>'+p.name+' <span style="font-size:11px;color:var(--muted)">已关联</span></td></tr>'}else{h+='<tr><td><input type="checkbox" value="'+p.id+'"'+(chooseSelection.indexOf(p.id)>=0?' checked':'')+' onchange="toggleChoose(\''+p.id+'\',this.checked)"></td><td>'+p.id+'</td><td>'+p.name+'</td></tr>'}});
+  if(!pd.length)h='<tr><td colspan="3" style="text-align:center;padding:30px;color:var(--muted)">暂无巡检点</td></tr>';
+  document.getElementById('chooseBody').innerHTML=h;
+  document.getElementById('choosePager').innerHTML='<span>共 <b>'+total+'</b> 条</span><div><span style="cursor:pointer" onclick="choosePage>1&&(choosePage--,renderChooseTable())">‹</span> <b>'+choosePage+'</b> <span style="cursor:pointer" onclick="choosePage<pages&&(choosePage++,renderChooseTable())">›</span></div>';
+}
+function toggleChoose(id,ck){if(ck)chooseSelection.push(id);else chooseSelection=chooseSelection.filter(function(x){return x!==id})}
+function confirmChoose(){
+  if(!chooseSelection.length){toast('请选择至少一个巡检点','warn');return}
+  chooseSelection.forEach(function(id){var p=allAvailable.find(function(x){return x.id===id});if(p&&!selected.points.find(function(x){return x.id===id})){selected.points.push({id:p.id,name:p.name,typeName:'设备巡检',loc:p.name,startTime:'08:00',endTime:'18:00',sort:selected.points.length+1})}});
+  selected.points.forEach(function(p,i){p.sort=i+1});
+  closeModal();renderPointTab();toast('巡检点已添加','ok');
+}
+
+// 编辑巡检点（仿 EditInspectionRoutePoint）
+function openEditPt(i){ptEditIdx=i;var p=selected.points[ptEditIdx];document.getElementById('eptName').value=p.name;document.getElementById('eptStart').value=p.startTime||'08:00';document.getElementById('eptEnd').value=p.endTime||'18:00';document.getElementById('eptSort').value=p.sort;openM('modal-editpt')}
+function savePt(){
+  var p=selected.points[ptEditIdx];p.startTime=document.getElementById('eptStart').value;p.endTime=document.getElementById('eptEnd').value;p.sort=parseInt(document.getElementById('eptSort').value)||1;
+  selected.points.sort(function(a,b){return a.sort-b.sort});selected.points.forEach(function(pt,i){pt.sort=i+1});
+  closeModal();renderPointTab();toast('已修改','ok');
+}
+function openDelPt(i){dType='point';dIdx=i;document.getElementById('delMsg').textContent='确定要移除巡检点「'+selected.points[i].name+'」吗？';openM('modal-delete')}
+
+function openM(id){document.getElementById(id).classList.add('show')}
+function closeModal(){document.querySelectorAll('.modal-overlay.show').forEach(function(m){m.classList.remove('show')})}
+function toast(msg,kind){var w=document.getElementById('toastWrap');var el=document.createElement('div');el.className='toast'+(kind?' '+kind:'');el.textContent=msg;w.appendChild(el);requestAnimationFrame(function(){el.classList.add('show')});setTimeout(function(){el.classList.remove('show');setTimeout(function(){el.remove()},280)},2500)}
+filterRoutes();document.addEventListener('click',function(e){if(e.target.classList.contains('modal-overlay')&&e.target.classList.contains('show'))e.target.classList.remove('show')});
+</script>
+</body></html>

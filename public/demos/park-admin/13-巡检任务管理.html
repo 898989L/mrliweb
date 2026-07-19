@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>巡检任务管理</title><link rel="stylesheet" href="common.css" />
+<style>
+.two-col{display:flex;min-height:calc(100vh - 200px)}
+.left-panel{width:200px;flex-shrink:0;border-right:1px solid var(--line)}
+.right-panel{flex:1;overflow:auto}
+.pl-item{padding:12px 16px;cursor:pointer;border-bottom:1px solid #f0f2f5;transition:.12s}
+.pl-item:hover{background:#f7f9fe}
+.pl-item.active{background:#eaf2ff;color:var(--blue-deep);font-weight:800}
+.text-danger{color:var(--red);font-weight:800}
+.staff-item{padding:10px 12px;border:1px solid #e8ecf2;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:.1s}
+.staff-item:hover{border-color:var(--blue);background:#f8faff}
+.staff-item.selected{background:#eef5ff;border-color:var(--blue);font-weight:800}
+.staff-item .name{font-size:14px}.staff-item .dept{font-size:12px;color:var(--muted)}
+.org-item{padding:8px 10px;cursor:pointer;border-radius:4px;font-size:13px;transition:.1s}
+.org-item:hover{background:#f0f5ff}
+.org-item.active{background:#eaf2ff;color:var(--blue-deep);font-weight:800}
+.transfer-pick{border:1px solid #d7dfeb;border-radius:4px;padding:8px 12px;min-height:44px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;cursor:pointer}
+.transfer-pick .tag{display:inline-flex;align-items:center;gap:4px;background:#eef5ff;color:var(--blue-deep);padding:3px 8px;border-radius:4px;font-size:12px;font-weight:800}
+.transfer-pick .tag .remove{cursor:pointer;font-size:14px;line-height:1;opacity:.6}.transfer-pick .tag .remove:hover{opacity:1}
+.transfer-pick .placeholder{color:#9aa4b5}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+<main class="layout"><aside class="primary-side"><a class="primary-item" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item active" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside>
+<aside class="sub-side"><div class="sub-title">巡检管理</div><a class="sub-item" href="15-巡检项目管理.html">巡检项目</a><a class="sub-item" href="11-巡检点管理.html">巡检点</a><a class="sub-item" href="25-巡检路线管理.html">巡检路线</a><a class="sub-item" href="12-巡检计划管理.html">巡检计划</a><a class="sub-item active" href="13-巡检任务管理.html">巡检任务</a><a class="sub-item" href="14-巡检明细.html">巡检明细</a><a class="sub-item" href="24-巡检报表.html">巡检报表</a></aside>
+<section class="workspace"><div class="toast-wrap" id="toastWrap"></div>
+<section class="panel"><div class="panel-head"><span>巡检任务管理</span></div><div class="panel-body" style="padding:0"><div class="two-col">
+<div class="left-panel"><div class="scroll-list" style="max-height:calc(100vh - 300px)" id="planList"></div></div>
+<div class="right-panel" style="padding:18px 22px">
+<div class="filters"><div class="input"><input id="fExe" placeholder="执行人" style="border:0;outline:0;width:100%;background:transparent" oninput="doFilter()"></div><div class="input"><input id="fStart" placeholder="实际开始时间" style="border:0;outline:0;width:100%;background:transparent"></div><div class="input"><input id="fEnd" placeholder="实际结束时间" style="border:0;outline:0;width:100%;background:transparent"></div><div class="select"><select id="fState" style="border:0;outline:0;width:100%;background:transparent;color:inherit" onchange="doFilter()"><option value="">巡检状态</option><option value="未开始">未开始</option><option value="进行中">进行中</option><option value="已完成">已完成</option></select></div><div></div><button class="btn" onclick="doFilter()">查询</button><button class="btn gray" onclick="doReset()">重置</button></div>
+<table style="min-width:1300px"><thead><tr><th>任务编码</th><th>巡检计划</th><th>巡检人/开始结束时间</th><th>实际巡检时间</th><th>计划巡检人</th><th>当前巡检人</th><th>转移描述</th><th>巡检方式</th><th>巡检状态</th><th style="width:180px">操作</th></tr></thead><tbody id="tableBody"></tbody></table>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px;color:var(--muted)"><span>共 <b id="totalCount">0</b> 条</span><div><span style="cursor:pointer" onclick="prevPage()">‹</span> <b id="pageNum">1</b> <span style="cursor:pointer" onclick="nextPage()">›</span></div><span>前往 <input style="width:40px;height:28px;border:1px solid var(--line);border-radius:4px;text-align:center" id="goPage" value="1" onkeydown="if(event.key==='Enter')goToPage()"> 页</span></div>
+<div class="alert-box" style="margin-top:14px"><p class="dim">提示：巡检任务根据计划每晚2点自动生成。如未生成请检查计划配置是否正确。</p></div>
+</div></div></div></section></section></main>
+
+<!-- 流转弹窗 -->
+<div class="modal-overlay" id="modal-transfer"><div class="modal"><div class="modal-head"><span>任务流转</span><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body"><div class="form-item"><label>当前巡检人</label><div class="input"><input id="tCurUser" style="border:0;outline:0;width:100%;background:transparent" readonly></div></div><div class="form-item"><label>流转给</label><div class="transfer-pick" id="transferPick" onclick="openStaffDialog()"><span class="placeholder" id="transferPlaceholder">请选择接收人</span></div></div><div class="form-item"><label>流转原因</label><div class="input"><input id="tReason" style="border:0;outline:0;width:100%;background:transparent" placeholder="请输入流转原因"></div></div></div><div class="modal-foot"><a class="btn light" onclick="closeModal()">取消</a><a class="btn" onclick="confirmTransfer()">确认流转</a></div></div></div>
+
+<!-- 删除确认 -->
+<div class="modal-overlay" id="modal-delete"><div class="modal"><div class="modal-head"><span>确认删除</span><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body"><p>确定要删除任务「<b id="delName"></b>」吗？</p></div><div class="modal-foot"><a class="btn light" onclick="closeModal()">取消</a><a class="btn red" onclick="confirmDelete()">确认删除</a></div></div></div>
+
+<script src="common.js"></script>
+<script>
+var plans=[{id:'P001',name:'柴油发电机巡检'},{id:'P002',name:'气膜设备巡检'},{id:'P003',name:'电梯巡检'},{id:'P004',name:'监控设备巡检'}];
+var allData=[{taskId:'53202606001',planName:'柴油发电机巡检',planInsTime:'2026-06-02 08:00',planEndTime:'2026-06-02 18:00',actInsTime:'-',originalPlanUserName:'-',planUserName:'测试2',transferDesc:'-',signTypeName:'现场拍照',stateName:'未开始'},{taskId:'53202606002',planName:'气膜设备巡检',planInsTime:'2026-06-02 08:00',planEndTime:'2026-06-02 18:00',actInsTime:'-',originalPlanUserName:'-',planUserName:'测试2',transferDesc:'-',signTypeName:'现场拍照',stateName:'未开始'},{taskId:'53202606003',planName:'电梯巡检',planInsTime:'2026-06-02 08:00',planEndTime:'2026-06-02 12:00',actInsTime:'2026-06-02 09:30',originalPlanUserName:'测试2',planUserName:'测试4',transferDesc:'原巡检人请假，已转交接班人员',signTypeName:'现场拍照',stateName:'进行中'},{taskId:'53202606004',planName:'监控设备巡检',planInsTime:'2026-06-01 08:00',planEndTime:'2026-06-01 18:00',actInsTime:'2026-06-01 10:15',originalPlanUserName:'测试2',planUserName:'测试2',transferDesc:'-',signTypeName:'NFC签到',stateName:'已完成'}];
+var filtered=[],page=1,ps=10,curPlan='',dIdx=-1,tTask=null;
+
+function renderPlans(){var h='<div class="pl-item'+(curPlan===''?' active':'')+'" onclick="switchPlan(\'\')">全部计划</div>';plans.forEach(function(p){h+='<div class="pl-item'+(curPlan===p.name?' active':'')+'" onclick="switchPlan(\''+p.name+'\')">'+p.name+'</div>'});document.getElementById('planList').innerHTML=h}
+function switchPlan(nm){curPlan=nm;doFilter();renderPlans()}
+
+function render(){var s=(page-1)*ps,pd=filtered.slice(s,s+ps),h='';pd.forEach(function(d,i){h+='<tr><td>'+d.taskId+'</td><td>'+d.planName+'</td><td><div>'+d.planInsTime+'</div><div>'+d.planEndTime+'</div></td><td>'+d.actInsTime+'</td><td>'+d.originalPlanUserName+'</td><td>'+d.planUserName+'</td><td>'+d.transferDesc+'</td><td>'+d.signTypeName+'</td><td>'+(d.stateName==='未开始'?'<span class="status red">'+d.stateName+'</span>':(d.stateName==='进行中'?'<span class="status orange">'+d.stateName+'</span>':'<span class="status green">'+d.stateName+'</span>'))+'</td><td>'+(d.stateName==='未开始'||d.stateName==='进行中'?'<a class="link" onclick="openTransfer('+(s+i)+')">流转</a>　':'')+'<a class="link" href="14-巡检明细.html">详情</a>　<a class="link red-text" onclick="openDel('+(s+i)+')">删除</a></td></tr>'});if(!pd.length)h='<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--muted)">暂无巡检任务</td></tr>';document.getElementById('tableBody').innerHTML=h;document.getElementById('totalCount').textContent=filtered.length;document.getElementById('pageNum').textContent=page}
+function doFilter(){var ex=(document.getElementById('fExe').value||'').toLowerCase(),st=document.getElementById('fState').value;filtered=allData.filter(function(d){return(!curPlan||d.planName===curPlan)&&(!ex||d.planUserName.toLowerCase().indexOf(ex)!==-1)&&(!st||d.stateName===st)});page=1;render()}
+function doReset(){document.getElementById('fExe').value='';document.getElementById('fStart').value='';document.getElementById('fEnd').value='';document.getElementById('fState').value='';doFilter()}
+function prevPage(){if(page>1){page--;render()}}function nextPage(){if(page<Math.ceil(filtered.length/ps)){page++;render()}}function goToPage(){var p=parseInt(document.getElementById('goPage').value);if(p>=1&&p<=Math.ceil(filtered.length/ps)){page=p;render()}}
+
+function openTransfer(i){tTask=filtered[i];tStaff=null;document.getElementById('tCurUser').value=tTask.planUserName;var pk=document.getElementById('transferPick');pk.querySelectorAll('.tag').forEach(function(t){t.remove()});document.getElementById('transferPlaceholder').style.display='';document.getElementById('tReason').value='';openM('modal-transfer')}
+function confirmTransfer(){if(!tStaff){toast('请选择接收人','warn');return}tTask.planUserName=tStaff;tTask.originalPlanUserName=tTask.originalPlanUserName||tTask.planUserName;tTask.transferDesc=document.getElementById('tReason').value||'手动流转';closeModal();doFilter();toast('流转成功','ok')}
+var tStaff=null,dialogSelStaff=null;var allStaffByOrg={'盛源印花产业园':[{name:'测试2',dept:'运维部'},{name:'测试3',dept:'运维部'},{name:'测试4',dept:'工程部'},{name:'王政伟',dept:'行政部'},{name:'熊剑',dept:'工程部'},{name:'章琼',dept:'行政部'},{name:'万俊伟',dept:'工程部'}],'运维部':[{name:'测试2',dept:'运维部'},{name:'测试3',dept:'运维部'}],'工程部':[{name:'测试4',dept:'工程部'},{name:'熊剑',dept:'工程部'},{name:'万俊伟',dept:'工程部'}],'行政部':[{name:'王政伟',dept:'行政部'},{name:'章琼',dept:'行政部'}]};function openStaffDialog(){dialogSelStaff=tStaff?tStaff:null;var orgs=Object.keys(allStaffByOrg),h='';orgs.forEach(function(o){h+='<div class="org-item'+(o==='盛源印花产业园'?' active':'')+'" onclick="selectOrg(\''+o+'\')">'+o+'</div>'});document.getElementById('orgList').innerHTML=h;selectOrg('盛源印花产业园');openM('modal-staff')}function closeStaffDialog(){closeModal()}function selectOrg(org){document.querySelectorAll('.org-item').forEach(function(e){e.classList.toggle('active',e.textContent.trim()===org)});var staffs=allStaffByOrg[org]||allStaffByOrg['盛源印花产业园'],h='';staffs.forEach(function(s){h+='<div class="staff-item'+(dialogSelStaff===s.name?' selected':'')+'" onclick="toggleDialogStaff(\''+s.name+'\')"><span class="name">'+s.name+'</span><span class="dept">'+s.dept+'</span></div>'});document.getElementById('staffList').innerHTML=h;document.getElementById('staffCount').textContent='('+(dialogSelStaff?1:0)+'人)'}function toggleDialogStaff(name){dialogSelStaff=(dialogSelStaff===name?null:name);var act=document.querySelector('.org-item.active');if(act)selectOrg(act.textContent.trim())}function confirmStaff(){tStaff=dialogSelStaff;var pk=document.getElementById('transferPick');pk.querySelectorAll('.tag').forEach(function(t){t.remove()});if(tStaff){document.getElementById('transferPlaceholder').style.display='none';pk.insertAdjacentHTML('beforeend','<span class="tag">'+tStaff+'<span class="remove" onclick="event.stopPropagation();removeStaff()">&times;</span></span>')}else{document.getElementById('transferPlaceholder').style.display=''}closeStaffDialog()}function removeStaff(){tStaff=null;var pk=document.getElementById('transferPick');pk.querySelectorAll('.tag').forEach(function(t){t.remove()});document.getElementById('transferPlaceholder').style.display=''};
+function openDel(i){dIdx=i;document.getElementById('delName').textContent=filtered[i].taskId;openM('modal-delete')}
+function confirmDelete(){filtered.splice(dIdx,1);closeModal();doFilter();toast('已删除','warn')}
+
+function openM(id){document.getElementById(id).classList.add('show')}
+function closeModal(){document.querySelectorAll('.modal-overlay.show').forEach(function(m){m.classList.remove('show')})}
+function toast(msg,kind){var w=document.getElementById('toastWrap');var el=document.createElement('div');el.className='toast'+(kind?' '+kind:'');el.textContent=msg;w.appendChild(el);requestAnimationFrame(function(){el.classList.add('show')});setTimeout(function(){el.classList.remove('show');setTimeout(function(){el.remove()},280)},2500)}
+renderPlans();doFilter();document.addEventListener('click',function(e){if(e.target.classList.contains('modal-overlay')&&e.target.classList.contains('show'))e.target.classList.remove('show')});
+</script>
+</body></html>

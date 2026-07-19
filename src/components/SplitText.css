@@ -1,0 +1,11 @@
+.split-text__char {
+  display: inline-block;
+}
+
+.split-text:not(.split-text--sharp) .split-text__char {
+  will-change: transform, opacity, filter;
+}
+
+.split-text--sharp .split-text__char {
+  will-change: transform, opacity;
+}

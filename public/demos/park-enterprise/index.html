@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>首页 · 智慧园区企业端</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hello-bar {
+      background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%);
+      color: #fff;
+      padding: 18px 16px 70px;
+      margin-bottom: -60px;
+      border-radius: 0 0 24px 24px;
+    }
+    .hello-bar .greeting,
+    .hello-bar .name { color: #fff; }
+    .hello-bar .name { font-size: 16px; font-weight: 600; margin-top: 2px; }
+    .hello-row {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 10px;
+    }
+    .hello-row .logo {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+    .hello-row .bell {
+      margin-left: auto;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      position: relative;
+    }
+    .hello-row .bell svg { width: 18px; height: 18px; color: #fff; }
+    .hello-row .bell .dot {
+      position: absolute;
+      top: 8px; right: 8px;
+      width: 8px; height: 8px;
+      background: #ff4d4f;
+      border-radius: 50%;
+      border: 1.5px solid #4096ff;
+    }
+    .hello-bar .room-meta {
+      font-size: 12px;
+      opacity: 0.92;
+      margin-top: 4px;
+    }
+    .hello-bar .room-meta span { margin-right: 12px; }
+
+    /* 顶部 4 卡 */
+    .top-cards {
+      margin: 0 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      padding: 14px 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      position: relative;
+      z-index: 2;
+    }
+    .top-cards .item {
+      text-align: center;
+      padding: 4px 0;
+      position: relative;
+    }
+    .top-cards .item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 12px;
+      width: 1px; height: 32px;
+      background: var(--border);
+    }
+    .top-cards .item .v {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-1);
+      line-height: 1.3;
+    }
+    .top-cards .item .v .unit { font-size: 11px; color: var(--text-3); font-weight: normal; margin-left: 2px; }
+    .top-cards .item .l { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+    .top-cards .item.danger .v { color: var(--danger); }
+    .top-cards .item.success .v { color: var(--success); }
+    .top-cards .item.warning .v { color: var(--warning); }
+
+    .quick-entries {
+      margin: 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 16px 8px 12px;
+      box-shadow: var(--shadow);
+    }
+    .qe-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-1);
+      padding: 0 8px 12px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .qe-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px 0;
+    }
+    .qe-grid a {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+      padding: 6px 0;
+    }
+    .qe-grid .icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+    }
+    .qe-grid .icon svg { width: 22px; height: 22px; }
+    .qe-grid .icon.blue { background: linear-gradient(135deg, #1677ff, #4096ff); }
+    .qe-grid .icon.orange { background: linear-gradient(135deg, #ff9500, #ffb049); }
+    .qe-grid .icon.green { background: linear-gradient(135deg, #00b578, #4ddba6); }
+    .qe-grid .icon.red { background: linear-gradient(135deg, #ff4d4f, #ff7875); }
+    .qe-grid .icon.purple { background: linear-gradient(135deg, #722ed1, #9254de); }
+    .qe-grid .icon.cyan { background: linear-gradient(135deg, #13c2c2, #36cfc9); }
+    .qe-grid .icon.pink { background: linear-gradient(135deg, #eb2f96, #ff85c0); }
+    .qe-grid .icon.gray { background: linear-gradient(135deg, #8c8c8c, #bfbfbf); }
+    .qe-grid .name { font-size: 12px; color: var(--text-2); }
+
+    /* 本月概览卡 */
+    .month-card {
+      margin: 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .month-card .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .month-card .hd .ttl { font-size: 14px; font-weight: 600; color: var(--text-1); }
+    .month-card .hd .more { font-size: 12px; color: var(--primary); }
+    .month-card .body {
+      background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+    .month-card .body .row1 {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .month-card .body .amount {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-1);
+      font-family: -apple-system, sans-serif;
+    }
+    .month-card .body .amount .sym { font-size: 14px; color: var(--text-3); margin-right: 2px; }
+    .month-card .body .tag-paid {
+      background: var(--success-light);
+      color: var(--success);
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+    .month-card .body .row2 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-3);
+    }
+    .month-card .body .row2 .v { color: var(--text-1); font-weight: 600; font-size: 13px; margin-top: 2px; }
+
+    /* 通知预览 */
+    .notice-list {
+      margin: 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .notice-list .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .notice-list .hd .ttl { font-size: 14px; font-weight: 600; color: var(--text-1); }
+    .notice-list .hd .more { font-size: 12px; color: var(--primary); }
+    .notice-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .notice-item:last-child { border-bottom: none; }
+    .notice-item .tag-badge {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .notice-item .tag-badge.公告 { background: linear-gradient(135deg, #1677ff, #4096ff); }
+    .notice-item .tag-badge.提醒 { background: linear-gradient(135deg, #ff9500, #ffb049); }
+    .notice-item .tag-badge.通知 { background: linear-gradient(135deg, #722ed1, #9254de); }
+    .notice-item .tag-badge.账单 { background: linear-gradient(135deg, #ff4d4f, #ff7875); }
+    .notice-item .body { flex: 1; min-width: 0; }
+    .notice-item .ttl {
+      font-size: 13px;
+      color: var(--text-1);
+      font-weight: 500;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .notice-item .meta {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 2px;
+    }
+    .notice-item .dot-unread {
+      width: 6px; height: 6px;
+      background: var(--danger);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* 合同到期卡 */
+    .contract-card {
+      margin: 12px;
+      padding: 14px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #fff8e6 0%, #fff 100%);
+      border: 1px solid #ffe7a6;
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .contract-card .icon {
+      width: 40px; height: 40px;
+      background: #fff8e6;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--warning);
+      flex-shrink: 0;
+    }
+    .contract-card .icon svg { width: 22px; height: 22px; }
+    .contract-card .body { flex: 1; min-width: 0; }
+    .contract-card .ttl { font-size: 13px; font-weight: 600; color: var(--text-1); }
+    .contract-card .desc { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+    .contract-card .arrow { color: var(--warning); }
+
+    /* 通用 sheet/modal */
+    .sheet-mask {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1100;
+      display: none;
+      align-items: flex-end; justify-content: center;
+    }
+    .sheet-mask.show { display: flex; }
+    .sheet {
+      width: 100%; max-width: 750px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 16px 16px 0 0;
+      padding: 18px 18px calc(24px + 60px + env(safe-area-inset-bottom));
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .sheet .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .sheet .hd .ttl { font-size: 17px; font-weight: 600; color: var(--text-1); }
+    .sheet .hd .close { color: var(--text-3); font-size: 24px; cursor: pointer; line-height: 1; }
+    .sheet .field { margin-bottom: 14px; }
+    .sheet .field .l { font-size: 13px; color: var(--text-2); margin-bottom: 6px; }
+    .sheet .field .l .req { color: var(--danger); margin-right: 2px; }
+    .sheet .field input,
+    .sheet .field textarea,
+    .sheet .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-1);
+      background: var(--white);
+      font-family: inherit;
+    }
+    .sheet .field textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+    .sheet .field input:focus,
+    .sheet .field textarea:focus,
+    .sheet .field select:focus { border-color: var(--primary); outline: none; }
+    .sheet .submit-btn {
+      width: 100%; padding: 13px 0;
+      font-size: 15px; font-weight: 600;
+      margin-top: 6px;
+    }
+    .sheet .type-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    }
+    .sheet .type-grid .chip {
+      padding: 8px 0;
+      text-align: center;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text-2);
+      background: var(--white);
+      cursor: pointer;
+    }
+    .sheet .type-grid .chip.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- 蓝色欢迎条 -->
+    <div class="hello-bar">
+      <div class="hello-row">
+        <div class="logo" id="tenantLogo">蓝</div>
+        <div>
+          <div class="greeting" id="greeting">早上好</div>
+          <div class="name" id="tenantName">蓝海科技</div>
+        </div>
+        <a href="notifications.html" class="bell" aria-label="通知">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 01-6 0m6 0H9"/>
+          </svg>
+          <span class="dot" id="unreadDot" style="display:none;"></span>
+        </a>
+      </div>
+      <div class="room-meta" id="roomMeta"></div>
+    </div>
+
+    <!-- 顶部 4 卡 -->
+    <div class="top-cards" id="topCards"></div>
+
+    <!-- 本月账单卡 -->
+    <div class="month-card">
+      <div class="hd">
+        <div class="ttl">本月账单</div>
+        <a href="company-fees.html" class="more">查看详情 ›</a>
+      </div>
+      <div class="body" id="monthBillBody"></div>
+    </div>
+
+    <!-- 快捷入口 -->
+    <div class="quick-entries">
+      <div class="qe-title">
+        <span>常用功能</span>
+      </div>
+      <div class="qe-grid">
+        <a href="water-list.html">
+          <div class="icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l-5.5 9h11L12 2zM12 22a7 7 0 007-7c0-2-1-3.9-3-5.5l-4 7-4-7c-2 1.6-3 3.5-3 5.5a7 7 0 007 7z"/></svg>
+          </div>
+          <div class="name">水电列表</div>
+        </a>
+        <a href="company-fees.html">
+          <div class="icon orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/><circle cx="12" cy="12" r="9"/></svg>
+          </div>
+          <div class="name">我的费用</div>
+        </a>
+        <a href="company-info.html">
+          <div class="icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/><path d="M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg>
+          </div>
+          <div class="name">入驻信息</div>
+        </a>
+        <a href="javascript:void(0)" onclick="openRepairSheet()">
+          <div class="icon cyan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div class="name">报修</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 通知预览 -->
+    <div class="notice-list">
+      <div class="hd">
+        <div class="ttl">最新通知</div>
+        <a href="notifications.html" class="more">全部 ›</a>
+      </div>
+      <div id="noticePreview"></div>
+    </div>
+
+    <!-- 合同到期提示 -->
+    <div class="contract-card" id="contractCard" style="display:none;" onclick="location.href='company-info.html'">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="body">
+        <div class="ttl" id="contractTitle"></div>
+        <div class="desc" id="contractDesc"></div>
+      </div>
+      <span class="arrow">›</span>
+    </div>
+
+    <div style="height:12px;"></div>
+
+    <div id="tabbar"></div>
+  </div>
+
+  <!-- 报修 sheet -->
+  <div class="sheet-mask" id="repairMask" onclick="closeRepairSheet(event)">
+    <div class="sheet" onclick="event.stopPropagation()">
+      <div class="hd">
+        <div class="ttl">报修工单</div>
+        <span class="close" onclick="closeRepairSheet()">×</span>
+      </div>
+      <div class="field">
+        <div class="l"><span class="req">*</span>报修类型</div>
+        <div class="type-grid" id="repairTypeGrid">
+          <div class="chip active" data-type="水电" onclick="selectRepairType(this)">水电</div>
+          <div class="chip" data-type="空调" onclick="selectRepairType(this)">空调</div>
+          <div class="chip" data-type="门窗" onclick="selectRepairType(this)">门窗</div>
+          <div class="chip" data-type="网络" onclick="selectRepairType(this)">网络</div>
+          <div class="chip" data-type="照明" onclick="selectRepairType(this)">照明</div>
+          <div class="chip" data-type="电梯" onclick="selectRepairType(this)">电梯</div>
+          <div class="chip" data-type="保洁" onclick="selectRepairType(this)">保洁</div>
+          <div class="chip" data-type="其他" onclick="selectRepairType(this)">其他</div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="l"><span class="req">*</span>故障描述</div>
+        <textarea id="repairDesc" placeholder="请详细描述故障现象、位置等信息（不少于 10 字）"></textarea>
+      </div>
+      <div class="field">
+        <div class="l">现场照片（可选）</div>
+        <div style="display:flex;gap:8px;">
+          <div id="repairPhoto1" onclick="uploadRepairPhoto('repairPhoto1')" style="width:64px;height:64px;border:1.5px dashed #d9d9d9;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-3);cursor:pointer;background:#fafbfc;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <div id="repairPhoto2" onclick="uploadRepairPhoto('repairPhoto2')" style="width:64px;height:64px;border:1.5px dashed #d9d9d9;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-3);cursor:pointer;background:#fafbfc;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="l"><span class="req">*</span>联系电话</div>
+        <input type="tel" id="repairPhone" placeholder="便于维修师傅联系您" maxlength="11">
+      </div>
+      <div class="field">
+        <div class="l">期望上门时间</div>
+        <select id="repairTime">
+          <option value="尽快">尽快（今日内）</option>
+          <option value="明日上午">明日上午 9:00-12:00</option>
+          <option value="明日下午">明日下午 13:00-18:00</option>
+          <option value="后天">后天</option>
+          <option value="不急">不急，预约即可</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-block btn-lg submit-btn" onclick="submitRepair()">提交工单</button>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    // 顶部 TabBar
+    document.getElementById('tabbar').outerHTML = renderTabBar('home');
+
+    // 当前租户
+    const t = getCurrentTenant();
+    document.getElementById('tenantLogo').textContent = t.avatar || t.shortName.charAt(0);
+
+    // 问候语
+    const h = new Date().getHours();
+    const greet = h < 6 ? '凌晨好' : h < 11 ? '早上好' : h < 13 ? '中午好' : h < 18 ? '下午好' : '晚上好';
+    document.getElementById('greeting').textContent = greet + '，';
+    document.getElementById('tenantName').textContent = t.shortName;
+    document.getElementById('roomMeta').innerHTML = `
+      <span>🏢 ${t.park}</span>
+      <span>🚪 ${t.room}</span>
+      <span>📐 ${t.area} ㎡</span>
+    `;
+
+    // 未读通知红点
+    const unread = getUnreadCount();
+    if (unread > 0) {
+      document.getElementById('unreadDot').style.display = 'block';
+    }
+
+    // 顶部 4 卡
+    const u = MOCK.utilityCurrent;
+    const acc = MOCK.utilityAccount;
+    const fb = MOCK.feeBillsCurrent;
+    const lowBal = acc.balance < acc.lowBalanceThreshold;
+    document.getElementById('topCards').innerHTML = `
+      <div class="item">
+        <div class="v">${u.water}<span class="unit">吨</span></div>
+        <div class="l">本月用水</div>
+      </div>
+      <div class="item warning">
+        <div class="v">${u.electricity}<span class="unit">度</span></div>
+        <div class="l">本月用电</div>
+      </div>
+      <div class="item ${lowBal ? 'danger' : 'success'}">
+        <div class="v" style="font-size:16px;">¥${acc.balance.toFixed(0)}</div>
+        <div class="l">预存余额${lowBal ? ' ⚠' : ''}</div>
+      </div>
+      <div class="item ${unread > 0 ? 'danger' : ''}">
+        <div class="v">${unread}<span class="unit">条</span></div>
+        <div class="l">未读通知</div>
+      </div>
+    `;
+
+    // 本月账单（仅租金 + 物业，水电走预存）
+    document.getElementById('monthBillBody').innerHTML = `
+      <div class="row1">
+        <div>
+          <div style="font-size:12px;color:var(--text-3);">${fb.period} 应缴合计</div>
+          <div class="amount"><span class="sym">¥</span>${fb.total.toLocaleString('zh-CN',{minimumFractionDigits:2})}</div>
+        </div>
+        <span class="tag-paid">${fb.status === 'paid' ? '✓ 已结清' : '待缴费'}</span>
+      </div>
+      <div class="row2" style="grid-template-columns: 1fr 1fr;">
+        <div>租金<div class="v">¥${fb.rent.toLocaleString()}</div></div>
+        <div>物业费<div class="v">¥${fb.property.toLocaleString()}</div></div>
+      </div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:11px;color:var(--text-3);display:flex;align-items:center;justify-content:space-between;">
+        <span>💧 本月水电已从预存账户扣减 ¥${u.total.toFixed(2)}</span>
+        <a href="water-list.html" style="color:var(--primary);">账户详情 ›</a>
+      </div>
+    `;
+
+    // 余额不足时在合同卡前插一条横幅
+    if (lowBal) {
+      const card = document.getElementById('contractCard');
+      const alert = document.createElement('div');
+      alert.className = 'contract-card';
+      alert.style.background = 'linear-gradient(135deg, #fff7e6 0%, #fff 100%)';
+      alert.style.borderColor = '#ffd591';
+      alert.style.cursor = 'pointer';
+      alert.onclick = () => location.href = 'water-list.html';
+      alert.innerHTML = `
+        <div class="icon" style="background:#fff7e6;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div class="body">
+          <div class="ttl" style="color:var(--warning);">预存余额仅剩 ¥${acc.balance.toFixed(2)}</div>
+          <div class="desc">低于预警值 ¥${acc.lowBalanceThreshold}，建议及时充值避免影响水电扣减</div>
+        </div>
+        <span class="arrow" style="color:var(--warning);">›</span>
+      `;
+      card.parentNode.insertBefore(alert, card);
+    }
+
+    // 通知预览（最新 3 条）
+    document.getElementById('noticePreview').innerHTML = MOCK.notifications.slice(0, 3).map(n => `
+      <div class="notice-item" onclick="location.href='notifications.html?id=${n.id}'">
+        <div class="tag-badge ${n.tag}">${n.tag}</div>
+        <div class="body">
+          <div class="ttl">${n.title}</div>
+          <div class="meta">${n.time.split(' ')[0]} · ${n.tag}</div>
+        </div>
+        ${n.read ? '<span class="arrow" style="color:var(--text-3)">›</span>' : '<div class="dot-unread"></div>'}
+      </div>
+    `).join('');
+
+    // 合同到期提醒
+    const contractEnd = new Date(t.contractEnd);
+    const today = new Date('2026-06-02');
+    const daysLeft = Math.round((contractEnd - today) / (1000 * 60 * 60 * 24));
+    if (daysLeft <= 365 && daysLeft > 0) {
+      document.getElementById('contractCard').style.display = 'flex';
+      document.getElementById('contractTitle').textContent = `合同还有 ${daysLeft} 天到期`;
+      document.getElementById('contractDesc').textContent = `${t.contractEnd} 到期 · 请提前联系物业续签`;
+    }
+
+    // ========== 报修 sheet 交互 ==========
+    function openRepairSheet() {
+      document.getElementById('repairDesc').value = '';
+      document.getElementById('repairPhone').value = t.phone;
+      document.getElementById('repairTime').value = '尽快';
+      document.getElementById('repairMask').classList.add('show');
+    }
+    function closeRepairSheet(e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById('repairMask').classList.remove('show');
+    }
+    function selectRepairType(el) {
+      document.querySelectorAll('#repairTypeGrid .chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+    }
+    const repairPhotoStatus = { repairPhoto1: false, repairPhoto2: false };
+    function uploadRepairPhoto(id) {
+      repairPhotoStatus[id] = true;
+      const el = document.getElementById(id);
+      el.style.borderColor = 'var(--success)';
+      el.style.background = 'var(--success-light)';
+      el.style.color = 'var(--success)';
+      el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22" height="22"><polyline points="5 12 10 17 19 8"/></svg>';
+      showToast('照片已添加');
+    }
+    function submitRepair() {
+      const type = document.querySelector('#repairTypeGrid .chip.active')?.dataset.type;
+      const desc = document.getElementById('repairDesc').value.trim();
+      const phone = document.getElementById('repairPhone').value.trim();
+      if (!type) { showToast('请选择报修类型'); return; }
+      if (desc.length < 10) { showToast('请详细描述故障（不少于 10 字）'); return; }
+      if (!/^1[3-9]\d{9}$/.test(phone)) { showToast('请填写正确的联系电话'); return; }
+      const btn = document.querySelector('#repairMask .submit-btn');
+      btn.disabled = true; btn.textContent = '提交中...';
+      setTimeout(() => {
+        closeRepairSheet();
+        btn.disabled = false; btn.textContent = '提交工单';
+        showToast(`工单已提交，${type}类报修将在 2h 内响应`);
+      }, 800);
+    }
+  </script>
+</body>
+</html>

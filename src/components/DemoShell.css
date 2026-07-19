@@ -1,0 +1,152 @@
+.demo-shell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #0b0d14;
+}
+
+.demo-shell--bare {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.demo-shell__bare-label {
+  flex-shrink: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 12px;
+  color: rgba(240, 242, 248, 0.55);
+  background: #161a24;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.demo-shell--desktop {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.demo-shell__bar {
+  flex-shrink: 0;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  background: #161a24;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.demo-shell__dots {
+  display: flex;
+  gap: 6px;
+}
+
+.demo-shell__dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3a3f4d;
+}
+
+.demo-shell__dots span:nth-child(1) { background: #ff5f57; }
+.demo-shell__dots span:nth-child(2) { background: #febc2e; }
+.demo-shell__dots span:nth-child(3) { background: #28c840; }
+
+.demo-shell__url {
+  flex: 1;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(240, 242, 248, 0.55);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.demo-shell__body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #f5f7fb;
+}
+
+.demo-shell--phone {
+  max-width: 390px;
+  margin: 0 auto;
+  border-radius: 28px;
+  border: 2px solid #2a2e3a;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  background: #111;
+}
+
+.demo-shell--wechat {
+  border-color: #07c160;
+}
+
+.demo-shell__notch {
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.demo-shell__wx-head,
+.demo-shell__app-head {
+  flex-shrink: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f1f1f;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.demo-shell__app-head {
+  justify-content: center;
+  background: #0f172a;
+  color: #f8fafc;
+  border-bottom: none;
+}
+
+.demo-shell__phone-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #f5f6f8;
+}
+
+.demo-shell__home-bar {
+  flex-shrink: 0;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f172a;
+}
+
+.demo-shell__home-bar::after {
+  content: '';
+  width: 110px;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.demo-shell iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #fff;
+}
+

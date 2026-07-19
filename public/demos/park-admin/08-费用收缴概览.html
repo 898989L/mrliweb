@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>费用收缴概览</title><link rel="stylesheet" href="common.css" /></head>
+<body>
+  <header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+  <main class="layout">
+    <aside class="primary-side"><a class="primary-item" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item active" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside>
+    <aside class="sub-side"><div class="sub-title">企业台账</div><a class="sub-item" href="01-厂房空间管理.html">厂房空间管理</a><a class="sub-item" href="02-企业入驻-基本信息.html">企业入驻</a><a class="sub-item" href="05-企业管理总览.html">企业管理</a><a class="sub-item" href="06-企业详情总览.html">企业详情</a><a class="sub-item" href="07-业务办理中心.html">业务办理</a><a class="sub-item active" href="08-费用收缴概览.html">费用收缴</a><a class="sub-item" href="09-资源授权.html">进出记录</a><a class="sub-item" href="10-历史归档.html">历史归档</a><div class="sub-title">巡检管理</div><a class="sub-item" href="15-巡检项目管理.html">巡检项目</a><a class="sub-item" href="11-巡检点管理.html">巡检点</a><a class="sub-item" href="12-巡检计划管理.html">巡检计划</a><a class="sub-item" href="13-巡检任务管理.html">巡检任务</a><a class="sub-item" href="14-巡检明细.html">巡检明细</a><a class="sub-item" href="24-巡检报表.html">巡检报表</a></aside>
+    <section class="workspace">
+      <div class="toast-wrap" id="toastWrap"></div>
+      <section class="panel">
+        <div class="panel-head"><span>费用收缴概览</span><div class="btn-row"><a class="btn light" href="05-企业管理总览.html">返回企业管理</a><a class="btn" onclick="openModal('modal-bill')">生成账单</a><a class="btn light" onclick="doBatchRemind()">批量催缴</a><a class="btn light" onclick="doBatchPay()">批量缴费</a><a class="btn light" onclick="openModal('modal-export')">导出报表</a></div></div>
+        <div class="panel-body">
+          <div class="tab-nav">
+            <a class="active" onclick="switchTab('tab-fee',this)">物业 &amp; 租金</a>
+            <a onclick="switchTab('tab-water',this)">水电费预缴</a>
+          </div>
+
+          <!-- ===== Tab 1 ===== -->
+          <div class="tab-pane active" id="tab-fee">
+            <div class="cards mb-14"><div class="kpi"><span>本期应收总额</span><b>￥2,841,392</b></div><div class="kpi"><span>已收金额</span><b>￥2,519,301</b></div><div class="kpi"><span>待收金额</span><b class="orange-text">￥322,091</b></div><div class="kpi"><span>欠费企业数</span><b class="red-text">16 家</b></div><div class="kpi"><span>缴款率</span><b>88.7%</b></div></div>
+            <!-- 优化新增：进度条 -->
+            <div class="two-col mb-14"><div class="box"><div class="box-title">催缴进度</div><div class="panel-body" id="remindProgress"></div></div><div class="box"><div class="box-title">缴费进度</div><div class="panel-body" id="payProgress"></div></div></div>
+            <div class="two-col mb-14">
+              <div class="box"><div class="box-title">费用类型分布</div><div class="panel-body"><div class="kv"><div class="k">租金</div><div class="v">￥2,005,500 (70.6%)</div><div class="k">物业费</div><div class="v">￥641,192 (22.6%)</div><div class="k">其他费用</div><div class="v">￥194,700 (6.8%)</div></div></div></div>
+              <div class="box"><div class="box-title">欠费 Top 5</div><div class="panel-body scroll-list" style="padding:0"><table><thead><tr><th>企业</th><th>厂房</th><th>欠费金额</th><th>欠费月数</th><th>操作</th></tr></thead><tbody><tr><td>盛源数码印花</td><td>1-1-101</td><td class="red-text">￥21,392</td><td>2</td><td><a class="link" onclick="toast('已向盛源数码印花发送催缴通知','warn')">催缴</a></td></tr><tr><td>百川包装</td><td>1-1-105</td><td class="red-text">￥8,930</td><td>1</td><td><a class="link" onclick="toast('已向百川包装发送催缴通知','warn')">催缴</a></td></tr><tr><td>华彩科技</td><td>2-1-201</td><td class="red-text">￥6,500</td><td>1</td><td><a class="link" onclick="toast('已向华彩科技发送催缴通知','warn')">催缴</a></td></tr><tr><td>永信纺织</td><td>3-1-301</td><td class="red-text">￥4,200</td><td>1</td><td><a class="link" onclick="toast('已向永信纺织发送催缴通知','warn')">催缴</a></td></tr><tr><td>丰源包装</td><td>1-2-202</td><td class="red-text">￥3,120</td><td>1</td><td><a class="link" onclick="toast('已向丰源包装发送催缴通知','warn')">催缴</a></td></tr><tr><td>宏达纺织</td><td>1-1-201</td><td>￥0</td><td>0</td><td>-</td></tr></tbody></table></div></div>
+            </div>
+            <div class="filters"><div class="input" placeholder="企业名称 / 厂房编号"></div><div class="select">欠费状态 <i class="chev"></i></div><div class="select">账期 <i class="chev"></i></div><div></div><div></div><button class="btn" onclick="toast('查询完成')">查询</button><button class="btn gray" onclick="toast('筛选条件已重置')">重置</button></div>
+
+            <table id="feeTable"><thead><tr><th style="width:40px"><input type="checkbox" id="feeCheckAll" onclick="toggleAllFeeChecks(this)"></th><th>企业名称</th><th>厂房编号</th><th>账期</th><th>租金</th><th>物业费</th><th>其他</th><th>应收合计</th><th>已收</th><th class="sortable" onclick="sortFeeTable()">待收</th><th>状态</th><th>操作</th></tr></thead><tbody>
+            <tr id="row-shengyuan101" data-owner="盛源数码印花"><td><input type="checkbox" class="fee-check" value="shengyuan101" onchange="updateBatchBtn()"></td><td>盛源数码印花</td><td>1-1-101</td><td>2026-05</td><td>￥20,055</td><td>￥1,337</td><td>￥0</td><td class="due">￥21,392</td><td class="paid">￥0</td><td class="red-text owing">￥21,392</td><td><span class="status red">欠费</span></td><td><a class="link" onclick="toast('已向盛源数码印花发送催缴通知','warn')">催缴</a>　<a class="link" onclick="openDetail('shengyuan101')">详情</a>　<a class="link" onclick="openPay('shengyuan101')">缴费</a></td></tr>
+            <tr id="row-shengyuan106" data-owner="盛源数码印花"><td><input type="checkbox" class="fee-check" value="shengyuan106" onchange="updateBatchBtn()"></td><td>盛源数码印花</td><td>1-1-106</td><td>2026-05</td><td>￥14,700</td><td>￥980</td><td>￥0</td><td class="due">￥15,680</td><td class="paid">￥0</td><td class="red-text owing">￥15,680</td><td><span class="status red">欠费</span></td><td><a class="link" onclick="toast('已向盛源数码印花发送催缴通知','warn')">催缴</a>　<a class="link" onclick="openDetail('shengyuan106')">详情</a>　<a class="link" onclick="openPay('shengyuan106')">缴费</a></td></tr>
+            <tr id="row-hongda" data-owner="宏达纺织"><td><input type="checkbox" class="fee-check" value="hongda" onchange="updateBatchBtn()"></td><td>宏达纺织</td><td>1-1-201</td><td>2026-05</td><td>￥14,700</td><td>￥980</td><td>￥0</td><td class="due">￥15,680</td><td class="paid">￥15,680</td><td>￥0</td><td><span class="status green">已缴清</span></td><td><a class="link" onclick="openDetail('hongda')">详情</a></td></tr>
+            <tr id="row-baichuan" data-owner="百川包装"><td><input type="checkbox" class="fee-check" value="baichuan" onchange="updateBatchBtn()"></td><td>百川包装</td><td>1-1-105</td><td>2026-05</td><td>￥18,430</td><td>￥0</td><td>￥500</td><td class="due">￥18,930</td><td class="paid">￥10,000</td><td class="orange-text owing">￥8,930</td><td><span class="status orange">部分缴纳</span></td><td><a class="link" onclick="toast('已向百川包装发送催缴通知','warn')">催缴</a>　<a class="link" onclick="openDetail('baichuan')">详情</a>　<a class="link" onclick="openPay('baichuan')">缴费</a></td></tr>
+            </tbody></table>
+          </div>
+
+          <!-- ===== Tab 2 ===== -->
+          <div class="tab-pane" id="tab-water">
+            <div class="cards col4 mb-14"><div class="kpi"><span>预缴余额总计</span><b>￥428,600</b></div><div class="kpi"><span>本月预缴总额</span><b>￥86,320</b></div><div class="kpi"><span>本月已扣总额</span><b>￥62,150</b></div><div class="kpi"><span>余额不足户数</span><b class="red-text">5 户</b></div></div>
+            <div class="sub-tabs">
+              <span class="sub-tab active" onclick="filterWaterType('all',this)">全部</span>
+              <span class="sub-tab" onclick="filterWaterType('water',this)">水费</span>
+              <span class="sub-tab" onclick="filterWaterType('elec',this)">电费</span>
+              <a class="btn light" href="08-水电明细.html" style="height:30px;margin-left:auto">近6月趋势</a>
+            </div>
+            <div class="filters"><div class="input" placeholder="企业名称 / 厂房编号"></div><div class="select">楼栋 <i class="chev"></i></div><div class="select">账期 <i class="chev"></i></div><div class="select">余额状态 <i class="chev"></i></div><div></div><button class="btn" onclick="toast('查询完成')">查询</button><button class="btn gray" onclick="toast('筛选条件已重置')">重置</button></div>
+            <table id="waterTable"><thead><tr><th>企业名称</th><th>厂房编号</th><th>费用类型</th><th>账期</th><th>期初余额</th><th>本月预缴</th><th>本月用量</th><th>单价</th><th class="sortable" onclick="sortWaterTable()">本月扣款</th><th class="sortable" onclick="sortWaterTable()">期末余额</th><th>状态</th><th>操作</th></tr></thead><tbody>
+            <tr data-wtype="water"><td>盛源数码印花</td><td>1-1-101</td><td>水费</td><td>2026-05</td><td>￥3,200</td><td>￥2,000</td><td>286 吨</td><td>￥5.2/吨</td><td>￥1,487</td><td>￥3,713</td><td><span class="status green">正常</span></td><td><a class="link" href="08-水电明细.html">明细</a></td></tr>
+            <tr data-wtype="elec"><td>盛源数码印花</td><td>1-1-101</td><td>电费</td><td>2026-05</td><td>￥8,500</td><td>￥5,000</td><td>5,240 度</td><td>￥0.89/度</td><td>￥4,664</td><td>￥8,836</td><td><span class="status green">正常</span></td><td><a class="link" href="08-水电明细.html">明细</a></td></tr>
+            <tr data-wtype="water"><td>宏达纺织</td><td>1-1-201</td><td>水费</td><td>2026-05</td><td>￥1,800</td><td>￥1,500</td><td>310 吨</td><td>￥5.2/吨</td><td>￥1,612</td><td>￥1,688</td><td><span class="status green">正常</span></td><td><a class="link" href="08-水电明细.html">明细</a></td></tr>
+            <tr data-wtype="elec"><td>宏达纺织</td><td>1-1-201</td><td>电费</td><td>2026-05</td><td>￥6,200</td><td>￥3,000</td><td>3,880 度</td><td>￥0.89/度</td><td>￥3,453</td><td>￥5,747</td><td><span class="status green">正常</span></td><td><a class="link" href="08-水电明细.html">明细</a></td></tr>
+            <tr data-wtype="water"><td>百川包装</td><td>1-1-105</td><td>水费</td><td>2026-05</td><td>￥900</td><td>￥0</td><td>218 吨</td><td>￥5.2/吨</td><td>￥1,134</td><td class="red-text">-￥234</td><td><span class="status red">余额不足</span></td><td><a class="link" href="08-水电明细.html">明细</a></td></tr>
+            <tr data-wtype="elec"><td>百川包装</td><td>1-1-105</td><td>电费</td><td>2026-05</td><td>￥3,400</td><td>￥2,000</td><td>3,150 度</td><td>￥0.89/度</td><td>￥2,804</td><td>￥2,596</td><td><span class="status orange">偏低</span></td><td><a class="link" href="08-水电明细.html">明细</a></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- ===== 缴费弹窗 ===== -->
+  <div class="modal-overlay" id="modal-pay">
+    <div class="modal">
+      <div class="modal-head"><span id="payTitle">费用收缴</span><button class="modal-close" onclick="closeModal('modal-pay')">&times;</button></div>
+      <div class="modal-body">
+        <div class="alert-box info" id="payBatchInfo" style="display:none"><p></p></div>
+        <div class="box mb-14">
+          <div class="box-title">费用明细</div>
+          <div class="panel-body" style="padding:0">
+            <table><thead><tr><th>厂房</th><th>租金</th><th>物业费</th><th>其他</th><th>应收合计</th></tr></thead><tbody id="payDetail"></tbody></table>
+          </div>
+        </div>
+        <div class="summary-row"><span class="sl" id="payTotalLabel">应收合计</span><span class="sr red-text" style="font-size:18px" id="payTotal">--</span></div>
+        <div class="form-grid col2 mt-14">
+          <div class="form-item"><label>缴费方式</label><div class="select">银行转账 <i class="chev"></i></div></div>
+          <div class="form-item"><label>实缴金额</label><div class="input" id="payInput" contenteditable="true" style="font-weight:800;color:var(--blue-deep)">0</div></div>
+          <div class="form-item"><label>收款日期</label><div class="input" contenteditable="true">2026-05-22</div></div>
+          <div class="form-item"><label>经手人</label><div class="input" contenteditable="true">罗主管</div></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-pay')">取消</a>
+        <a class="btn" onclick="confirmPay()">确认收款</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 详情弹窗 ===== -->
+  <div class="modal-overlay" id="modal-detail">
+    <div class="modal">
+      <div class="modal-head"><span>费用详情</span><button class="modal-close" onclick="closeModal('modal-detail')">&times;</button></div>
+      <div class="modal-body">
+        <div class="box mb-14">
+          <div class="box-title">基本信息</div>
+          <div class="kv"><div class="k">企业名称</div><div class="v" id="detName">--</div><div class="k">厂房编号</div><div class="v" id="detRoom">--</div><div class="k">账期</div><div class="v" id="detPeriod">--</div><div class="k">状态</div><div class="v" id="detStatus">--</div></div>
+        </div>
+        <div class="box">
+          <div class="box-title">费用构成</div>
+          <div class="panel-body"><div class="kv"><div class="k">租金</div><div class="v" id="detRent">--</div><div class="k">物业费</div><div class="v" id="detPm">--</div><div class="k">其他费用</div><div class="v" id="detOther">--</div><div class="k">应收合计</div><div class="v" id="detDue">--</div><div class="k">已收</div><div class="v" id="detPaid">--</div><div class="k">待收</div><div class="v red-text" id="detOwing">--</div></div></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-detail')">关闭</a>
+      </div>
+    </div>
+  </div>
+
+<!-- ===== 生成账单弹窗 ===== -->
+  <div class="modal-overlay" id="modal-bill">
+    <div class="modal wide">
+      <div class="modal-head"><span>生成账单</span><button class="modal-close" onclick="closeModal('modal-bill')">&times;</button></div>
+      <div class="modal-body">
+        <div class="form-grid col2 mb-14">
+          <div class="form-item"><label>账期</label><div class="select">2026-06 <i class="chev"></i></div></div>
+          <div class="form-item"><label>缴费类型</label><div class="select">全部 <i class="chev"></i></div></div>
+          <div class="form-item"><label>楼栋范围</label><div class="select">全部楼栋 <i class="chev"></i></div></div>
+          <div class="form-item"><label>生成日期</label><div class="input" contenteditable="true">2026-05-22</div></div>
+        </div>
+        <div class="alert-box info"><p>将生成 2026 年 6 月费用账单，覆盖 126 家在园企业，应收总额预估 ￥2,910,000。</p></div>
+        <div class="box">
+          <div class="box-title">账单预览（部分）</div>
+          <div class="panel-body" style="padding:0">
+            <table><thead><tr><th>企业名称</th><th>厂房</th><th>租金</th><th>物业费</th><th>应收合计</th></tr></thead><tbody>
+            <tr><td>盛源数码印花</td><td>1-1-101</td><td>￥20,055</td><td>￥1,337</td><td>￥21,392</td></tr>
+            <tr><td>盛源数码印花</td><td>1-1-106</td><td>￥14,700</td><td>￥980</td><td>￥15,680</td></tr>
+            <tr><td>宏达纺织</td><td>1-1-201</td><td>￥14,700</td><td>￥980</td><td>￥15,680</td></tr>
+            <tr><td colspan="5" class="dim" style="height:40px">…… 共 126 家企业</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-bill')">取消</a>
+        <a class="btn" onclick="confirmBill()">确认生成</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 导出报表弹窗 ===== -->
+  <div class="modal-overlay" id="modal-export">
+    <div class="modal">
+      <div class="modal-head"><span>导出报表</span><button class="modal-close" onclick="closeModal('modal-export')">&times;</button></div>
+      <div class="modal-body">
+        <div class="form-grid col2 mb-14">
+          <div class="form-item"><label>报表类型</label><div class="select">费用收缴明细 <i class="chev"></i></div></div>
+          <div class="form-item"><label>文件格式</label><div class="select">Excel (.xlsx) <i class="chev"></i></div></div>
+          <div class="form-item"><label>账期起</label><div class="select">2026-01 <i class="chev"></i></div></div>
+          <div class="form-item"><label>账期止</label><div class="select">2026-05 <i class="chev"></i></div></div>
+          <div class="form-item full"><label>备注</label><div class="input" contenteditable="true">费用收缴月度汇总报表</div></div>
+        </div>
+        <div class="alert-box info"><p>将导出 2026-01 至 2026-05 费用收缴明细，共 5 个账期、126 家企业、约 630 条记录。</p></div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-export')">取消</a>
+        <a class="btn" onclick="confirmExport()">确认导出</a>
+      </div>
+    </div>
+  </div>
+
+<script src="common.js"></script>
+<script>
+function toast(msg, kind) {
+  var w = document.getElementById('toastWrap');
+  var el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = msg;
+  w.appendChild(el);
+  requestAnimationFrame(function(){ el.classList.add('show'); });
+  setTimeout(function(){ el.classList.remove('show'); setTimeout(function(){ el.remove(); }, 280); }, 2000);
+}
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+// ===== 批量催缴 =====
+function doBatchRemind() {
+  var checks = document.querySelectorAll('#feeTable .fee-check:checked');
+  if (checks.length === 0) { toast('请先勾选需要催缴的记录','warn'); return; }
+  var names = new Set();
+  var total = 0;
+  checks.forEach(function(c){
+    names.add(c.closest('tr').getAttribute('data-owner'));
+    var owing = parseFloat(c.closest('tr').querySelector('.owing').textContent.replace(/[^0-9.]/g,'')) || 0;
+    total += owing;
+  });
+  document.getElementById('batchCount').textContent = names.size;
+  document.getElementById('batchAmount').textContent = '￥' + total.toLocaleString();
+  openModal('modal-batch-remind');
+}
+function confirmBatchRemind() {
+  closeModal('modal-batch-remind');
+  var checks = document.querySelectorAll('#feeTable .fee-check:checked');
+  var names = new Set();
+  checks.forEach(function(c){ names.add(c.closest('tr').getAttribute('data-owner')); });
+  toast('已向 ' + names.size + ' 家企业发送催缴通知','ok');
+  checks.forEach(function(c){ c.checked = false; });
+}
+
+// ===== 欠费列表排序 =====
+var feeSortDir = -1;
+function sortFeeTable() {
+  var tbody = document.querySelector('#feeTable tbody');
+  if (!tbody) return;
+  var rows = Array.from(tbody.querySelectorAll('tr'));
+  feeSortDir = feeSortDir * -1;
+  rows.sort(function(a, b){
+    var va = parseFloat((a.querySelector('.owing')||{}).textContent||''.replace(/[^0-9.]/g,'')) || 0;
+    var vb = parseFloat((b.querySelector('.owing')||{}).textContent||''.replace(/[^0-9.]/g,'')) || 0;
+    return (va - vb) * feeSortDir;
+  });
+  rows.forEach(function(r){ tbody.appendChild(r); });
+  var th = document.querySelector('#feeTable th.sortable');
+  if (th) { th.classList.remove('sort-asc','sort-desc'); th.classList.add(feeSortDir===1?'sort-asc':'sort-desc'); }
+}
+function toggleAllFeeChecks(el) {
+  var cbs = document.querySelectorAll('#feeTable .fee-check');
+  cbs.forEach(function(c){ c.checked = el.checked; });
+}
+
+// ===== 批量缴费 =====
+function updateBatchBtn() {}
+function doBatchPay() {
+  var checks = document.querySelectorAll('#feeTable .fee-check:checked');
+  if (checks.length === 0) { toast('请先勾选需要缴费的记录','warn'); return; }
+  var rows = [];
+  var owners = new Set();
+  checks.forEach(function(c){
+    var row = c.closest('tr');
+    rows.push(row);
+    owners.add(row.getAttribute('data-owner'));
+  });
+  // Build pay modal for checked rows
+  var detail = document.getElementById('payDetail');
+  detail.innerHTML = '';
+  var total = 0;
+  rows.forEach(function(row){
+    var cells = row.querySelectorAll('td');
+    var room = cells[2].textContent;
+    var rent = cells[4].textContent, pm = cells[5].textContent, other = cells[6].textContent;
+    var dueStr = cells[7].textContent.replace(/[￥,]/g,'');
+    var d = parseFloat(dueStr) || 0;
+    total += d;
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>'+room+'</td><td>'+rent+'</td><td>'+pm+'</td><td>'+other+'</td><td>'+cells[7].textContent+'</td>';
+    detail.appendChild(tr);
+  });
+  document.getElementById('payTotal').textContent = '￥' + total.toLocaleString();
+  document.getElementById('payTitle').textContent = owners.size > 1 || rows.length > 1 ? '批量缴费（共 ' + rows.length + ' 条）' : '费用收缴';
+  document.getElementById('payInput').textContent = total;
+  document.getElementById('payTotalLabel').textContent = '应收合计';
+  document.getElementById('payBatchInfo').style.display = rows.length > 1 ? '' : 'none';
+  if (rows.length > 1) document.getElementById('payBatchInfo').querySelector('p').textContent = '将同时处理 ' + owners.size + ' 家企业、' + rows.length + ' 条费用记录';
+  // Store checked IDs for confirm
+  window._payRows = [];
+  checks.forEach(function(c){ window._payRows.push(c.closest('tr').id); });
+  openModal('modal-pay');
+}
+
+// ===== 单条缴费 =====
+function openPay(rowId) {
+  document.getElementById('payTitle').textContent = '费用收缴';
+  document.getElementById('payBatchInfo').style.display = 'none';
+  var row = document.getElementById('row-' + rowId);
+  if (!row) return;
+  var cells = row.querySelectorAll('td');
+  var detail = document.getElementById('payDetail');
+  detail.innerHTML = '';
+  var total = parseFloat(cells[7].textContent.replace(/[￥,]/g,'')) || 0;
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td>'+cells[2].textContent+'</td><td>'+cells[4].textContent+'</td><td>'+cells[5].textContent+'</td><td>'+cells[6].textContent+'</td><td>'+cells[7].textContent+'</td>';
+  detail.appendChild(tr);
+  document.getElementById('payTotal').textContent = cells[7].textContent;
+  document.getElementById('payInput').textContent = total;
+  document.getElementById('payTotalLabel').textContent = '应收合计';
+  window._payRows = [row.id];
+  openModal('modal-pay');
+}
+
+function confirmPay() {
+  var inputEl = document.getElementById('payInput');
+  var paidAmt = parseFloat(inputEl.textContent.replace(/[￥,]/g,'')) || 0;
+  closeModal('modal-pay');
+  var rows = window._payRows || [];
+  if (rows.length === 0) return;
+  rows.forEach(function(rowId){
+    var row = document.getElementById(rowId);
+    if (!row) return;
+    var cells = row.querySelectorAll('td');
+    var due = parseFloat(cells[7].textContent.replace(/[￥,]/g,'')) || 0;
+    if (paidAmt >= rows.length) {
+      var perRow = Math.round(paidAmt / rows.length);
+      var remaining = due - perRow;
+      cells[8].textContent = '￥' + perRow.toLocaleString();
+      cells[9].textContent = remaining <= 0 ? '￥0' : '￥' + remaining.toLocaleString();
+      cells[9].className = remaining <= 0 ? '' : 'red-text';
+      var st = row.querySelector('.status');
+      if (remaining <= 0) { st.className = 'status green'; st.textContent = '已缴清'; }
+      else if (perRow > 0) { st.className = 'status orange'; st.textContent = '部分缴纳'; }
+    } else {
+      // Single row or simpler: use proportional distribution
+      // For simplicity, just update the first row fully and leave others
+      if (rows.indexOf(rowId) === 0) {
+        var remaining = due - paidAmt;
+        cells[8].textContent = '￥' + paidAmt.toLocaleString();
+        cells[9].textContent = remaining <= 0 ? '￥0' : '￥' + remaining.toLocaleString();
+        cells[9].className = remaining <= 0 ? '' : 'red-text';
+        var st2 = row.querySelector('.status');
+        if (remaining <= 0) { st2.className = 'status green'; st2.textContent = '已缴清'; }
+        else if (paidAmt > 0) { st2.className = 'status orange'; st2.textContent = '部分缴纳'; }
+      }
+    }
+  });
+  // Uncheck all
+  document.querySelectorAll('#feeTable .fee-check').forEach(function(c){ c.checked = false; });
+  toast('收款成功 — 实缴 ￥' + paidAmt.toLocaleString(),'ok');
+}
+
+// ===== 详情 =====
+function openDetail(rowId) {
+  var row = document.getElementById('row-' + rowId);
+  if (!row) return;
+  var cells = row.querySelectorAll('td');
+  document.getElementById('detName').textContent = cells[1].textContent;
+  document.getElementById('detRoom').textContent = cells[2].textContent;
+  document.getElementById('detPeriod').textContent = cells[3].textContent;
+  document.getElementById('detStatus').textContent = row.querySelector('.status').textContent;
+  document.getElementById('detRent').textContent = cells[4].textContent;
+  document.getElementById('detPm').textContent = cells[5].textContent;
+  document.getElementById('detOther').textContent = cells[6].textContent;
+  document.getElementById('detDue').textContent = cells[7].textContent;
+  document.getElementById('detPaid').textContent = cells[8].textContent;
+  document.getElementById('detOwing').textContent = cells[9].textContent;
+  openModal('modal-detail');
+}
+
+// ===== 生成账单 / 导出报表 =====
+function confirmBill() { closeModal('modal-bill'); toast('2026-06 账单已生成，共 126 家企业','ok'); }
+function confirmExport() { closeModal('modal-export'); toast('报表已导出：费用收缴明细 2026-01~05.xlsx','ok'); }
+
+// ===== Tabs =====
+function switchTab(tabId, a) {
+  document.querySelectorAll('.tab-nav a').forEach(function(x){ x.classList.remove('active'); });
+  a.classList.add('active');
+  document.querySelectorAll('.tab-pane').forEach(function(x){ x.classList.remove('active'); });
+  document.getElementById(tabId).classList.add('active');
+}
+function filterWaterType(type, el) {
+  document.querySelectorAll('#tab-water .sub-tab').forEach(function(x){ x.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('#waterTable tbody tr').forEach(function(r){
+    r.style.display = type === 'all' || r.getAttribute('data-wtype') === type ? '' : 'none';
+  });
+}
+
+// ===== 水电费排序 =====
+var waterSortDir = -1;
+function sortWaterTable() {
+  var tbody = document.querySelector('#waterTable tbody');
+  if (!tbody) return;
+  var rows = Array.from(tbody.querySelectorAll('tr')).filter(function(r){
+    return r.style.display !== 'none';
+  });
+  waterSortDir = waterSortDir * -1;
+  rows.sort(function(a, b){
+    var va = parseFloat(a.cells[8].textContent.replace(/[^0-9.]/g,'')) || 0;
+    var vb = parseFloat(b.cells[8].textContent.replace(/[^0-9.]/g,'')) || 0;
+    return (va - vb) * waterSortDir;
+  });
+  rows.forEach(function(r){ tbody.appendChild(r); });
+  document.querySelectorAll('#waterTable th.sortable').forEach(function(th){
+    th.classList.remove('sort-asc','sort-desc');
+    th.classList.add(waterSortDir===1?'sort-asc':'sort-desc');
+  });
+}
+
+// ===== 进度条初始化 =====
+(function initProgress(){
+  createProgressBar('#remindProgress', '已催缴企业', 12, 16, 'green');
+  createProgressBar('#remindProgress', '待催缴企业', 4, 16, 'red');
+  createProgressBar('#payProgress', '已收金额', 2519301, 2841392, 'green');
+  createProgressBar('#payProgress', '待收金额', 322091, 2841392, 'orange');
+})();
+
+document.addEventListener('click', function(e){
+  if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('show')) {
+    e.target.classList.remove('show');
+  }
+});
+</script>
+
+<!-- 优化新增：批量催缴二次确认 -->
+<div class="modal-overlay" id="modal-batch-remind">
+  <div class="modal">
+    <div class="modal-head"><span>确认批量催缴</span><button class="modal-close" onclick="closeModal('modal-batch-remind')">&times;</button></div>
+    <div class="modal-body">
+      <div class="alert-box warn"><p>将对 <b id="batchCount">0</b> 家企业发送催缴通知，合计欠费 <b id="batchAmount">￥0</b></p></div>
+    </div>
+    <div class="modal-foot">
+      <a class="btn light" onclick="closeModal('modal-batch-remind')">取消</a>
+      <a class="btn red" onclick="confirmBatchRemind()">确认催缴</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

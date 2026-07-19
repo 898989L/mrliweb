@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>智慧园区运营管理平台 · 交互演示</title>
+  <link rel="stylesheet" href="common.css" />
+  <style>
+    body { background: #f0f2f5; margin: 0; font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .hub { max-width: 960px; margin: 0 auto; padding: 28px 20px 48px; }
+    .hub h1 { font-size: 22px; margin: 0 0 6px; }
+    .hub p { color: #666; margin: 0 0 20px; font-size: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .card {
+      display: block; background: #fff; border-radius: 10px; padding: 16px;
+      text-decoration: none; color: #1f1f1f; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      border: 1px solid #e8e8e8; transition: .15s;
+    }
+    .card:hover { border-color: #1677ff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(22,119,255,.12); }
+    .card b { display: block; margin-bottom: 4px; }
+    .card span { font-size: 12px; color: #888; }
+    .tip { background: #e6f4ff; color: #0958d9; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 18px; }
+  </style>
+</head>
+<body>
+  <div class="hub">
+    <h1>智慧园区运营管理平台</h1>
+    <p>基于真实业务原型 · 点击卡片进入对应模块（可继续点侧栏切换）</p>
+    <div class="tip">提示：进入页面后可点击左侧菜单、表格操作、弹窗按钮体验完整交互</div>
+    <div class="grid">
+      <a class="card" href="01-space.html"><b>厂房空间管理</b><span>楼栋树 · 空间色块 · 入驻</span></a>
+      <a class="card" href="02-settled-info.html"><b>企业入驻</b><span>基本信息录入</span></a>
+      <a class="card" href="05-company-list.html"><b>企业管理</b><span>入驻企业台账</span></a>
+      <a class="card" href="06-company-detail.html"><b>企业详情</b><span>合同 / 费用 KPI</span></a>
+      <a class="card" href="07-business.html"><b>业务办理中心</b><span>续租 · 退租 · 换房</span></a>
+      <a class="card" href="08-fee-overview.html"><b>费用收缴概览</b><span>收缴率 · 欠费 Top</span></a>
+      <a class="card" href="08-utility.html"><b>水电明细</b><span>用量与预存</span></a>
+      <a class="card" href="11-inspection.html"><b>巡检管理</b><span>巡检点与任务</span></a>
+    </div>
+  </div>
+</body>
+</html>

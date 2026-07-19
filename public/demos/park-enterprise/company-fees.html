@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>我的费用 · 智慧园区企业端</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    .fee-hero {
+      background: linear-gradient(135deg, #ff9500 0%, #ffb049 100%);
+      color: #fff;
+      padding: 18px 16px 24px;
+      border-radius: 0 0 16px 16px;
+      margin-bottom: 12px;
+    }
+    .fee-hero .top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .fee-hero .top .l { font-size: 13px; opacity: 0.92; }
+    .fee-hero .top .status-paid {
+      background: rgba(255,255,255,0.95);
+      color: var(--success);
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .fee-hero .amount {
+      font-size: 32px;
+      font-weight: 700;
+      font-family: -apple-system, sans-serif;
+      margin-bottom: 4px;
+    }
+    .fee-hero .amount .sym { font-size: 16px; opacity: 0.85; margin-right: 2px; }
+    .fee-hero .sub { font-size: 12px; opacity: 0.92; }
+    .fee-hero .breakdown {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .fee-hero .breakdown .cell {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(6px);
+      border-radius: 10px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+    .fee-hero .breakdown .cell .l { font-size: 11px; opacity: 0.92; }
+    .fee-hero .breakdown .cell .v {
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .fee-hero .breakdown .cell .vf {
+      font-size: 10px;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    /* 年度统计 */
+    .year-summary {
+      margin: 0 12px 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .year-summary .hd {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .year-summary .hd .ttl { font-size: 14px; font-weight: 600; color: var(--text-1); }
+    .year-summary .hd .v { font-size: 14px; font-weight: 700; color: var(--danger); }
+    .year-summary .body {
+      display: flex; gap: 14px;
+      align-items: center;
+    }
+    .year-summary .chart {
+      width: 100px; height: 100px;
+      flex-shrink: 0;
+    }
+    .year-summary .legend {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+      font-size: 11px;
+    }
+    .year-summary .legend .item {
+      display: flex; align-items: center; gap: 4px;
+      color: var(--text-2);
+    }
+    .year-summary .legend .item .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .year-summary .legend .item .v { font-weight: 600; color: var(--text-1); margin-left: 2px; }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 0 12px 12px;
+    }
+    .filter-tabs .chip {
+      flex-shrink: 0;
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 14px;
+      background: var(--white);
+      color: var(--text-2);
+      box-shadow: var(--shadow);
+    }
+    .filter-tabs .chip.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* 账单卡片 */
+    .bill-list { margin: 0 12px; }
+    .bill-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+    }
+    .bill-card .top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .bill-card .top .period {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-1);
+    }
+    .bill-card .top .period .badge {
+      font-size: 10px;
+      padding: 1px 6px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 4px;
+      font-weight: normal;
+      margin-left: 6px;
+    }
+    .bill-card .breakdown-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .bill-card .breakdown-row .cell {
+      text-align: center;
+      padding: 6px 0;
+    }
+    .bill-card .breakdown-row .cell .l { font-size: 10px; color: var(--text-3); }
+    .bill-card .breakdown-row .cell .v { font-size: 13px; font-weight: 600; color: var(--text-1); margin-top: 2px; }
+    .bill-card .footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px;
+      color: var(--text-3);
+    }
+    .bill-card .footer .total {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--danger);
+    }
+    .bill-card .footer .total .sym { font-size: 11px; }
+    .bill-card .action-link { color: var(--primary); }
+    .bill-card .inv-tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 6px;
+      background: #e6f9f1;
+      color: var(--success);
+      border-radius: 4px;
+      margin-left: 4px;
+    }
+
+    /* 弹层 */
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1100;
+      display: none;
+      align-items: flex-end;
+    }
+    .modal-mask.show { display: flex; }
+    .modal-sheet {
+      width: 100%;
+      max-width: 750px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 16px 16px 0 0;
+      padding: 18px 18px calc(24px + 60px + env(safe-area-inset-bottom));
+      max-height: 88vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-sheet .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .modal-sheet .hd .ttl { font-size: 16px; font-weight: 600; color: var(--text-1); }
+    .modal-sheet .hd .close { color: var(--text-3); font-size: 22px; cursor: pointer; }
+    .modal-sheet .period-label {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-bottom: 12px;
+    }
+    .modal-sheet .period-label .v { color: var(--text-1); font-weight: 600; }
+
+    .item-pick {
+      display: flex; align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+    }
+    .item-pick:last-of-type { border-bottom: none; }
+    .item-pick .checkbox {
+      width: 22px; height: 22px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      transition: all 0.15s;
+    }
+    .item-pick .checkbox.checked {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .item-pick .checkbox.disabled {
+      background: #f5f5f5;
+      border-color: var(--border);
+      color: var(--text-3);
+      cursor: not-allowed;
+    }
+    .item-pick .body { flex: 1; min-width: 0; }
+    .item-pick .body .l { font-size: 14px; color: var(--text-1); font-weight: 500; }
+    .item-pick .body .s { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+    .item-pick .v { font-size: 15px; font-weight: 600; color: var(--danger); }
+
+    .inv-form {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .inv-form .row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+    .inv-form .row .l { width: 80px; color: var(--text-3); flex-shrink: 0; }
+    .inv-form .row .v { flex: 1; color: var(--text-1); }
+    .inv-form .type-tabs { display: flex; gap: 8px; flex: 1; }
+    .inv-form .type-tabs .tt {
+      flex: 1;
+      padding: 6px 0;
+      text-align: center;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text-2);
+      cursor: pointer;
+    }
+    .inv-form .type-tabs .tt.active {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .inv-summary {
+      background: linear-gradient(135deg, #fff7e6 0%, #fff 100%);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 14px 0 16px;
+      font-size: 12px;
+      color: var(--text-2);
+    }
+    .inv-summary .row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .inv-summary .row:last-child { margin-bottom: 0; }
+    .inv-summary .row .v { color: var(--text-1); font-weight: 500; }
+    .inv-summary .row.total { padding-top: 6px; border-top: 1px dashed #ffd591; margin-top: 6px; }
+    .inv-summary .row.total .v { color: var(--danger); font-size: 16px; font-weight: 700; }
+
+    .inv-submit {
+      width: 100%;
+      padding: 13px 0;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    /* 水电提示卡 */
+    .water-tip {
+      margin: 0 12px 12px;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, #e6f4ff 0%, #fff 100%);
+      border: 1px solid #91caff;
+      border-radius: var(--radius);
+      display: flex; align-items: center; gap: 12px;
+      cursor: pointer;
+    }
+    .water-tip .icon {
+      width: 36px; height: 36px;
+      background: var(--primary-light);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .water-tip .icon svg { width: 20px; height: 20px; }
+    .water-tip .body { flex: 1; min-width: 0; }
+    .water-tip .ttl { font-size: 13px; color: var(--text-1); font-weight: 500; }
+    .water-tip .desc { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+    .water-tip .arrow { color: var(--text-3); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div id="topbar"></div>
+
+    <!-- 水电提示卡 -->
+    <div class="water-tip" id="waterTip" onclick="location.href='water-list.html'" style="margin-top:12px;">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l-5.5 9h11L12 2zM12 22a7 7 0 007-7c0-2-1-3.9-3-5.5l-4 7-4-7c-2 1.6-3 3.5-3 5.5a7 7 0 007 7z"/></svg>
+      </div>
+      <div class="body">
+        <div class="ttl">💧 水电走预存账户扣减</div>
+        <div class="desc" id="waterTipDesc"></div>
+      </div>
+      <span class="arrow">›</span>
+    </div>
+
+    <!-- Hero -->
+    <div class="fee-hero" id="feeHero"></div>
+
+    <!-- 年度饼图 -->
+    <div class="year-summary">
+      <div class="hd">
+        <div class="ttl">近 6 个月费用类型分布</div>
+        <div class="v" id="yearTotal"></div>
+      </div>
+      <div class="body">
+        <div class="chart" id="chartPie"></div>
+        <div class="legend" id="pieLegend"></div>
+      </div>
+    </div>
+
+    <!-- 筛选 -->
+    <div class="filter-tabs" id="filterTabs">
+      <div class="chip active" data-value="all">全部</div>
+      <div class="chip" data-value="2026">2026 年</div>
+      <div class="chip" data-value="paid">已缴费</div>
+      <div class="chip" data-value="unpaid">待缴费</div>
+    </div>
+
+    <!-- 历史账单 -->
+    <div class="bill-list" id="billList"></div>
+
+    <div style="height:12px;"></div>
+
+    <div id="tabbar"></div>
+  </div>
+
+  <!-- 开票 sheet -->
+  <div class="modal-mask" id="invMask" onclick="closeInvoice(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="hd">
+        <div class="ttl">申请开票</div>
+        <span class="close" onclick="closeInvoice()">×</span>
+      </div>
+      <div class="period-label">账单期间：<span class="v" id="invPeriod"></span></div>
+
+      <div id="invItemList"></div>
+
+      <div class="inv-form">
+        <div class="row">
+          <span class="l">发票类型</span>
+          <div class="type-tabs" id="invTypeTabs">
+            <div class="tt active" data-value="专票">增值税专票</div>
+            <div class="tt" data-value="普票">增值税普票</div>
+          </div>
+        </div>
+        <div class="row">
+          <span class="l">抬头</span>
+          <span class="v" id="invTitle"></span>
+        </div>
+        <div class="row">
+          <span class="l">税号</span>
+          <span class="v" id="invCredit"></span>
+        </div>
+        <div class="row">
+          <span class="l">接收邮箱</span>
+          <span class="v" id="invEmail"></span>
+        </div>
+      </div>
+
+      <div class="inv-summary">
+        <div class="row"><span>开票项目数</span><span class="v" id="invCount">0 项</span></div>
+        <div class="row total"><span>开票金额合计</span><span class="v" id="invTotal">¥0.00</span></div>
+      </div>
+
+      <button class="btn btn-primary inv-submit" onclick="submitInvoice()">提交开票申请</button>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.getElementById('topbar').outerHTML = renderTopBar('我的费用');
+    document.getElementById('tabbar').outerHTML = renderTabBar('');
+
+    const t = getCurrentTenant();
+
+    // 水电提示卡
+    document.getElementById('waterTipDesc').textContent =
+      `本月已扣 ¥${MOCK.utilityCurrent.total.toFixed(2)} · 账户余额 ¥${MOCK.utilityAccount.balance.toFixed(2)}`;
+
+    // 顶部 Hero（仅租金 + 物业）
+    const fb = MOCK.feeBillsCurrent;
+    document.getElementById('feeHero').innerHTML = `
+      <div class="top">
+        <span class="l">${fb.period} 当月应缴</span>
+        <span class="status-paid">${MOCK.statusMap[fb.status].text}</span>
+      </div>
+      <div class="amount"><span class="sym">¥</span>${fb.total.toLocaleString('zh-CN', { minimumFractionDigits: 2 })}</div>
+      <div class="sub">应缴日期：${fb.dueDate} · 已结清 ${formatMoney(fb.paid)}</div>
+      <div class="breakdown">
+        <div class="cell">
+          <div class="l">租金</div>
+          <div class="v">¥${fb.rent.toLocaleString()}</div>
+          <div class="vf">${Math.round(fb.rent / fb.total * 100)}%</div>
+        </div>
+        <div class="cell">
+          <div class="l">物业费</div>
+          <div class="v">¥${fb.property.toLocaleString()}</div>
+          <div class="vf">${Math.round(fb.property / fb.total * 100)}%</div>
+        </div>
+      </div>
+    `;
+
+    // 年度饼图
+    const dist = MOCK.feeDistribution;
+    const totalYear = dist.reduce((s, x) => s + x.value, 0);
+    document.getElementById('yearTotal').textContent = formatMoney(totalYear);
+
+    const chartPie = echarts.init(document.getElementById('chartPie'));
+    chartPie.setOption({
+      tooltip: { trigger: 'item', formatter: '{b}: ¥{c} ({d}%)' },
+      color: CHART_COLORS,
+      series: [{
+        type: 'pie',
+        radius: ['55%', '85%'],
+        avoidLabelOverlap: false,
+        label: { show: false },
+        data: dist.map(d => ({ name: d.name, value: d.value }))
+      }]
+    });
+
+    document.getElementById('pieLegend').innerHTML = dist.map((d, i) => `
+      <div class="item">
+        <span class="dot" style="background:${CHART_COLORS[i]};"></span>
+        <span>${d.name}</span>
+        <span class="v">¥${(d.value/10000).toFixed(2)}万</span>
+      </div>
+    `).join('');
+
+    // 账单列表
+    function renderList(filter) {
+      let list = MOCK.feeBillsHistory;
+      if (filter === '2026') list = list.filter(b => b.period.startsWith('2026'));
+      else if (filter === 'paid') list = list.filter(b => b.status === 'paid');
+      else if (filter === 'unpaid') list = list.filter(b => b.status !== 'paid');
+
+      const target = document.getElementById('billList');
+      if (!list.length) {
+        target.innerHTML = '<div class="empty">暂无账单</div>';
+        return;
+      }
+      target.innerHTML = list.map((b, idx) => {
+        const inv = b.invoicedItems || [];
+        const invCount = inv.length;
+        return `
+        <div class="bill-card">
+          <div class="top">
+            <div class="period">
+              ${b.period}
+              ${idx === 0 && filter === 'all' ? '<span class="badge">本月</span>' : ''}
+              ${invCount > 0 ? `<span class="inv-tag">已开票 ${invCount}/2</span>` : ''}
+            </div>
+            <span class="tag ${MOCK.statusMap[b.status].class}">${MOCK.statusMap[b.status].text}</span>
+          </div>
+          <div class="breakdown-row">
+            <div class="cell"><div class="l">租金${inv.includes('rent') ? ' <span style="color:var(--success);">✓</span>' : ''}</div><div class="v">¥${b.rent.toLocaleString()}</div></div>
+            <div class="cell"><div class="l">物业费${inv.includes('property') ? ' <span style="color:var(--success);">✓</span>' : ''}</div><div class="v">¥${b.property.toLocaleString()}</div></div>
+          </div>
+          <div class="footer">
+            <span>${b.status === 'paid' ? '✓ ' + b.paidTime : '应缴 ' + b.period + '-15'}</span>
+            <div>
+              <span style="margin-right:10px;">合计 <span class="total"><span class="sym">¥</span>${b.total.toLocaleString('zh-CN',{minimumFractionDigits:2})}</span></span>
+              <span class="action-link" onclick="${b.status === 'paid' ? `openInvoice('${b.period}')` : `payNow('${b.period}')`}">${b.status === 'paid' ? '申请开票' : '缴费'} ›</span>
+            </div>
+          </div>
+        </div>
+      `}).join('');
+    }
+
+    function payNow(p) {
+      showToast(`正在跳转 ${p} 缴费收银台…`);
+    }
+
+    // 开票 sheet 状态
+    let invPeriod = '';
+    let invSelected = [];
+    let invType = '专票';
+
+    function openInvoice(period) {
+      const bill = MOCK.feeBillsHistory.find(b => b.period === period);
+      if (!bill) return;
+      invPeriod = period;
+      const invoiced = bill.invoicedItems || [];
+      invSelected = invoiced.slice();
+      invType = '专票';
+
+      document.getElementById('invPeriod').textContent = period;
+      document.getElementById('invTitle').textContent = t.name;
+      document.getElementById('invCredit').textContent = t.credit;
+      document.getElementById('invEmail').textContent = t.email;
+      document.querySelectorAll('#invTypeTabs .tt').forEach(x => {
+        x.classList.toggle('active', x.dataset.value === invType);
+      });
+      renderInvItems();
+      updateInvSummary();
+      document.getElementById('invMask').classList.add('show');
+    }
+
+    function renderInvItems() {
+      const bill = MOCK.feeBillsHistory.find(b => b.period === invPeriod);
+      const invoiced = bill.invoicedItems || [];
+      const items = [
+        { key: 'rent', label: '租金', amount: bill.rent, hint: '办公租赁费' },
+        { key: 'property', label: '物业费', amount: bill.property, hint: '物业管理服务费' }
+      ];
+      document.getElementById('invItemList').innerHTML = items.map(it => {
+        const isInvoiced = invoiced.includes(it.key);
+        const checked = invSelected.includes(it.key);
+        return `
+          <div class="item-pick" onclick="${isInvoiced ? '' : `toggleItem('${it.key}')`}">
+            <div class="checkbox ${isInvoiced ? 'disabled' : (checked ? 'checked' : '')}">
+              ${isInvoiced ? '✓' : (checked ? '✓' : '')}
+            </div>
+            <div class="body">
+              <div class="l">${it.label}${isInvoiced ? ' <span style="font-size:10px;color:var(--success);">（已开票）</span>' : ''}</div>
+              <div class="s">${it.hint}</div>
+            </div>
+            <div class="v">¥${it.amount.toLocaleString()}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleItem(key) {
+      const bill = MOCK.feeBillsHistory.find(b => b.period === invPeriod);
+      const invoiced = bill.invoicedItems || [];
+      if (invoiced.includes(key)) return; // 已开过票的不能重复开
+      const i = invSelected.indexOf(key);
+      if (i >= 0) invSelected.splice(i, 1);
+      else invSelected.push(key);
+      renderInvItems();
+      updateInvSummary();
+    }
+
+    function updateInvSummary() {
+      const bill = MOCK.feeBillsHistory.find(b => b.period === invPeriod);
+      const total = invSelected.reduce((s, k) => s + (bill[k] || 0), 0);
+      document.getElementById('invCount').textContent = `${invSelected.length} 项`;
+      document.getElementById('invTotal').textContent = formatMoney(total);
+    }
+
+    function closeInvoice(e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById('invMask').classList.remove('show');
+    }
+
+    function submitInvoice() {
+      if (invSelected.length === 0) {
+        showToast('请至少选择一项开票科目');
+        return;
+      }
+      const app = submitInvoiceData(invPeriod, invSelected, invType);
+      if (app) {
+        showToast(`开票申请已提交，工单号 ${app.id.slice(-8)}`);
+        closeInvoice();
+        renderList(currentFilter);
+      }
+    }
+
+    // tabs (type)
+    document.querySelectorAll('#invTypeTabs .tt').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('#invTypeTabs .tt').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        invType = t.dataset.value;
+      });
+    });
+
+    let currentFilter = 'all';
+    bindChips(document.getElementById('filterTabs'), v => {
+      currentFilter = v;
+      renderList(v);
+    });
+    renderList('all');
+
+    window.addEventListener('resize', () => chartPie.resize());
+  </script>
+</body>
+</html>

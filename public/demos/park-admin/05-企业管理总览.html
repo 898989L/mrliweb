@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>企业管理总览</title><link rel="stylesheet" href="common.css" /></head>
+<body>
+  <header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+  <main class="layout">
+    <aside class="primary-side"><a class="primary-item active" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside>
+    <aside class="sub-side"><div class="sub-title">企业台账</div><a class="sub-item" href="01-厂房空间管理.html">厂房空间管理</a><a class="sub-item" href="02-企业入驻-基本信息.html">企业入驻</a><a class="sub-item active" href="05-企业管理总览.html">企业管理</a><a class="sub-item" href="06-企业详情总览.html">企业详情</a><a class="sub-item" href="07-业务办理中心.html">业务办理</a><a class="sub-item" href="08-费用收缴概览.html">费用收缴</a><a class="sub-item" href="09-资源授权.html">进出记录</a><a class="sub-item" href="10-历史归档.html">历史归档</a><div class="sub-title">巡检管理</div><a class="sub-item" href="15-巡检项目管理.html">巡检项目</a><a class="sub-item" href="11-巡检点管理.html">巡检点</a><a class="sub-item" href="12-巡检计划管理.html">巡检计划</a><a class="sub-item" href="13-巡检任务管理.html">巡检任务</a><a class="sub-item" href="14-巡检明细.html">巡检明细</a><a class="sub-item" href="24-巡检报表.html">巡检报表</a></aside>
+    <section class="workspace">
+      <div class="toast-wrap" id="toastWrap"></div>
+      <section class="panel"><div class="panel-head"><span>企业管理总览</span><div class="btn-row"><a class="btn" href="02-企业入驻-基本信息.html">＋ 办理企业入驻</a><a class="btn light" onclick="toast('企业台账已导出','ok')">导出企业台账</a></div></div>
+        <div class="panel-body">
+          <div class="filters"><div class="input" placeholder="企业名称 / 厂房号 / 联系电话"></div><div class="select">入驻状态 <i class="chev"></i></div><div class="select">行业类型 <i class="chev"></i></div><div class="select">合同状态 <i class="chev"></i></div><div class="select">欠费状态 <i class="chev"></i></div><button class="btn" onclick="toast('查询完成，共 126 条记录')">查询</button><button class="btn gray" onclick="toast('筛选条件已重置')">重置</button></div>
+          <div class="cards" id="kpiCards"><div class="kpi" onclick="filterByKpi('all')" style="cursor:pointer"><span>在园企业</span><b>126 家</b></div><div class="kpi" onclick="filterByKpi('expiring')" style="cursor:pointer"><span>即将到期</span><b class="orange-text">9 家</b></div><div class="kpi" onclick="filterByKpi('arrear')" style="cursor:pointer"><span>欠费企业</span><b class="red-text">16 家</b></div><div class="kpi" onclick="filterByKpi('abnormal')" style="cursor:pointer"><span>资源异常</span><b class="orange-text">5 家</b></div><div class="kpi" onclick="toast('本月新入驻 8 家，详情请查看入驻记录')" style="cursor:pointer"><span>本月新入驻</span><b>8 家</b></div></div>
+          <table><thead><tr><th>企业名称</th><th>绑定厂房</th><th>负责人</th><th>行业</th><th>入驻状态</th><th>合同状态</th><th>欠费金额</th><th>资源状态</th><th>操作</th></tr></thead><tbody><tr><td>江西盛源数码印花有限公司</td><td>1-1-101、1-1-106</td><td>秦建文</td><td>纺织印花</td><td><span class="status green">已入驻</span></td><td><span class="status orange">56天到期</span></td><td class="red-text">￥21,392</td><td>车3/门禁18/表2</td><td><a class="link" href="06-企业详情总览.html">详情</a>　<a class="link" href="07-业务办理中心.html">办理</a></td></tr><tr><td>江西宏达纺织有限公司</td><td>1-1-201</td><td>刘金才</td><td>纺织</td><td><span class="status green">已入驻</span></td><td><span class="status green">正常</span></td><td>￥0</td><td>正常</td><td><a class="link" href="06-企业详情总览.html">详情</a>　<a class="link" href="07-业务办理中心.html">办理</a></td></tr></tbody></table>
+        </div>
+      </section>
+    </section>
+  </main>
+<script src="common.js"></script>
+<script>
+function toast(msg, kind) {
+  var w = document.getElementById('toastWrap');
+  var el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = msg;
+  w.appendChild(el);
+  requestAnimationFrame(function(){ el.classList.add('show'); });
+  setTimeout(function(){ el.classList.remove('show'); setTimeout(function(){ el.remove(); }, 280); }, 2500);
+}
+
+// ===== 优化新增：KPI下钻筛选 =====
+var currentFilter = 'all';
+function filterByKpi(type) {
+  currentFilter = type;
+  var rows = document.querySelectorAll('table tbody tr');
+  var count = 0;
+  rows.forEach(function(r){
+    var cells = r.querySelectorAll('td');
+    var contractCell = cells[5]; // 合同状态
+    var feeCell = cells[6]; // 欠费金额
+    var resourceCell = cells[7]; // 资源状态
+    var visible = true;
+    if (type === 'expiring') {
+      visible = contractCell && contractCell.textContent.indexOf('正常') === -1;
+    } else if (type === 'arrear') {
+      visible = feeCell && feeCell.classList.contains('red-text');
+    } else if (type === 'abnormal') {
+      visible = resourceCell && resourceCell.textContent.trim() !== '正常';
+    }
+    r.style.display = visible ? '' : 'none';
+    if (visible) count++;
+  });
+  // Show batch reminder button when filtered to arrears
+  var existing = document.getElementById('batchRemindBar');
+  if (existing) existing.remove();
+  if (type === 'arrear' && count > 0) {
+    var bar = document.createElement('div');
+    bar.id = 'batchRemindBar';
+    bar.className = 'alert-box warn';
+    bar.style.marginTop = '10px';
+    bar.innerHTML = '已筛选 <b>' + count + '</b> 家欠费企业  <button class="btn red" onclick="batchRemind()" style="height:30px;margin-left:12px">一键催缴（共 ' + count + ' 家）</button>';
+    var table = document.querySelector('table');
+    if (table) table.parentElement.insertBefore(bar, table.nextSibling);
+  }
+  // Highlight active KPI
+  document.querySelectorAll('#kpiCards .kpi').forEach(function(k){ k.style.background = ''; });
+  var allKpis = document.querySelectorAll('#kpiCards .kpi');
+  var idx = type === 'all' ? 0 : type === 'expiring' ? 1 : type === 'arrear' ? 2 : 3;
+  if (allKpis[idx]) allKpis[idx].style.background = '#eaf2ff';
+}
+function batchRemind() {
+  toast('已向 ' + (document.querySelectorAll('table tbody tr:not([style*="display:none"])').length) + ' 家企业发送催缴通知','ok');
+}
+</script>
+</body>
+</html>

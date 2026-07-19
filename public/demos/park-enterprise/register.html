@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>企业入驻申请 · 智慧园区</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .reg-hero {
+      background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%);
+      color: #fff;
+      padding: 20px 16px 28px;
+      border-radius: 0 0 20px 20px;
+    }
+    .reg-hero .title-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 12px;
+    }
+    .reg-hero .back {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .reg-hero .back svg { width: 22px; height: 22px; }
+    .reg-hero h1 { font-size: 20px; font-weight: 600; }
+    .reg-hero p { font-size: 13px; opacity: 0.9; line-height: 1.6; }
+
+    /* 步骤指示 */
+    .step-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 16px;
+    }
+    .step-bar .step {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+    .step-bar .step.active { opacity: 1; font-weight: 600; }
+    .step-bar .step .num {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .step-bar .step.active .num { background: #fff; color: var(--primary); }
+    .step-bar .step.done .num::after {
+      content: '✓';
+      color: #fff;
+    }
+    .step-bar .step.done .num { background: var(--success); }
+    .step-bar .step.done .num span { display: none; }
+    .step-bar .line {
+      width: 30px; height: 1px;
+      background: rgba(255,255,255,0.4);
+    }
+
+    .reg-section {
+      background: var(--white);
+      margin: 12px;
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .reg-section .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-1);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .reg-section .section-title::before {
+      content: '';
+      width: 3px; height: 14px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .form-row {
+      display: flex;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-row:last-child { border-bottom: none; }
+    .form-row .label {
+      width: 100px;
+      font-size: 13px;
+      color: var(--text-2);
+      padding-top: 8px;
+      flex-shrink: 0;
+    }
+    .form-row .label .req { color: var(--danger); margin-right: 2px; }
+    .form-row .field {
+      flex: 1;
+      min-width: 0;
+    }
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 14px;
+      color: var(--text-1);
+      background: #fafbfc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .form-row input:focus,
+    .form-row select:focus,
+    .form-row textarea:focus {
+      border-color: var(--primary);
+      background: var(--white);
+    }
+    .form-row textarea { min-height: 60px; resize: vertical; }
+    .form-row .hint {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 4px;
+    }
+    .form-row .err {
+      font-size: 11px;
+      color: var(--danger);
+      margin-top: 4px;
+      display: none;
+    }
+    .form-row .err.show { display: block; }
+    .form-row input.error,
+    .form-row select.error { border-color: var(--danger); }
+
+    .room-card {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      background: #fafbfc;
+      transition: all 0.2s;
+    }
+    .room-card.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .room-card .top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 4px;
+    }
+    .room-card .name { font-weight: 600; font-size: 13px; color: var(--text-1); }
+    .room-card .area { font-size: 12px; color: var(--primary); font-weight: 600; }
+    .room-card .meta { font-size: 11px; color: var(--text-3); }
+
+    .upload-zone {
+      border: 1.5px dashed #d9d9d9;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      background: #fafbfc;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .upload-zone:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .upload-zone.uploaded {
+      border-color: var(--success);
+      background: var(--success-light);
+    }
+    .upload-zone svg { width: 28px; height: 28px; color: var(--text-3); }
+    .upload-zone.uploaded svg { color: var(--success); }
+    .upload-zone .text { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+    .upload-zone.uploaded .text { color: var(--success); font-weight: 500; }
+
+    .agree-row {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 16px;
+      font-size: 12px;
+      color: var(--text-2);
+    }
+    .agree-row .box {
+      width: 16px; height: 16px;
+      border: 1.5px solid #d9d9d9;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .agree-row.checked .box {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .agree-row.checked .box svg { width: 10px; height: 10px; stroke: #fff; fill: none; stroke-width: 3; }
+    .agree-row a { color: var(--primary); }
+
+    .action-bar {
+      position: sticky;
+      bottom: 0;
+      background: var(--white);
+      padding: 12px 16px;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+      display: flex; gap: 10px;
+      z-index: 10;
+    }
+    .action-bar .btn { flex: 1; padding: 12px 0; font-size: 15px; }
+
+    .footer-link {
+      text-align: center;
+      padding: 14px;
+      font-size: 13px;
+      color: var(--text-3);
+    }
+    .footer-link a { color: var(--primary); font-weight: 500; }
+
+    /* 提交成功状态 */
+    .success-view {
+      text-align: center;
+      padding: 60px 24px;
+    }
+    .success-view .icon {
+      width: 72px; height: 72px;
+      background: var(--success-light);
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .success-view .icon svg { width: 40px; height: 40px; color: var(--success); stroke-width: 3; }
+    .success-view h2 { font-size: 18px; color: var(--text-1); font-weight: 600; margin-bottom: 8px; }
+    .success-view p { font-size: 13px; color: var(--text-2); line-height: 1.7; margin-bottom: 24px; }
+    .success-view .info {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      text-align: left;
+      font-size: 12px;
+      color: var(--text-2);
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+    .success-view .info .v { color: var(--text-1); font-weight: 600; }
+
+    /* 协议 sheet */
+    .sheet-mask {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1100;
+      display: none;
+      align-items: flex-end; justify-content: center;
+    }
+    .sheet-mask.show { display: flex; }
+    .sheet {
+      width: 100%; max-width: 750px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 16px 16px 0 0;
+      padding: 18px 18px calc(24px + 60px + env(safe-area-inset-bottom));
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .sheet .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+    .sheet .hd .ttl { font-size: 17px; font-weight: 600; color: var(--text-1); }
+    .sheet .hd .close { color: var(--text-3); font-size: 24px; cursor: pointer; line-height: 1; }
+    .sheet .agreement-body {
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-2);
+      padding: 0 4px;
+    }
+    .sheet .agreement-body h3 {
+      font-size: 14px;
+      color: var(--text-1);
+      font-weight: 600;
+      margin: 14px 0 6px;
+    }
+    .sheet .agreement-body h3:first-child { margin-top: 0; }
+    .sheet .agreement-body p { margin-bottom: 8px; }
+    .sheet .agreement-actions {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="app no-tabbar">
+    <!-- 表单视图 -->
+    <div id="formView">
+      <div class="reg-hero">
+        <div class="title-row">
+          <a href="login.html" class="back" aria-label="返回">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </a>
+          <div>
+            <h1>企业入驻申请</h1>
+            <p style="font-size:12px;margin-top:2px;">填写企业信息，物业审核通过后即可入驻</p>
+          </div>
+        </div>
+        <div class="step-bar">
+          <div class="step active"><span class="num">1</span><span>企业资料</span></div>
+          <div class="line"></div>
+          <div class="step"><span class="num">2</span><span>联系信息</span></div>
+          <div class="line"></div>
+          <div class="step"><span class="num">3</span><span>选房入驻</span></div>
+        </div>
+      </div>
+
+      <!-- 第一段：企业基本信息 -->
+      <div class="reg-section">
+        <div class="section-title">企业基本信息</div>
+        <div class="form-row">
+          <div class="label"><span class="req">*</span>企业名称</div>
+          <div class="field">
+            <input type="text" id="fCompany" placeholder="请输入企业全称">
+            <div class="err" id="errCompany"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="label"><span class="req">*</span>信用代码</div>
+          <div class="field">
+            <input type="text" id="fCredit" placeholder="91XXXXXXXXXXXXXXXX" maxlength="18">
+            <div class="hint">18 位统一社会信用代码</div>
+            <div class="err" id="errCredit"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="label"><span class="req">*</span>所属行业</div>
+          <div class="field">
+            <select id="fIndustry">
+              <option value="">请选择行业</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="label">企业简介</div>
+          <div class="field">
+            <textarea id="fIntro" placeholder="简单介绍企业主营业务（选填）"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第二段：联系信息 -->
+      <div class="reg-section">
+        <div class="section-title">联系信息</div>
+        <div class="form-row">
+          <div class="label"><span class="req">*</span>法定代表人</div>
+          <div class="field">
+            <input type="text" id="fApplicant" placeholder="姓名">
+            <div class="err" id="errApplicant"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="label"><span class="req">*</span>联系电话</div>
+          <div class="field">
+            <input type="tel" id="fPhone" placeholder="11 位手机号" maxlength="11">
+            <div class="err" id="errPhone"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="label"><span class="req">*</span>邮箱</div>
+          <div class="field">
+            <input type="email" id="fEmail" placeholder="联系邮箱">
+            <div class="err" id="errEmail"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第三段：入驻房源 -->
+      <div class="reg-section">
+        <div class="section-title">入驻房源（可选）</div>
+        <div class="form-row">
+          <div class="label">选择园区</div>
+          <div class="field">
+            <select id="fPark" onchange="renderRoomList()">
+              <option value="">请选择园区</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="label">意向房源</div>
+          <div class="field" id="roomList">
+            <div class="hint">先选择园区后展示可用房源</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="label">用房类型</div>
+          <div class="field">
+            <select id="fType">
+              <option value="">请选择类型</option>
+              <option value="办公">办公</option>
+              <option value="厂房">厂房</option>
+              <option value="仓储">仓储</option>
+              <option value="商业">商业</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第四段：证件资料 -->
+      <div class="reg-section">
+        <div class="section-title">证件资料</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="upload-zone" id="upload1" onclick="doUpload('upload1','营业执照')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <div class="text">营业执照</div>
+          </div>
+          <div class="upload-zone" id="upload2" onclick="doUpload('upload2','法人身份证')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <div class="text">法人身份证</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agree-row checked" id="agreeRow" onclick="toggleAgree()">
+        <div class="box">
+          <svg viewBox="0 0 24 24"><polyline points="5 12 10 17 19 8"/></svg>
+        </div>
+        <div>
+          我已阅读并同意 <a href="javascript:void(0)" onclick="event.stopPropagation();openAgreement('lease')">《园区入驻协议》</a>
+          和 <a href="javascript:void(0)" onclick="event.stopPropagation();openAgreement('privacy')">《隐私政策》</a>
+        </div>
+      </div>
+
+      <div style="height:16px;"></div>
+
+      <div class="action-bar">
+        <button class="btn btn-outline" onclick="location.href='login.html'">取消</button>
+        <button class="btn btn-primary" onclick="doSubmit()">提交申请</button>
+      </div>
+    </div>
+
+    <!-- 提交成功视图 -->
+    <div id="successView" style="display:none;">
+      <div class="success-view">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="5 12 10 17 19 7"/></svg>
+        </div>
+        <h2>申请已提交</h2>
+        <p>物业管理人员会在 1-2 个工作日内审核您的申请<br>审核结果将通过短信通知您</p>
+        <div class="info" id="resultInfo"></div>
+        <button class="btn btn-primary btn-block btn-lg" onclick="location.href='login.html'">返回登录</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 协议 sheet -->
+  <div class="sheet-mask" id="agreeMask" onclick="closeAgreement(event)">
+    <div class="sheet" onclick="event.stopPropagation()">
+      <div class="hd">
+        <div class="ttl" id="agreeTitle">协议</div>
+        <span class="close" onclick="closeAgreement()">×</span>
+      </div>
+      <div class="agreement-body" id="agreeBody"></div>
+      <div class="agreement-actions">
+        <button class="btn btn-primary btn-block btn-lg" onclick="closeAgreement()">我已阅读</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    // 填充行业 / 园区下拉
+    const fIndustry = document.getElementById('fIndustry');
+    MOCK.industryOptions.forEach(i => {
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = i;
+      fIndustry.appendChild(opt);
+    });
+    const fPark = document.getElementById('fPark');
+    MOCK.parkOptions.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.id; opt.textContent = p.name;
+      fPark.appendChild(opt);
+    });
+
+    // 园区可选房源（演示数据）
+    const AVAILABLE_ROOMS = {
+      'P01': [
+        { id: 'A-601', name: 'A-601', area: 480, type: '办公', rent: '24000/月' },
+        { id: 'A-702', name: 'A-702', area: 220, type: '办公', rent: '11000/月' },
+        { id: 'A-810', name: 'A-810', area: 360, type: '办公', rent: '18000/月' }
+      ],
+      'P02': [
+        { id: 'B-403', name: 'B-403', area: 620, type: '厂房', rent: '18600/月' },
+        { id: 'B-505', name: 'B-505', area: 450, type: '厂房', rent: '13500/月' }
+      ],
+      'P03': [
+        { id: 'C-201', name: 'C-201', area: 280, type: '商业', rent: '16800/月' },
+        { id: 'C-405', name: 'C-405', area: 520, type: '仓储', rent: '10400/月' }
+      ]
+    };
+    let selectedRoom = null;
+    function renderRoomList() {
+      const pid = document.getElementById('fPark').value;
+      const target = document.getElementById('roomList');
+      selectedRoom = null;
+      if (!pid) {
+        target.innerHTML = '<div class="hint">先选择园区后展示可用房源</div>';
+        return;
+      }
+      const rooms = AVAILABLE_ROOMS[pid] || [];
+      if (!rooms.length) {
+        target.innerHTML = '<div class="hint">该园区暂无可用房源</div>';
+        return;
+      }
+      target.innerHTML = rooms.map(r => `
+        <div class="room-card" data-id="${r.id}" onclick="selectRoom('${r.id}')">
+          <div class="top">
+            <span class="name">${r.name} · ${r.type}</span>
+            <span class="area">${r.area} ㎡</span>
+          </div>
+          <div class="meta">租金：${r.rent}</div>
+        </div>
+      `).join('');
+    }
+    function selectRoom(id) {
+      selectedRoom = id;
+      document.querySelectorAll('#roomList .room-card').forEach(c => {
+        c.classList.toggle('selected', c.dataset.id === id);
+      });
+    }
+
+    let agreed = true;
+    function toggleAgree() {
+      agreed = !agreed;
+      document.getElementById('agreeRow').classList.toggle('checked', agreed);
+    }
+
+    const uploadStatus = { upload1: false, upload2: false };
+    function doUpload(id, name) {
+      const el = document.getElementById(id);
+      uploadStatus[id] = true;
+      el.classList.add('uploaded');
+      el.querySelector('.text').textContent = `${name} ✓ 已上传`;
+      showToast(`${name} 上传成功`);
+    }
+
+    function validate() {
+      const fields = [
+        { id: 'fCompany', err: 'errCompany', msg: '请输入企业名称' },
+        { id: 'fCredit', err: 'errCredit', msg: '请输入统一社会信用代码', check: v => /^[0-9A-Z]{18}$/.test(v), msg2: '信用代码必须为 18 位字母数字' },
+        { id: 'fApplicant', err: 'errApplicant', msg: '请输入法人姓名' },
+        { id: 'fPhone', err: 'errPhone', msg: '请输入联系电话', check: v => /^1[3-9]\d{9}$/.test(v), msg2: '手机号格式不正确' },
+        { id: 'fEmail', err: 'errEmail', msg: '请输入邮箱', check: v => /^[\w.-]+@[\w.-]+\.\w+$/.test(v), msg2: '邮箱格式不正确' }
+      ];
+      let ok = true;
+      let firstErr = null;
+      fields.forEach(f => {
+        const el = document.getElementById(f.id);
+        const errEl = document.getElementById(f.err);
+        const v = el.value.trim();
+        if (!v) {
+          errEl.textContent = f.msg;
+          errEl.classList.add('show');
+          el.classList.add('error');
+          ok = false;
+          if (!firstErr) firstErr = el;
+        } else if (f.check && !f.check(v)) {
+          errEl.textContent = f.msg2;
+          errEl.classList.add('show');
+          el.classList.add('error');
+          ok = false;
+          if (!firstErr) firstErr = el;
+        } else {
+          errEl.classList.remove('show');
+          el.classList.remove('error');
+        }
+      });
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return ok;
+    }
+
+    function doSubmit() {
+      if (!validate()) {
+        showToast('请完善必填信息');
+        return;
+      }
+      if (!agreed) {
+        showToast('请先勾选同意《入驻协议》');
+        return;
+      }
+      const data = {
+        company: document.getElementById('fCompany').value.trim(),
+        credit: document.getElementById('fCredit').value.trim(),
+        applicant: document.getElementById('fApplicant').value.trim(),
+        phone: document.getElementById('fPhone').value.trim(),
+        park: fPark.selectedOptions[0]?.text || '—',
+        room: selectedRoom || '—',
+        time: new Date().toLocaleString('zh-CN')
+      };
+      document.getElementById('formView').style.display = 'none';
+      document.getElementById('successView').style.display = '';
+      document.getElementById('resultInfo').innerHTML = `
+        <div>申请单号：<span class="v">A${Date.now().toString().slice(-8)}</span></div>
+        <div>企业名称：<span class="v">${data.company}</span></div>
+        <div>意向园区：<span class="v">${data.park}</span></div>
+        <div>意向房源：<span class="v">${data.room}</span></div>
+        <div>提交时间：<span class="v">${data.time}</span></div>
+      `;
+      window.scrollTo({ top: 0 });
+    }
+
+    // 输入时实时清错
+    document.querySelectorAll('input, select').forEach(el => {
+      el.addEventListener('input', () => el.classList.remove('error'));
+    });
+
+    // ========== 协议 sheet ==========
+    const AGREEMENTS = {
+      lease: {
+        title: '园区入驻协议',
+        html: `
+          <h3>第一条 协议双方</h3>
+          <p>本协议由 <strong>智慧园区管理有限公司</strong>（以下简称"甲方"）与申请入驻企业（以下简称"乙方"）共同签署。</p>
+          <h3>第二条 入驻申请</h3>
+          <p>2.1 乙方应如实填写企业名称、统一社会信用代码、法定代表人、联系方式等入驻信息，并保证所提交资料的真实性、合法性、有效性。</p>
+          <p>2.2 甲方将在收到乙方入驻申请后的 1-2 个工作日内完成审核，审核结果以短信形式通知乙方。</p>
+          <h3>第三条 房源与费用</h3>
+          <p>3.1 乙方通过审核后，可与甲方协商确定具体入驻房源、租赁面积、租金、押金等事项。</p>
+          <p>3.2 入驻期间产生的水费、电费、网络费、物业费等公共事业费用由乙方自行承担。</p>
+          <h3>第四条 权利与义务</h3>
+          <p>4.1 乙方应遵守园区各项管理制度，文明经营，不得从事违法活动。</p>
+          <p>4.2 乙方如需对房屋进行装修或改造，应提前 15 日书面通知甲方并取得书面同意。</p>
+          <p>4.3 乙方应按时支付各项费用，逾期支付的，按日加收 0.5‰ 滞纳金。</p>
+          <h3>第五条 协议生效</h3>
+          <p>本协议自乙方点击"同意"并成功提交入驻申请之日起生效。正式入驻合同将在乙方选定房源后另行签署。</p>
+        `
+      },
+      privacy: {
+        title: '隐私政策',
+        html: `
+          <h3>第一条 信息收集范围</h3>
+          <p>为提供园区入驻服务，我们将收集以下信息：</p>
+          <p>• <strong>企业信息</strong>：企业名称、统一社会信用代码、行业类型、企业简介</p>
+          <p>• <strong>联系信息</strong>：法定代表人姓名、联系电话、电子邮箱</p>
+          <p>• <strong>使用信息</strong>：登录日志、操作记录、设备信息</p>
+          <h3>第二条 信息使用</h3>
+          <p>2.1 收集的信息将用于入驻审核、身份验证、费用通知、物业服务等场景。</p>
+          <p>2.2 未经您同意，我们不会将您的个人信息用于其他用途或提供给第三方。</p>
+          <h3>第三条 信息存储与保护</h3>
+          <p>3.1 我们采用业界通行的安全技术和管理措施保护您的个人信息，防止信息泄露、损毁或丢失。</p>
+          <p>3.2 您的个人信息将存储在中华人民共和国境内，存储期限不超过法律法规要求的最短时限。</p>
+          <h3>第四条 您的权利</h3>
+          <p>您有权随时查看、更正、删除您的个人信息。如需行使上述权利，请联系物业客服。</p>
+          <h3>第五条 政策更新</h3>
+          <p>本政策可能根据业务调整进行更新，更新后会在园区内显著位置公布。继续使用我们的服务即视为接受更新后的政策。</p>
+        `
+      }
+    };
+    function openAgreement(type) {
+      const a = AGREEMENTS[type];
+      document.getElementById('agreeTitle').textContent = a.title;
+      document.getElementById('agreeBody').innerHTML = a.html;
+      document.getElementById('agreeMask').classList.add('show');
+    }
+    function closeAgreement(e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById('agreeMask').classList.remove('show');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>厂房空间管理</title><link rel="stylesheet" href="common.css" /></head>
+<body>
+  <header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+  <main class="layout">
+    <aside class="primary-side"><a class="primary-item active" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside>
+    <aside class="sub-side"><div class="sub-title">企业台账</div><a class="sub-item active" href="01-厂房空间管理.html">厂房空间管理</a><a class="sub-item" href="02-企业入驻-基本信息.html">企业入驻</a><a class="sub-item" href="05-企业管理总览.html">企业管理</a><a class="sub-item" href="06-企业详情总览.html">企业详情</a><a class="sub-item" href="07-业务办理中心.html">业务办理</a><a class="sub-item" href="08-费用收缴概览.html">费用收缴</a><a class="sub-item" href="09-资源授权.html">进出记录</a><a class="sub-item" href="10-历史归档.html">历史归档</a><div class="sub-title">巡检管理</div><a class="sub-item" href="15-巡检项目管理.html">巡检项目</a><a class="sub-item" href="11-巡检点管理.html">巡检点</a><a class="sub-item" href="25-巡检路线管理.html">巡检路线</a><a class="sub-item" href="12-巡检计划管理.html">巡检计划</a><a class="sub-item" href="13-巡检任务管理.html">巡检任务</a><a class="sub-item" href="14-巡检明细.html">巡检明细</a><a class="sub-item" href="24-巡检报表.html">巡检报表</a></aside>
+    <section class="workspace">
+      <div class="toast-wrap" id="toastWrap"></div>
+
+      <!-- 优化新增：30天到期提醒 -->
+      <div class="alert-banner" id="expireAlert">
+        <div class="alert-list">
+          <div class="alert-item"><span class="badge">28天到期</span> 江西盛源数码印花有限公司（1-1-101）合同2029-05-31到期 <a class="btn light" style="height:28px;padding:0 12px;margin-left:8px" href="07-业务办理中心.html">联系续签</a></div>
+          <div class="alert-item"><span class="badge">15天到期</span> 百川包装有限公司（1-1-105）合同2026-06-10到期 <a class="btn light" style="height:28px;padding:0 12px;margin-left:8px" href="07-业务办理中心.html">联系续签</a></div>
+          <div class="alert-item"><span class="badge">7天到期</span> 华彩科技有限公司（2-1-201）合同2026-06-02到期 <a class="btn light" style="height:28px;padding:0 12px;margin-left:8px" href="07-业务办理中心.html">联系续签</a></div>
+        </div>
+        <button style="border:0;background:none;color:var(--muted);cursor:pointer;font-size:18px" onclick="document.getElementById('expireAlert').remove()">×</button>
+      </div>
+
+      <section class="panel">
+        <div class="panel-head"><span>厂房空间管理</span><div class="btn-row"><a class="btn" onclick="openModal('modal-building')">＋ 新增楼栋</a><a class="btn light" onclick="openModal('modal-floor')">＋ 新增楼层</a><a class="btn light" onclick="openModal('modal-room')">＋ 新增厂房</a><a class="btn light" onclick="openModal('modal-import')">导入厂房</a><a class="btn light" onclick="exportRoomList()">导出 Excel</a><a class="btn" href="02-企业入驻-基本信息.html">办理企业入驻</a></div></div>
+        <div class="panel-body">
+          <div class="cards"><div class="kpi"><span>楼栋数</span><b>4 栋</b></div><div class="kpi"><span>厂房总数</span><b>168 间</b></div><div class="kpi"><span>已租厂房</span><b>126 间</b></div><div class="kpi"><span>空置厂房</span><b class="orange-text">18 间</b></div><div class="kpi"><span>出租率</span><b>75% <span class="trend-up">2.7%</span></b></div></div>
+          <div class="tree-layout">
+            <div class="tree">
+              <div class="node active" onclick="switchBuilding('1号楼', this)"><span class="tree-arrow">▾</span> 1号楼</div>
+              <div class="node child" onclick="switchFloor('1F', this)">　<span class="tree-arrow">▸</span> 1层</div>
+              <div class="node child" onclick="switchFloor('2F', this)">　<span class="tree-arrow">▸</span> 2层</div>
+              <div class="node child" onclick="switchFloor('3F', this)">　<span class="tree-arrow">▸</span> 3层</div>
+              <div class="node" onclick="switchBuilding('2号楼', this)"><span class="tree-arrow">▸</span> 2号楼</div>
+              <div class="node child" style="display:none" onclick="switchFloor('2-1F', this)">　<span class="tree-arrow">▸</span> 1层</div>
+              <div class="node child" style="display:none" onclick="switchFloor('2-2F', this)">　<span class="tree-arrow">▸</span> 2层</div>
+              <div class="node" onclick="switchBuilding('3号楼', this)"><span class="tree-arrow">▸</span> 3号楼</div>
+              <div class="node child" style="display:none" onclick="switchFloor('3-1F', this)">　<span class="tree-arrow">▸</span> 1层</div>
+              <div class="node" onclick="switchBuilding('4号楼', this)"><span class="tree-arrow">▸</span> 4号楼</div>
+              <div class="node child" style="display:none" onclick="switchFloor('4-1F', this)">　<span class="tree-arrow">▸</span> 1层</div>
+            </div>
+            <div>
+              <div class="filters"><div class="input" placeholder="厂房编号 / 企业名称" id="roomSearch"></div><div class="select">楼栋 <i class="chev"></i></div><div class="select">楼层 <i class="chev"></i></div><div class="select">空间状态 <i class="chev"></i></div><div class="select">空间类型 <i class="chev"></i></div><button class="btn" onclick="doSearch()">查询</button><button class="btn gray" onclick="doReset()">重置</button></div>
+              <div class="box mb-14"><div class="box-title" id="gridTitle">1号楼 1层结构图</div><div class="panel-body"><div class="space-grid" id="spaceGrid">
+                <div class="space green" onclick="openRoomDetail('1-1-101','已租','盛源数码印花','1337㎡','1号楼','1层','2029-05-31')"><b>1-1-101</b><span>盛源数码印花</span></div>
+                <div class="space green" onclick="openRoomDetail('1-1-102','已租','宏达纺织','1337㎡','1号楼','1层','2027-12-31')"><b>1-1-102</b><span>宏达纺织</span></div>
+                <div class="space orange" onclick="openRoomDetail('1-1-103','即将到期','华彩科技','1337㎡','1号楼','1层','2026-06-18')"><b>1-1-103</b><span>28天到期</span></div>
+                <div class="space" onclick="openRoomDetail('1-1-104','空置','-','1337㎡','1号楼','1层','-')"><b>1-1-104</b><span>空置待租</span></div>
+                <div class="space green" onclick="openRoomDetail('1-1-105','已租','百川包装','1337㎡','1号楼','1层','2028-03-15')"><b>1-1-105</b><span>百川包装</span></div>
+                <div class="space red" onclick="openRoomDetail('1-1-106','欠费','百川包装','1337㎡','1号楼','1层','2028-03-15')"><b>1-1-106</b><span>欠费预警</span></div>
+                <div class="space" onclick="openRoomDetail('1-1-107','停用','-','1337㎡','1号楼','1层','-')"><b>1-1-107</b><span>停用检修</span></div>
+                <div class="space green" onclick="openRoomDetail('1-1-108','已租','华彩科技','1337㎡','1号楼','1层','2027-08-20')"><b>1-1-108</b><span>华彩科技</span></div>
+              </div></div></div>
+              <table id="roomTable"><thead><tr><th>厂房编号</th><th>楼栋/楼层</th><th>空间类型</th><th class="sortable" onclick="sortRoomTable('area')">建筑面积</th><th>计租面积</th><th>当前企业</th><th>空间状态</th><th>合同到期</th><th>操作</th></tr></thead><tbody>
+              <tr data-building="1号楼" data-floor="1层"><td>1-1-101</td><td>1号楼/1层</td><td>厂房</td><td>1337㎡</td><td>1337㎡</td><td>盛源数码印花</td><td><span class="status green">已租</span></td><td>2029-05-31</td><td><a class="link" onclick="openRoomDetail('1-1-101','已租','盛源数码印花','1337㎡','1号楼','1层','2029-05-31')">编辑</a>　<a class="link" href="06-企业详情总览.html">企业详情</a></td></tr>
+              <tr data-building="1号楼" data-floor="1层"><td>1-1-104</td><td>1号楼/1层</td><td>厂房</td><td>1337㎡</td><td>1337㎡</td><td>-</td><td><span class="status blue">空置</span></td><td>-</td><td><a class="link" onclick="openRoomDetail('1-1-104','空置','-','1337㎡','1号楼','1层','-')">编辑</a>　<a class="link" href="02-企业入驻-基本信息.html">办理入驻</a></td></tr>
+              </tbody></table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- ===== 弹窗: 新增楼栋 ===== -->
+  <div class="modal-overlay" id="modal-building">
+    <div class="modal">
+      <div class="modal-head"><span>新增楼栋</span><button class="modal-close" onclick="closeModal('modal-building')">&times;</button></div>
+      <div class="modal-body">
+        <div class="form-grid col2">
+          <div class="form-item"><label>楼栋名称</label><div class="input" contenteditable="true">5号楼</div></div>
+          <div class="form-item"><label>楼栋编号</label><div class="input" contenteditable="true">B05</div></div>
+          <div class="form-item"><label>楼层数</label><div class="input" contenteditable="true">3</div></div>
+          <div class="form-item"><label>建筑类型</label><div class="select">标准厂房 <i class="chev"></i></div></div>
+          <div class="form-item"><label>总建筑面积</label><div class="input" contenteditable="true">12,000</div></div>
+          <div class="form-item"><label>每层厂房数</label><div class="input" contenteditable="true">8</div></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-building')">取消</a>
+        <a class="btn" onclick="confirmAddBuilding()">确认新增</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 弹窗: 新增楼层 ===== -->
+  <div class="modal-overlay" id="modal-floor">
+    <div class="modal">
+      <div class="modal-head"><span>新增楼层</span><button class="modal-close" onclick="closeModal('modal-floor')">&times;</button></div>
+      <div class="modal-body">
+        <div class="form-grid col2">
+          <div class="form-item"><label>所属楼栋</label><div class="select">1号楼 <i class="chev"></i></div></div>
+          <div class="form-item"><label>楼层编号</label><div class="input" contenteditable="true">4层</div></div>
+          <div class="form-item"><label>厂房数量</label><div class="input" contenteditable="true">8</div></div>
+          <div class="form-item"><label>层高（米）</label><div class="input" contenteditable="true">4.5</div></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-floor')">取消</a>
+        <a class="btn" onclick="confirmAddFloor()">确认新增</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 弹窗: 新增厂房 ===== -->
+  <div class="modal-overlay" id="modal-room">
+    <div class="modal">
+      <div class="modal-head"><span>新增厂房</span><button class="modal-close" onclick="closeModal('modal-room')">&times;</button></div>
+      <div class="modal-body">
+        <div class="form-grid col2">
+          <div class="form-item"><label>所属楼栋</label><div class="select">1号楼 <i class="chev"></i></div></div>
+          <div class="form-item"><label>所属楼层</label><div class="select">1层 <i class="chev"></i></div></div>
+          <div class="form-item"><label>厂房编号</label><div class="input" contenteditable="true">1-1-109</div></div>
+          <div class="form-item"><label>空间类型</label><div class="select">厂房 <i class="chev"></i></div></div>
+          <div class="form-item"><label>建筑面积（㎡）</label><div class="input" contenteditable="true">1337</div></div>
+          <div class="form-item"><label>计租面积（㎡）</label><div class="input" contenteditable="true">1337</div></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-room')">取消</a>
+        <a class="btn" onclick="confirmAddRoom()">确认新增</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 弹窗: 导入厂房 ===== -->
+  <div class="modal-overlay" id="modal-import">
+    <div class="modal">
+      <div class="modal-head"><span>导入厂房</span><button class="modal-close" onclick="closeModal('modal-import')">&times;</button></div>
+      <div class="modal-body">
+        <div class="alert-box info"><p>支持批量导入厂房信息，请下载模板并按格式填写后上传。</p></div>
+        <div class="box mb-14">
+          <div class="box-title">上传文件</div>
+          <div class="panel-body">
+            <div class="form-item"><label>选择文件</label><div class="input" style="border-style:dashed;justify-content:center;height:80px;cursor:pointer" onclick="toast('请选择 Excel 文件 (.xlsx)')"><span class="dim">点击选择或拖拽 Excel 文件到此处</span></div></div>
+          </div>
+        </div>
+        <div class="btn-row"><a class="btn light" onclick="toast('模板下载中…')">下载导入模板</a></div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-import')">取消</a>
+        <a class="btn" onclick="confirmImport()">开始导入</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 弹窗: 厂房详情 ===== -->
+  <div class="modal-overlay" id="modal-room-detail">
+    <div class="modal">
+      <div class="modal-head"><span>厂房详情</span><button class="modal-close" onclick="closeModal('modal-room-detail')">&times;</button></div>
+      <div class="modal-body">
+        <div class="box mb-14">
+          <div class="box-title">基本信息</div>
+          <div class="kv"><div class="k">厂房编号</div><div class="v" id="rdCode">--</div><div class="k">楼栋/楼层</div><div class="v" id="rdLoc">--</div><div class="k">空间类型</div><div class="v">厂房</div><div class="k">建筑面积</div><div class="v" id="rdArea">--</div><div class="k">计租面积</div><div class="v" id="rdArea">--</div><div class="k">空间状态</div><div class="v" id="rdStatus">--</div></div>
+        </div>
+        <div class="box mb-14" id="rdEnterpriseBox">
+          <div class="box-title">入驻企业</div>
+          <div class="kv"><div class="k">企业名称</div><div class="v" id="rdEnterprise">--</div><div class="k">合同到期</div><div class="v" id="rdExpire">--</div><div class="k">操作</div><div class="v"><a class="link" href="06-企业详情总览.html">进入企业详情</a></div></div>
+        </div>
+        <div class="btn-row">
+          <a class="btn light" onclick="closeModal('modal-room-detail')">关闭</a>
+          <a class="btn" id="rdActionBtn" onclick="closeModal('modal-room-detail');toast('厂房信息已更新')">编辑信息</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script src="common.js"></script>
+<!-- 优化新增：出租率趋势图弹窗 -->
+  <div class="modal-overlay" id="modal-trend">
+    <div class="modal wide">
+      <div class="modal-head"><span>出租率趋势（近6个月）</span><button class="modal-close" onclick="closeModal('modal-trend')">&times;</button></div>
+      <div class="modal-body" id="trendChart"></div>
+    </div>
+  </div>
+
+<script>
+function toast(msg, kind) {
+  var w = document.getElementById('toastWrap');
+  var el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = msg;
+  w.appendChild(el);
+  requestAnimationFrame(function(){ el.classList.add('show'); });
+  setTimeout(function(){ el.classList.remove('show'); setTimeout(function(){ el.remove(); }, 280); }, 2500);
+}
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+// ===== 新增确认 =====
+function confirmAddBuilding() { closeModal('modal-building'); toast('楼栋 "5号楼" 已新增，共 24 间厂房','ok'); }
+function confirmAddFloor() { closeModal('modal-floor'); toast('楼层 "1号楼 4层" 已新增','ok'); }
+function confirmAddRoom() { closeModal('modal-room'); toast('厂房 "1-1-109" 已新增，状态：空置','ok'); }
+function confirmImport() { closeModal('modal-import'); toast('导入完成，成功导入 24 间厂房','ok'); }
+
+// ===== 厂房详情弹窗 =====
+function openRoomDetail(code, status, enterprise, area, building, floor, expire) {
+  document.getElementById('rdCode').textContent = code;
+  document.getElementById('rdLoc').textContent = building + ' / ' + floor;
+  document.getElementById('rdArea').textContent = area + '㎡';
+  document.getElementById('rdStatus').textContent = status;
+  if (enterprise === '-' || !enterprise) {
+    document.getElementById('rdEnterprise').textContent = '-';
+    document.getElementById('rdExpire').textContent = '-';
+    document.getElementById('rdEnterpriseBox').style.display = 'none';
+  } else {
+    document.getElementById('rdEnterprise').textContent = enterprise;
+    document.getElementById('rdExpire').textContent = expire;
+    document.getElementById('rdEnterpriseBox').style.display = '';
+  }
+  openModal('modal-room-detail');
+}
+
+// ===== 树节点交互 =====
+function switchBuilding(name, el) {
+  // Toggle expand/collapse
+  var arrow = el.querySelector('.tree-arrow');
+  var isOpen = arrow.textContent === '▾';
+  // Find child nodes belonging to this building
+  var nextEl = el.nextElementSibling;
+  while (nextEl && nextEl.classList.contains('child')) {
+    nextEl.style.display = isOpen ? 'none' : '';
+    nextEl = nextEl.nextElementSibling;
+  }
+  arrow.textContent = isOpen ? '▸' : '▾';
+  if (!isOpen) {
+    // Highlight this building, filter table
+    document.querySelectorAll('.tree .node').forEach(function(n){ n.classList.remove('active'); });
+    el.classList.add('active');
+    var tableRows = document.querySelectorAll('#roomTable tbody tr');
+    tableRows.forEach(function(r){
+      r.style.display = r.getAttribute('data-building') === name ? '' : 'none';
+    });
+    document.getElementById('gridTitle').textContent = name + ' 结构图';
+  } else {
+    // Reset to show all
+    document.querySelectorAll('#roomTable tbody tr').forEach(function(r){ r.style.display = ''; });
+    document.getElementById('gridTitle').textContent = '1号楼 1层结构图';
+  }
+}
+function switchFloor(name, el) {
+  document.querySelectorAll('.tree .node').forEach(function(n){ n.classList.remove('active'); });
+  el.classList.add('active');
+  var tableRows = document.querySelectorAll('#roomTable tbody tr');
+  tableRows.forEach(function(r){
+    r.style.display = r.getAttribute('data-floor') === name ? '' : 'none';
+  });
+  document.getElementById('gridTitle').textContent = '1号楼 ' + name + '结构图';
+}
+
+// ===== 查询/重置 =====
+function doSearch() { toast('查询完成，共 168 条记录'); }
+function doReset() {
+  document.querySelectorAll('#roomTable tbody tr').forEach(function(r){ r.style.display = ''; });
+  document.querySelectorAll('.tree .node').forEach(function(n){ n.classList.remove('active'); });
+  document.querySelector('.tree .node').classList.add('active');
+  document.getElementById('gridTitle').textContent = '1号楼 1层结构图';
+  toast('筛选条件已重置');
+}
+
+// ===== 优化新增：导出厂房列表 =====
+function exportRoomList() { toast('厂房列表已导出：厂房空间管理.xlsx','ok'); }
+
+// ===== 优化新增：面积排序 =====
+var sortDir = 1; // 1=asc, -1=desc
+function sortRoomTable(col) {
+  var tbody = document.querySelector('#roomTable tbody');
+  if (!tbody) return;
+  var rows = Array.from(tbody.querySelectorAll('tr'));
+  var idx = col === 'area' ? 3 : 4; // 建筑面积=3, 计租面积=4
+  sortDir = sortDir * -1;
+  rows.sort(function(a, b){
+    var va = parseFloat(a.cells[idx].textContent.replace(/[^0-9.]/g,'')) || 0;
+    var vb = parseFloat(b.cells[idx].textContent.replace(/[^0-9.]/g,'')) || 0;
+    return (va - vb) * sortDir;
+  });
+  rows.forEach(function(r){ tbody.appendChild(r); });
+  // Update sort indicators
+  document.querySelectorAll('#roomTable .sort-asc, #roomTable .sort-desc').forEach(function(th){
+    th.classList.remove('sort-asc', 'sort-desc');
+  });
+  var th = document.querySelector('#roomTable th:nth-child(' + (idx + 1) + ')');
+  if (th) th.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
+}
+
+// ===== 优化新增：点击出租率展开趋势图 =====
+(function(){
+  var kpiEl = document.querySelector('.kpi:last-child');
+  if (kpiEl) {
+    kpiEl.style.cursor = 'pointer';
+    kpiEl.addEventListener('click', function(e){
+      if (e.target.closest('.trend-up, .trend-down')) return; // don't interfere with arrow
+      var container = document.getElementById('trendChart');
+      container.innerHTML = '';
+      renderTrendChart('#trendChart', [
+        {label:'12月',value:72.3},{label:'1月',value:73.1},{label:'2月',value:73.8},
+        {label:'3月',value:74.2},{label:'4月',value:74.6},{label:'5月',value:75.0}
+      ], '出租率（%）');
+      openModal('modal-trend');
+    });
+  }
+})();
+
+document.addEventListener('click', function(e){
+  if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('show')) {
+    e.target.classList.remove('show');
+  }
+});
+</script>
+</body>
+</html>

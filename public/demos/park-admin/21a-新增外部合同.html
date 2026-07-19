@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>新增外部合同</title><link rel="stylesheet" href="common.css" /></head>
+<body>
+<header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+<main class="layout"><aside class="primary-side"><a class="primary-item" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item active" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside>
+<aside class="sub-side"><div class="sub-title">合同管理</div><a class="sub-item" href="16-合同类型管理.html">合同类型</a><a class="sub-item" href="17-合同甲方管理.html">合同甲方</a><a class="sub-item" href="18-起草合同管理.html">起草合同</a><a class="sub-item" href="19-内部合同管理.html">内部合同</a><a class="sub-item" href="20-合同查询.html">合同查询</a><a class="sub-item active" href="21-外部合同管理.html">外部合同</a><a class="sub-item" href="22-合同变更管理.html">合同变更</a><a class="sub-item" href="23-到期合同管理.html">到期合同</a></aside>
+<section class="workspace"><div class="toast-wrap" id="toastWrap"></div>
+<section class="panel"><div class="panel-head"><span>新增外部合同</span><div class="btn-row"><a class="btn light" href="21-外部合同管理.html">← 返回</a></div></div><div class="panel-body">
+
+  <div style="font-weight:800;font-size:16px;margin-bottom:20px">合同基本信息</div>
+  <div class="filters" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:24px">
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">合同名称</label><div class="input"><input id="eName" style="border:0;outline:0;width:100%;background:transparent" placeholder="请输入合同名称"></div></div>
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">合同编号</label><div class="input"><input id="eCode" style="border:0;outline:0;width:100%;background:transparent" placeholder="请输入合同编号"></div></div>
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">合同类型</label><div class="select"><select id="eType" style="border:0;outline:0;width:100%;background:transparent;color:inherit"><option value="">请选择</option><option>工程类合同</option></select></div></div>
+  </div>
+
+  <div style="font-weight:800;font-size:16px;margin-bottom:20px">甲方信息</div>
+  <div class="filters" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:24px">
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">甲方</label><div class="input"><input id="ePartyA" style="border:0;outline:0;width:100%;background:transparent" placeholder="请输入甲方名称"></div></div>
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">甲方联系人</label><div class="input"><input id="eAContact" style="border:0;outline:0;width:100%;background:transparent" placeholder="甲方联系人"></div></div>
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">甲方联系电话</label><div class="input"><input id="eALink" style="border:0;outline:0;width:100%;background:transparent" placeholder="甲方联系电话"></div></div>
+  </div>
+
+  <div style="font-weight:800;font-size:16px;margin-bottom:20px">乙方信息</div>
+  <div class="filters" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:24px">
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">乙方</label><div class="input"><input id="ePartyB" style="border:0;outline:0;width:100%;background:transparent" placeholder="请输入乙方名称"></div></div>
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">乙方联系人</label><div class="input"><input id="eBContact" style="border:0;outline:0;width:100%;background:transparent" placeholder="乙方联系人"></div></div>
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">乙方联系电话</label><div class="input"><input id="eBLink" style="border:0;outline:0;width:100%;background:transparent" placeholder="乙方联系电话"></div></div>
+  </div>
+
+  <div style="font-weight:800;font-size:16px;margin-bottom:20px">合同详情</div>
+  <div class="filters" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:24px">
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">经办人</label><div class="input"><input id="eOperator" style="border:0;outline:0;width:100%;background:transparent" placeholder="经办人"></div></div>
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">合同金额</label><div class="input"><input id="eAmount" style="border:0;outline:0;width:100%;background:transparent" placeholder="合同金额"></div></div>
+    <div></div>
+  </div>
+  <div class="filters" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:24px">
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">开始时间</label><div class="input"><input id="eStart" style="border:0;outline:0;width:100%;background:transparent" placeholder="开始时间"></div></div>
+    <div><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">结束时间</label><div class="input"><input id="eEnd" style="border:0;outline:0;width:100%;background:transparent" placeholder="结束时间"></div></div>
+    <div></div>
+  </div>
+
+  <div style="text-align:center;margin-top:10px"><a class="btn" style="width:200px;height:44px" onclick="save()">保存</a></div>
+
+</div></section></section></main>
+
+<script src="common.js"></script>
+<script>
+function save(){var nm=document.getElementById('eName').value.trim();if(!nm){toast('请输入合同名称','warn');return}toast('外部合同已保存','ok');setTimeout(function(){location.href='21-外部合同管理.html'},1000)}
+function toast(msg,kind){var w=document.getElementById('toastWrap');var el=document.createElement('div');el.className='toast'+(kind?' '+kind:'');el.textContent=msg;w.appendChild(el);requestAnimationFrame(function(){el.classList.add('show')});setTimeout(function(){el.classList.remove('show');setTimeout(function(){el.remove()},280)},2500)}
+</script>
+</body></html>

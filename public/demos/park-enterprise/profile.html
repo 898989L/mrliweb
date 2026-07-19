@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>我的 · 智慧园区企业端</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .app {
+      display: flex;
+      flex-direction: column;
+    }
+    .me-hero {
+      background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%);
+      color: #fff;
+      padding: 18px 16px 22px;
+      border-radius: 0 0 24px 24px;
+      margin-bottom: 12px;
+    }
+    .me-hero .row {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .me-hero .avatar {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.22);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+    .me-hero .info { flex: 1; min-width: 0; }
+    .me-hero .name { font-size: 17px; font-weight: 600; line-height: 1.3; }
+    .me-hero .meta {
+      margin-top: 6px;
+      font-size: 12px;
+      opacity: 0.92;
+    }
+    .me-hero .meta span { margin-right: 10px; }
+
+    /* 中间填充区 - 撑开主内容 */
+    .me-spacer { flex: 1; min-height: 24px; }
+
+    /* 设置组 */
+    .menu-group {
+      margin: 0 12px 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .menu-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .menu-row:last-child { border-bottom: none; }
+    .menu-row:active { background: #fafafa; }
+    .menu-row .icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .menu-row .icon svg { width: 16px; height: 16px; }
+    .menu-row .icon.orange { background: var(--warning-light); color: var(--warning); }
+    .menu-row .icon.blue { background: var(--primary-light); color: var(--primary); }
+    .menu-row .body { flex: 1; min-width: 0; }
+    .menu-row .ttl {
+      font-size: 14px;
+      color: var(--text-1);
+      font-weight: 500;
+    }
+    .menu-row .right {
+      display: flex; align-items: center; gap: 6px;
+      color: var(--text-3);
+      font-size: 12px;
+    }
+    .menu-row .right .badge {
+      background: var(--danger);
+      color: #fff;
+      padding: 1px 6px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .menu-row .right .arrow { font-size: 18px; line-height: 1; }
+
+    /* 物业服务卡 */
+    .service-card {
+      margin: 0 12px 12px;
+      background: linear-gradient(135deg, #f0f7ff 0%, #fff 100%);
+      border: 1px solid #d6e8ff;
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+    .service-card .hd {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-1);
+    }
+    .service-card .hd svg { width: 16px; height: 16px; color: var(--primary); }
+    .service-card .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .service-card .grid .item {
+      text-align: center;
+      padding: 10px 4px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 8px;
+    }
+    .service-card .grid .item .l { font-size: 10px; color: var(--text-3); }
+    .service-card .grid .item .v {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-1);
+      margin-top: 3px;
+      line-height: 1.3;
+    }
+
+    /* 退出按钮 */
+    .logout-btn {
+      margin: 16px 12px 12px;
+      width: calc(100% - 24px);
+      padding: 14px 0;
+      background: var(--white);
+      color: var(--danger);
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 500;
+      box-shadow: var(--shadow);
+    }
+    .logout-btn:active { background: #fff5f5; }
+
+    .ver-text {
+      text-align: center;
+      padding: 16px 0 24px;
+      font-size: 11px;
+      color: var(--text-3);
+      line-height: 1.8;
+    }
+
+    /* 确认弹层 */
+    .confirm-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1100;
+      display: none;
+      align-items: center; justify-content: center;
+    }
+    .confirm-mask.show { display: flex; }
+    .confirm-box {
+      width: calc(100% - 64px);
+      max-width: 320px;
+      background: var(--white);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
+    .confirm-box .icon {
+      width: 48px; height: 48px;
+      background: var(--danger-light);
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--danger);
+    }
+    .confirm-box .icon svg { width: 22px; height: 22px; }
+    .confirm-box .ttl { font-size: 16px; font-weight: 600; color: var(--text-1); margin-bottom: 6px; }
+    .confirm-box .msg { font-size: 13px; color: var(--text-2); margin-bottom: 18px; line-height: 1.6; }
+    .confirm-box .actions { display: flex; gap: 10px; }
+    .confirm-box .actions .btn { flex: 1; padding: 10px 0; font-size: 14px; }
+
+    /* 通用 sheet/modal */
+    .sheet-mask {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1100;
+      display: none;
+      align-items: flex-end; justify-content: center;
+    }
+    .sheet-mask.show { display: flex; }
+    .sheet {
+      width: 100%; max-width: 750px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 16px 16px 0 0;
+      padding: 18px 18px calc(24px + 60px + env(safe-area-inset-bottom));
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .sheet .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .sheet .hd .ttl { font-size: 17px; font-weight: 600; color: var(--text-1); }
+    .sheet .hd .close { color: var(--text-3); font-size: 24px; cursor: pointer; line-height: 1; }
+    .sheet .field { margin-bottom: 14px; }
+    .sheet .field .l { font-size: 13px; color: var(--text-2); margin-bottom: 6px; }
+    .sheet .field .l .req { color: var(--danger); margin-right: 2px; }
+    .sheet .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-1);
+      background: var(--white);
+    }
+    .sheet .field input:focus { border-color: var(--primary); outline: none; }
+    .sheet .field .hint { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+    .sheet .submit-btn {
+      width: 100%; padding: 13px 0;
+      font-size: 15px; font-weight: 600;
+      margin-top: 6px;
+    }
+    .sheet .pwd-tips {
+      background: var(--primary-light);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--primary);
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Hero -->
+    <div class="me-hero" onclick="location.href='company-info.html'">
+      <div class="row">
+        <div class="avatar" id="avatarChar">蓝</div>
+        <div class="info">
+          <div class="name" id="tenantName">蓝海科技有限公司</div>
+          <div class="meta">
+            <span>🚪 <span id="roomTag">A-301</span></span>
+            <span>📐 <span id="areaTag">320</span> ㎡</span>
+            <span>已入驻 <span id="daysTag">22</span> 月</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 物业服务卡（填中段空白） -->
+    <div class="service-card" onclick="window.location.href='tel:02112345678'">
+      <div class="hd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z"/></svg>
+        <span>物业服务中心</span>
+      </div>
+      <div class="grid">
+        <div class="item">
+          <div class="l">客服热线</div>
+          <div class="v">021-1234<br>5678</div>
+        </div>
+        <div class="item">
+          <div class="l">服务时间</div>
+          <div class="v">周一至五<br>9:00-18:00</div>
+        </div>
+        <div class="item">
+          <div class="l">紧急联系</div>
+          <div class="v">7×24h<br>400-999</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 设置组 -->
+    <div class="menu-group">
+      <div class="menu-row" onclick="location.href='notifications.html'">
+        <div class="icon orange">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 01-6 0m6 0H9"/></svg>
+        </div>
+        <div class="body"><div class="ttl">消息通知</div></div>
+        <div class="right" id="notifyRight"><span class="arrow">›</span></div>
+      </div>
+      <div class="menu-row" onclick="openPwdSheet()">
+        <div class="icon blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <div class="body"><div class="ttl">修改密码</div></div>
+        <div class="right"><span class="arrow">›</span></div>
+      </div>
+    </div>
+
+    <div class="me-spacer"></div>
+
+    <button class="logout-btn" onclick="confirmLogout()">退出登录</button>
+
+    <div class="ver-text">智慧园区企业端 v1.0.0</div>
+
+    <div id="tabbar"></div>
+  </div>
+
+  <!-- 退出确认 -->
+  <div class="confirm-mask" id="confirmMask" onclick="closeConfirm(event)">
+    <div class="confirm-box" onclick="event.stopPropagation()">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+      <div class="ttl">确定退出登录吗？</div>
+      <div class="msg">退出后将返回登录页，可使用账号重新登录</div>
+      <div class="actions">
+        <button class="btn btn-outline" onclick="closeConfirm()">取消</button>
+        <button class="btn btn-danger" onclick="doLogout()">确认退出</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 修改密码 sheet -->
+  <div class="sheet-mask" id="pwdMask" onclick="closePwdSheet(event)">
+    <div class="sheet" onclick="event.stopPropagation()">
+      <div class="hd">
+        <div class="ttl">修改密码</div>
+        <span class="close" onclick="closePwdSheet()">×</span>
+      </div>
+      <div class="pwd-tips">
+        🔒 密码需 8-20 位，包含字母和数字，建议包含大小写及特殊字符
+      </div>
+      <div class="field">
+        <div class="l"><span class="req">*</span>当前密码</div>
+        <input type="password" id="pwdOld" placeholder="请输入当前密码">
+      </div>
+      <div class="field">
+        <div class="l"><span class="req">*</span>新密码</div>
+        <input type="password" id="pwdNew" placeholder="8-20 位字母+数字组合" maxlength="20">
+        <div class="hint">建议使用字母、数字、符号混合</div>
+      </div>
+      <div class="field">
+        <div class="l"><span class="req">*</span>确认新密码</div>
+        <input type="password" id="pwdConfirm" placeholder="再次输入新密码" maxlength="20">
+      </div>
+      <button class="btn btn-primary btn-block btn-lg submit-btn" onclick="submitPwd()">确认修改</button>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.getElementById('tabbar').outerHTML = renderTabBar('me');
+
+    const t = getCurrentTenant();
+    document.getElementById('avatarChar').textContent = t.avatar;
+    document.getElementById('tenantName').textContent = t.name;
+    document.getElementById('roomTag').textContent = t.room;
+    document.getElementById('areaTag').textContent = t.area;
+
+    const moveIn = new Date(t.moveIn);
+    const today = new Date('2026-06-02');
+    const months = Math.round((today - moveIn) / (1000 * 60 * 60 * 24 * 30));
+    document.getElementById('daysTag').textContent = months;
+
+    // 未读通知右侧 badge
+    const unread = getUnreadCount();
+    if (unread > 0) {
+      document.getElementById('notifyRight').innerHTML = `<span class="badge">${unread}</span><span class="arrow">›</span>`;
+    }
+
+    function confirmLogout() {
+      document.getElementById('confirmMask').classList.add('show');
+    }
+    function closeConfirm(e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById('confirmMask').classList.remove('show');
+    }
+    function doLogout() {
+      clearTenant();
+      showToast('已退出登录');
+      setTimeout(() => location.href = 'login.html', 700);
+    }
+
+    // ========== 修改密码 ==========
+    function openPwdSheet() {
+      document.getElementById('pwdOld').value = '';
+      document.getElementById('pwdNew').value = '';
+      document.getElementById('pwdConfirm').value = '';
+      document.getElementById('pwdMask').classList.add('show');
+    }
+    function closePwdSheet(e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById('pwdMask').classList.remove('show');
+    }
+    function submitPwd() {
+      const oldPwd = document.getElementById('pwdOld').value;
+      const newPwd = document.getElementById('pwdNew').value;
+      const cfmPwd = document.getElementById('pwdConfirm').value;
+      if (!oldPwd) { showToast('请输入当前密码'); return; }
+      if (oldPwd.length < 6) { showToast('当前密码不正确'); return; }
+      if (newPwd.length < 8 || newPwd.length > 20) { showToast('新密码需 8-20 位'); return; }
+      if (!/[a-zA-Z]/.test(newPwd) || !/\d/.test(newPwd)) { showToast('新密码需包含字母和数字'); return; }
+      if (newPwd === oldPwd) { showToast('新密码不能与当前密码相同'); return; }
+      if (newPwd !== cfmPwd) { showToast('两次输入的新密码不一致'); return; }
+      const btn = document.querySelector('#pwdMask .submit-btn');
+      btn.disabled = true; btn.textContent = '提交中...';
+      setTimeout(() => {
+        closePwdSheet();
+        btn.disabled = false; btn.textContent = '确认修改';
+        showToast('密码修改成功，请重新登录');
+      }, 800);
+    }
+  </script>
+</body>
+</html>

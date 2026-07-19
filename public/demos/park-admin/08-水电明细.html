@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>水电用量明细</title><link rel="stylesheet" href="common.css" /></head>
+<body>
+  <header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+  <main class="layout">
+    <aside class="primary-side"><a class="primary-item" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item active" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside>
+    <aside class="sub-side"><div class="sub-title">企业台账</div><a class="sub-item" href="01-厂房空间管理.html">厂房空间管理</a><a class="sub-item" href="02-企业入驻-基本信息.html">企业入驻</a><a class="sub-item" href="05-企业管理总览.html">企业管理</a><a class="sub-item" href="06-企业详情总览.html">企业详情</a><a class="sub-item" href="07-业务办理中心.html">业务办理</a><a class="sub-item" href="08-费用收缴概览.html">费用收缴</a><a class="sub-item" href="09-资源授权.html">进出记录</a><a class="sub-item" href="10-历史归档.html">历史归档</a><div class="sub-title">巡检管理</div><a class="sub-item" href="15-巡检项目管理.html">巡检项目</a><a class="sub-item" href="11-巡检点管理.html">巡检点</a><a class="sub-item" href="12-巡检计划管理.html">巡检计划</a><a class="sub-item" href="13-巡检任务管理.html">巡检任务</a><a class="sub-item" href="14-巡检明细.html">巡检明细</a><a class="sub-item" href="24-巡检报表.html">巡检报表</a></aside>
+    <section class="workspace">
+      <section class="panel">
+        <div class="panel-head"><span>水电用量明细</span><div class="btn-row"><a class="btn light" href="08-费用收缴概览.html">返回费用收缴</a><a class="btn light" onclick="openModal('modal-water-trend')">近6月趋势</a></div></div>
+        <div class="panel-body">
+          <div class="two-col" style="margin-bottom:14px">
+            <div class="box"><div class="box-title">企业信息</div><div class="kv"><div class="k">企业名称</div><div class="v">江西盛源数码印花有限公司</div><div class="k">厂房编号</div><div class="v">1-1-101</div><div class="k">计租面积</div><div class="v">1,337㎡</div></div></div>
+            <div class="box"><div class="box-title">本月汇总</div><div class="kv" id="summaryKv"><div class="k">账期</div><div class="v">2026-05</div><div class="k">本月总用量</div><div class="v" id="sumUsage">286 吨</div><div class="k">本月总扣款</div><div class="v" id="sumDeduct">￥1,487</div><div class="k">日均用量</div><div class="v" id="sumAvg">9.2 吨/天</div></div></div>
+          </div>
+
+          <div class="sub-tabs">
+            <span class="sub-tab active" onclick="switchType('water',this)">水费</span>
+            <span class="sub-tab" onclick="switchType('elec',this)">电费</span>
+          </div>
+
+          <div class="cards col4" style="margin-bottom:14px"><div class="kpi"><span id="kpiTotal">本月总用量</span><b id="kpiTotalVal">286 吨</b></div><div class="kpi"><span id="kpiDeduct">本月总扣款</span><b id="kpiDeductVal">￥1,487</b></div><div class="kpi"><span>日均用量</span><b id="kpiAvg">9.2 吨/天</b></div><div class="kpi"><span>最高单日</span><b id="kpiMax">18 吨 (5/8)</b></div></div>
+
+          <table id="detailTable"><thead><tr><th>日期</th><th>当日用量</th><th>累计用量</th><th class="sortable" onclick="sortDetailTable()">当日扣款</th><th>累计扣款</th></tr></thead><tbody>
+<tr data-type="water"><td>5月1日 周四</td><td>12 吨</td><td>12 吨</td><td>￥62.4</td><td>￥62.4</td></tr>
+<tr data-type="water"><td>5月2日 周五</td><td>14 吨</td><td>26 吨</td><td>￥72.8</td><td>￥135.2</td></tr>
+<tr data-type="water"><td>5月3日 周六</td><td>5 吨</td><td>31 吨</td><td>￥26.0</td><td>￥161.2</td></tr>
+<tr data-type="water"><td>5月4日 周日</td><td>4 吨</td><td>35 吨</td><td>￥20.8</td><td>￥182.0</td></tr>
+<tr data-type="water"><td>5月5日 周一</td><td>15 吨</td><td>50 吨</td><td>￥78.0</td><td>￥260.0</td></tr>
+<tr data-type="water"><td>5月6日 周二</td><td>13 吨</td><td>63 吨</td><td>￥67.6</td><td>￥327.6</td></tr>
+<tr data-type="water"><td>5月7日 周三</td><td>11 吨</td><td>74 吨</td><td>￥57.2</td><td>￥384.8</td></tr>
+<tr data-type="water"><td>5月8日 周四</td><td>18 吨</td><td>92 吨</td><td>￥93.6</td><td>￥478.4</td></tr>
+<tr data-type="water"><td>5月9日 周五</td><td>10 吨</td><td>102 吨</td><td>￥52.0</td><td>￥530.4</td></tr>
+<tr data-type="water"><td>5月10日 周六</td><td>6 吨</td><td>108 吨</td><td>￥31.2</td><td>￥561.6</td></tr>
+<tr data-type="water"><td>5月11日 周日</td><td>3 吨</td><td>111 吨</td><td>￥15.6</td><td>￥577.2</td></tr>
+<tr data-type="water"><td>5月12日 周一</td><td>16 吨</td><td>127 吨</td><td>￥83.2</td><td>￥660.4</td></tr>
+<tr data-type="water"><td>5月13日 周二</td><td>14 吨</td><td>141 吨</td><td>￥72.8</td><td>￥733.2</td></tr>
+<tr data-type="water"><td>5月14日 周三</td><td>9 吨</td><td>150 吨</td><td>￥46.8</td><td>￥780.0</td></tr>
+<tr data-type="water"><td>5月15日 周四</td><td>17 吨</td><td>167 吨</td><td>￥88.4</td><td>￥868.4</td></tr>
+<tr data-type="water"><td>5月16日 周五</td><td>13 吨</td><td>180 吨</td><td>￥67.6</td><td>￥936.0</td></tr>
+<tr data-type="water"><td>5月17日 周六</td><td>5 吨</td><td>185 吨</td><td>￥26.0</td><td>￥962.0</td></tr>
+<tr data-type="water"><td>5月18日 周日</td><td>4 吨</td><td>189 吨</td><td>￥20.8</td><td>￥982.8</td></tr>
+<tr data-type="water"><td>5月19日 周一</td><td>11 吨</td><td>200 吨</td><td>￥57.2</td><td>￥1,040.0</td></tr>
+<tr data-type="water"><td>5月20日 周二</td><td>8 吨</td><td>208 吨</td><td>￥41.6</td><td>￥1,081.6</td></tr>
+<tr data-type="water"><td>5月21日 周三</td><td>10 吨</td><td>218 吨</td><td>￥52.0</td><td>￥1,133.6</td></tr>
+<tr data-type="water"><td>5月22日 周四</td><td>7 吨</td><td>225 吨</td><td>￥36.4</td><td>￥1,170.0</td></tr>
+<tr data-type="water" class="future"><td>5月23日 周五</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="water" class="future"><td>5月24日 周六</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="water" class="future"><td>5月25日 周日</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="water" class="future"><td>5月26日 周一</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="water" class="future"><td>5月27日 周二</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="water" class="future"><td>5月28日 周三</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="water" class="future"><td>5月29日 周四</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="water" class="future"><td>5月30日 周五</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="water" class="future"><td>5月31日 周六</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+
+<tr data-type="elec" style="display:none"><td>5月1日 周四</td><td>240 度</td><td>240 度</td><td>￥213.6</td><td>￥213.6</td></tr>
+<tr data-type="elec" style="display:none"><td>5月2日 周五</td><td>265 度</td><td>505 度</td><td>￥235.9</td><td>￥449.5</td></tr>
+<tr data-type="elec" style="display:none"><td>5月3日 周六</td><td>95 度</td><td>600 度</td><td>￥84.6</td><td>￥534.0</td></tr>
+<tr data-type="elec" style="display:none"><td>5月4日 周日</td><td>82 度</td><td>682 度</td><td>￥73.0</td><td>￥607.0</td></tr>
+<tr data-type="elec" style="display:none"><td>5月5日 周一</td><td>280 度</td><td>962 度</td><td>￥249.2</td><td>￥856.2</td></tr>
+<tr data-type="elec" style="display:none"><td>5月6日 周二</td><td>255 度</td><td>1,217 度</td><td>￥227.0</td><td>￥1,083.2</td></tr>
+<tr data-type="elec" style="display:none"><td>5月7日 周三</td><td>210 度</td><td>1,427 度</td><td>￥186.9</td><td>￥1,270.1</td></tr>
+<tr data-type="elec" style="display:none"><td>5月8日 周四</td><td>310 度</td><td>1,737 度</td><td>￥275.9</td><td>￥1,546.0</td></tr>
+<tr data-type="elec" style="display:none"><td>5月9日 周五</td><td>228 度</td><td>1,965 度</td><td>￥202.9</td><td>￥1,748.9</td></tr>
+<tr data-type="elec" style="display:none"><td>5月10日 周六</td><td>110 度</td><td>2,075 度</td><td>￥97.9</td><td>￥1,846.8</td></tr>
+<tr data-type="elec" style="display:none"><td>5月11日 周日</td><td>85 度</td><td>2,160 度</td><td>￥75.7</td><td>￥1,922.5</td></tr>
+<tr data-type="elec" style="display:none"><td>5月12日 周一</td><td>290 度</td><td>2,450 度</td><td>￥258.1</td><td>￥2,180.6</td></tr>
+<tr data-type="elec" style="display:none"><td>5月13日 周二</td><td>248 度</td><td>2,698 度</td><td>￥220.7</td><td>￥2,401.3</td></tr>
+<tr data-type="elec" style="display:none"><td>5月14日 周三</td><td>195 度</td><td>2,893 度</td><td>￥173.6</td><td>￥2,574.9</td></tr>
+<tr data-type="elec" style="display:none"><td>5月15日 周四</td><td>305 度</td><td>3,198 度</td><td>￥271.5</td><td>￥2,846.3</td></tr>
+<tr data-type="elec" style="display:none"><td>5月16日 周五</td><td>260 度</td><td>3,458 度</td><td>￥231.4</td><td>￥3,077.7</td></tr>
+<tr data-type="elec" style="display:none"><td>5月17日 周六</td><td>105 度</td><td>3,563 度</td><td>￥93.5</td><td>￥3,171.2</td></tr>
+<tr data-type="elec" style="display:none"><td>5月18日 周日</td><td>78 度</td><td>3,641 度</td><td>￥69.4</td><td>￥3,240.6</td></tr>
+<tr data-type="elec" style="display:none"><td>5月19日 周一</td><td>242 度</td><td>3,883 度</td><td>￥215.4</td><td>￥3,456.0</td></tr>
+<tr data-type="elec" style="display:none"><td>5月20日 周二</td><td>218 度</td><td>4,101 度</td><td>￥194.0</td><td>￥3,650.0</td></tr>
+<tr data-type="elec" style="display:none"><td>5月21日 周三</td><td>230 度</td><td>4,331 度</td><td>￥204.7</td><td>￥3,854.7</td></tr>
+<tr data-type="elec" style="display:none"><td>5月22日 周四</td><td>185 度</td><td>4,516 度</td><td>￥164.7</td><td>￥4,019.4</td></tr>
+<tr data-type="elec" class="future" style="display:none"><td>5月23日 周五</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="elec" class="future" style="display:none"><td>5月24日 周六</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="elec" class="future" style="display:none"><td>5月25日 周日</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="elec" class="future" style="display:none"><td>5月26日 周一</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="elec" class="future" style="display:none"><td>5月27日 周二</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="elec" class="future" style="display:none"><td>5月28日 周三</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="elec" class="future" style="display:none"><td>5月29日 周四</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="elec" class="future" style="display:none"><td>5月30日 周五</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr data-type="elec" class="future" style="display:none"><td>5月31日 周六</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+</tbody></table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+<script src="common.js"></script>
+<script>
+// ===== Water / Electricity type switcher =====
+var waterData = {
+  unit: '吨', price: 5.2, totalUsage: 286, totalDeduct: 1487,
+  kpiTotal: '本月总用量', kpiDeduct: '本月总扣款'
+};
+var elecData = {
+  unit: '度', price: 0.89, totalUsage: 5240, totalDeduct: 4664,
+  kpiTotal: '本月总用量', kpiDeduct: '本月总扣款'
+};
+
+function switchType(type, el) {
+  document.querySelectorAll('.sub-tab').forEach(function(x){ x.classList.remove('active'); });
+  el.classList.add('active');
+
+  var rows = document.querySelectorAll('#detailTable tbody tr');
+  rows.forEach(function(r){
+    r.style.display = r.getAttribute('data-type') === type ? '' : 'none';
+  });
+
+  var d = type === 'water' ? waterData : elecData;
+  document.getElementById('sumUsage').textContent = d.totalUsage + ' ' + d.unit;
+  document.getElementById('sumDeduct').textContent = '￥' + d.totalDeduct.toLocaleString();
+  document.getElementById('sumAvg').textContent = (d.totalUsage / 31).toFixed(1) + ' ' + d.unit + '/天';
+  document.getElementById('kpiTotal').textContent = d.kpiTotal;
+  document.getElementById('kpiDeduct').textContent = d.kpiDeduct;
+  document.getElementById('kpiTotalVal').textContent = d.totalUsage + ' ' + d.unit;
+  document.getElementById('kpiDeductVal').textContent = '￥' + d.totalDeduct.toLocaleString();
+  document.getElementById('kpiAvg').textContent = (d.totalUsage / 31).toFixed(1) + ' ' + d.unit + '/天';
+
+  // Find the max day
+  var visRows = document.querySelectorAll('#detailTable tbody tr[data-type="' + type + '"]:not(.future)');
+  var maxDay = '', maxVal = 0;
+  visRows.forEach(function(r){
+    var dayCell = r.cells[0].textContent;
+    var usageCell = r.cells[1].textContent;
+    var usageVal = parseFloat(usageCell);
+    if (usageVal > maxVal) { maxVal = usageVal; maxDay = dayCell; }
+  });
+  document.getElementById('kpiMax').textContent = maxVal + ' ' + d.unit + ' (' + maxDay.replace(/ .*$/, '') + ')';
+}
+
+// ===== 优化新增：扣款排序 =====
+var detailSortDir = -1;
+function sortDetailTable() {
+  var tbody = document.querySelector('#detailTable tbody');
+  if (!tbody) return;
+  var visRows = Array.from(tbody.querySelectorAll('tr')).filter(function(r){ return r.style.display !== 'none'; });
+  detailSortDir = detailSortDir * -1;
+  visRows.sort(function(a, b){
+    var va = parseFloat(a.cells[3].textContent.replace(/[^0-9.]/g,'')) || 0;
+    var vb = parseFloat(b.cells[3].textContent.replace(/[^0-9.]/g,'')) || 0;
+    return (va - vb) * detailSortDir;
+  });
+  visRows.forEach(function(r){ tbody.appendChild(r); });
+  var th = document.querySelector('#detailTable th.sortable');
+  if (th) { th.classList.remove('sort-asc','sort-desc'); th.classList.add(detailSortDir===1?'sort-asc':'sort-desc'); }
+}
+</script>
+
+<!-- 优化新增：水电费近6月趋势弹窗 -->
+<div class="modal-overlay" id="modal-water-trend">
+  <div class="modal wide">
+    <div class="modal-head"><span>水电费近6月趋势</span><button class="modal-close" onclick="closeModal('modal-water-trend')">&times;</button></div>
+    <div class="modal-body">
+      <div class="sub-tabs" style="margin-bottom:14px">
+        <span class="sub-tab active" onclick="switchTrendType('water',this)">水费</span>
+        <span class="sub-tab" onclick="switchTrendType('elec',this)">电费</span>
+      </div>
+      <div id="waterTrendChart"></div>
+      <div id="elecTrendChart" style="display:none"></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  document.getElementById('waterTrendChart').innerHTML = '';
+  renderTrendChart('#waterTrendChart', [
+    {label:'12月',value:1420},{label:'1月',value:1350},{label:'2月',value:1480},
+    {label:'3月',value:1520},{label:'4月',value:1390},{label:'5月',value:1487}
+  ], '水费扣款（元）');
+  renderTrendChart('#elecTrendChart', [
+    {label:'12月',value:4100},{label:'1月',value:4320},{label:'2月',value:4580},
+    {label:'3月',value:4720},{label:'4月',value:4490},{label:'5月',value:4664}
+  ], '电费扣款（元）');
+})();
+function switchTrendType(type, el) {
+  document.querySelectorAll('#modal-water-trend .sub-tab').forEach(function(x){ x.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('waterTrendChart').style.display = type === 'water' ? '' : 'none';
+  document.getElementById('elecTrendChart').style.display = type === 'elec' ? '' : 'none';
+}
+</body>
+</html>

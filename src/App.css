@@ -1,0 +1,19 @@
+.main-content {
+
+  position: relative;
+
+  z-index: 2;
+
+  overflow-x: clip;
+
+}
+
+
+
+.main-content > section:not(.hero):not(.contact) {
+
+  background: transparent;
+
+}
+
+

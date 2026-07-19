@@ -1,0 +1,323 @@
+/* ============================================
+   公共样式 - 变量 + Reset + 全局类
+   ============================================ */
+
+:root {
+  /* 政务主色 */
+  --color-primary: #1677ff;
+  --color-primary-light: #4096ff;
+  --color-primary-bg: #e6f0ff;
+
+  /* 党建专用色（党旗红） */
+  --color-party: #C8102E;
+  --color-party-light: #E83A52;
+  --color-party-bg: #FDECEF;
+
+  /* 7 色业务辅色（对齐参考项目） */
+  --color-orange: #ff9500;
+  --color-orange-light: #ffb049;
+  --color-orange-bg: #fff4e6;
+  --color-green: #00b578;
+  --color-green-light: #4ddba6;
+  --color-green-bg: #e6f9f1;
+  --color-red: #ff4d4f;
+  --color-red-light: #ff7875;
+  --color-red-bg: #ffece8;
+  --color-purple: #722ed1;
+  --color-purple-light: #9254de;
+  --color-purple-bg: #f4ecff;
+  --color-cyan: #13c2c2;
+  --color-cyan-light: #36cfc9;
+  --color-cyan-bg: #e6fffb;
+  --color-pink: #eb2f96;
+  --color-pink-light: #ff85c0;
+  --color-pink-bg: #fff0f6;
+  --color-gray: #8c8c8c;
+  --color-gray-light: #bfbfbf;
+  --color-gray-bg: #f5f5f5;
+
+  /* 兼容旧变量名（指向业务绿） */
+  --color-secondary: var(--color-green);
+  --color-secondary-bg: var(--color-green-bg);
+
+  /* 功能色 */
+  --color-warning: #FAAD14;
+  --color-warning-bg: #fff7e6;
+  --color-success: #52C41A;
+  --color-success-bg: #f6ffed;
+  --color-danger: #FF4D4F;
+  --color-danger-bg: #fff1f0;
+  --color-info: #1677ff;
+  --color-gold: #FAAD14;
+
+  /* 文本/背景/边框 */
+  --color-bg: #F5F6F8;
+  --color-card: #FFFFFF;
+  --color-text: #333333;
+  --color-text-sub: #666666;
+  --color-text-weak: #999999;
+  --color-text-faint: #CCCCCC;
+  --color-divider: #EEEEEE;
+
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+
+  /* 字号 */
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 15px;
+  --fs-lg: 17px;
+  --fs-xl: 19px;
+  --fs-xxl: 22px;
+
+  /* 间距 */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-xxl: 24px;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+  font-size: var(--fs-md);
+  color: var(--color-text);
+  background: #E8E8E8;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol, li {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+input, button, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+/* ============================================
+   手机外壳
+   ============================================ */
+.phone-frame {
+  width: 375px;
+  min-height: 812px;
+  margin: 24px auto;
+  background: var(--color-card);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  position: relative;
+  padding-bottom: 70px;
+}
+
+.phone-frame.no-tab {
+  padding-bottom: 0;
+}
+
+.phone-frame.no-status {
+  padding-top: 0;
+}
+
+/* ============================================
+   状态栏
+   ============================================ */
+.status-bar {
+  display: none;
+}
+
+/* ============================================
+   导航栏
+   ============================================ */
+.nav-bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-md);
+  background: var(--color-card);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.nav-bar .back {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.nav-bar .title {
+  flex: 1;
+  text-align: center;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.nav-bar .right {
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-md);
+}
+
+/* ============================================
+   通用工具类
+   ============================================ */
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-sub { color: var(--color-text-sub); }
+.text-weak { color: var(--color-text-weak); }
+.text-warning { color: var(--color-warning); }
+.text-success { color: var(--color-success); }
+.text-info { color: var(--color-info); }
+
+.bg-card { background: var(--color-card); }
+.bg-page { background: var(--color-bg); }
+
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-1 { flex: 1; min-width: 0; }
+.flex-shrink-0 { flex-shrink: 0; }
+.gap-xs { gap: 4px; }
+.gap-sm { gap: 8px; }
+.gap-md { gap: 12px; }
+.gap-lg { gap: 16px; }
+
+.mt-xs { margin-top: 4px; }
+.mt-sm { margin-top: 8px; }
+.mt-md { margin-top: 12px; }
+.mt-lg { margin-top: 16px; }
+.mt-xl { margin-top: 20px; }
+.mb-sm { margin-bottom: 8px; }
+.mb-md { margin-bottom: 12px; }
+.mb-lg { margin-bottom: 16px; }
+.p-md { padding: 12px; }
+.p-lg { padding: 16px; }
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.font-bold { font-weight: 600; }
+.font-medium { font-weight: 500; }
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* 页面内容容器 */
+.page-content {
+  padding: var(--space-md);
+}
+
+.page-content-pt {
+  padding-top: 0;
+}
+
+/* ============================================
+   预览模式切换（原型专用，不影响实际开发）
+   ============================================ */
+.preview-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(22, 119, 255, 0.4);
+  z-index: 9999;
+  user-select: none;
+  transition: transform 0.2s;
+  font-family: inherit;
+}
+
+.preview-toggle:hover {
+  transform: scale(1.08);
+}
+
+.preview-toggle:active {
+  transform: scale(0.95);
+}
+
+/* 全屏预览模式（接近真实小程序效果） */
+body.fullscreen {
+  background: white;
+}
+
+body.fullscreen .phone-frame {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  box-shadow: none;
+}
+
+/* 移动端关闭切换按钮（手机上看无意义） */
+@media (max-width: 480px) {
+  .preview-toggle {
+    display: none;
+  }
+}

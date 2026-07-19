@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>进出记录</title><link rel="stylesheet" href="common.css" /></head>
+<body>
+  <header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+  <main class="layout">
+    <aside class="primary-side"><a class="primary-item" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item active" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside>
+    <aside class="sub-side"><div class="sub-title">企业台账</div><a class="sub-item" href="01-厂房空间管理.html">厂房空间管理</a><a class="sub-item" href="02-企业入驻-基本信息.html">企业入驻</a><a class="sub-item" href="05-企业管理总览.html">企业管理</a><a class="sub-item" href="06-企业详情总览.html">企业详情</a><a class="sub-item" href="07-业务办理中心.html">业务办理</a><a class="sub-item" href="08-费用收缴概览.html">费用收缴</a><a class="sub-item active" href="09-资源授权.html">进出记录</a><a class="sub-item" href="10-历史归档.html">历史归档</a><div class="sub-title">巡检管理</div><a class="sub-item" href="15-巡检项目管理.html">巡检项目</a><a class="sub-item" href="11-巡检点管理.html">巡检点</a><a class="sub-item" href="12-巡检计划管理.html">巡检计划</a><a class="sub-item" href="13-巡检任务管理.html">巡检任务</a><a class="sub-item" href="14-巡检明细.html">巡检明细</a><a class="sub-item" href="24-巡检报表.html">巡检报表</a></aside>
+    <section class="workspace">
+      <div class="toast-wrap" id="toastWrap"></div>
+
+      <section class="panel">
+        <div class="panel-head"><span>车辆进出记录</span><div class="btn-row"><a class="btn light" href="05-企业管理总览.html">返回企业管理</a><a class="btn light" onclick="toast('进出记录已导出','ok')">导出记录</a></div></div>
+        <div class="panel-body">
+          <!-- ===== KPI 卡片 ===== -->
+          <div class="cards col4" style="margin-bottom:14px"><div class="kpi"><span>今日进场</span><b>47 辆</b></div><div class="kpi"><span>今日出场</span><b>32 辆</b></div><div class="kpi"><span>当前在场</span><b>15 辆</b></div><div class="kpi"><span>外来访客</span><b>8 辆</b></div></div>
+
+          <!-- ===== 进出口流量 ===== -->
+          <div class="two-col" style="margin-bottom:14px">
+            <div class="box"><div class="box-title">各门流量（今日）</div><div class="panel-body"><div class="kv"><div class="k">南门（主入口）</div><div class="v">进场 28 / 出场 19</div><div class="k">北门</div><div class="v">进场 12 / 出场 8</div><div class="k">东门（货运通道）</div><div class="v">进场 7 / 出场 5</div></div></div></div>
+            <div class="box"><div class="box-title">车辆类型分布（在场）</div><div class="panel-body"><div class="kv"><div class="k">小型车</div><div class="v">9 辆</div><div class="k">货车</div><div class="v">4 辆</div><div class="k">中型客车</div><div class="v">2 辆</div></div></div></div>
+          </div>
+
+          <!-- ===== 筛选 ===== -->
+          <div class="filters"><div class="input" placeholder="车牌号 / 企业名称"></div><div class="select">进出口 <i class="chev"></i></div><div class="select">车辆类型 <i class="chev"></i></div><div class="select">进出状态 <i class="chev"></i></div><div class="select">日期 <i class="chev"></i></div><button class="btn" onclick="toast('查询完成，共 79 条记录')">查询</button><button class="btn gray" onclick="toast('筛选条件已重置')">重置</button></div>
+
+          <!-- ===== 进出记录表 ===== -->
+          <table><thead><tr><th>车牌号</th><th>所属企业</th><th>车辆类型</th><th>进出口</th><th>进场时间</th><th>出场时间</th><th>停留时长</th><th>状态</th><th>操作</th></tr></thead><tbody>
+          <tr><td>赣B·12345</td><td>盛源数码印花</td><td>小型车</td><td>南门</td><td>2026-05-22 08:12:35</td><td>--</td><td>--</td><td><span class="status green">在场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>赣B·67890</td><td>盛源数码印花</td><td>小型车</td><td>南门</td><td>2026-05-22 07:45:18</td><td>2026-05-22 17:30:42</td><td>9h 45m</td><td><span class="status blue">已出场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>赣B·A8321</td><td>宏达纺织</td><td>小型车</td><td>北门</td><td>2026-05-22 09:03:11</td><td>--</td><td>--</td><td><span class="status green">在场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>赣C·D5612</td><td>百川包装</td><td>货车</td><td>东门</td><td>2026-05-22 06:30:05</td><td>2026-05-22 11:15:33</td><td>4h 45m</td><td><span class="status blue">已出场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>赣B·24680</td><td>盛源数码印花</td><td>小型车</td><td>南门</td><td>2026-05-22 10:20:44</td><td>--</td><td>--</td><td><span class="status green">在场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>赣D·F9023</td><td>华彩科技</td><td>小型车</td><td>南门</td><td>2026-05-22 08:55:27</td><td>2026-05-22 16:10:08</td><td>7h 15m</td><td><span class="status blue">已出场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>鲁H·77312</td><td>外来车辆</td><td>货车</td><td>东门</td><td>2026-05-22 13:40:52</td><td>--</td><td>--</td><td><span class="status orange">临时</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>赣B·K4128</td><td>宏达纺织</td><td>中型客车</td><td>北门</td><td>2026-05-22 11:08:19</td><td>2026-05-22 14:22:51</td><td>3h 14m</td><td><span class="status blue">已出场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>苏E·55U89</td><td>外来车辆</td><td>小型车</td><td>南门</td><td>2026-05-22 09:30:06</td><td>2026-05-22 11:05:40</td><td>1h 35m</td><td><span class="status blue">已出场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>赣B·N3176</td><td>百川包装</td><td>小型车</td><td>南门</td><td>2026-05-22 07:18:55</td><td>--</td><td>--</td><td><span class="status green">在场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>皖A·8M241</td><td>外来车辆</td><td>货车</td><td>东门</td><td>2026-05-22 14:12:33</td><td>2026-05-22 16:48:19</td><td>2h 36m</td><td><span class="status blue">已出场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          <tr><td>赣B·L0953</td><td>华彩科技</td><td>小型车</td><td>北门</td><td>2026-05-22 08:40:17</td><td>--</td><td>--</td><td><span class="status green">在场</span></td><td><a class="link" href="09-进出详情.html">详情</a></td></tr>
+          </tbody></table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+<script src="common.js"></script>
+<script>
+function toast(msg, kind) {
+  var w = document.getElementById('toastWrap');
+  var el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = msg;
+  w.appendChild(el);
+  requestAnimationFrame(function(){ el.classList.add('show'); });
+  setTimeout(function(){ el.classList.remove('show'); setTimeout(function(){ el.remove(); }, 280); }, 2500);
+}
+</script>
+</body>
+</html>

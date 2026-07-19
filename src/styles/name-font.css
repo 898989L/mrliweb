@@ -1,0 +1,25 @@
+/**
+ * 姓名字体自托管 + 独立 font-family 名称
+ * 避免 Tampermonkey 等扩展拦截 fonts.googleapis.com 或覆盖 Ma Shan Zheng
+ */
+@font-face {
+  font-family: 'PortfolioNameArt';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/ma-shan-zheng/files/ma-shan-zheng-chinese-simplified-400-normal.woff2')
+      format('woff2');
+}
+
+.font-name,
+.font-name .split-text__char,
+h1 .font-name,
+h3.font-name,
+.navbar__brand-name.font-name,
+.contact__wechat-info strong.font-name,
+.contact__footer-inner .font-name {
+  font-family: 'PortfolioNameArt', 'STKaiti', 'KaiTi', 'SimKai', serif !important;
+  font-weight: 400 !important;
+  font-synthesis: none;
+  font-variant-ligatures: none;
+}

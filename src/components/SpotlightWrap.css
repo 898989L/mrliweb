@@ -1,0 +1,62 @@
+.spotlight-wrap {
+  position: relative;
+  border-radius: var(--radius);
+}
+
+.spotlight-wrap.is-active {
+  isolation: isolate;
+}
+
+.spotlight-wrap__beam {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(
+    circle 220px at var(--spot-x) var(--spot-y),
+    rgba(0, 212, 255, 0.14) 0%,
+    rgba(139, 92, 246, 0.06) 35%,
+    transparent 70%
+  );
+  transition: opacity 0.3s ease;
+}
+
+.spotlight-wrap__border-beam {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 4;
+  padding: 1px;
+  background: linear-gradient(
+    var(--beam-angle, 120deg),
+    transparent 30%,
+    rgba(0, 212, 255, 0.55) 50%,
+    transparent 70%
+  );
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  animation: borderBeamSpin 4s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes borderBeamSpin {
+  to {
+    --beam-angle: 480deg;
+  }
+}
+
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 120deg;
+  inherits: false;
+}
+
+.spotlight-wrap.is-active > * {
+  position: relative;
+  z-index: 1;
+}

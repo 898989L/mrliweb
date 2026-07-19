@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>巡检计划管理</title><link rel="stylesheet" href="common.css" /></head>
+<body>
+<header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+<main class="layout"><aside class="primary-side"><a class="primary-item" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item active" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside>
+<aside class="sub-side"><div class="sub-title">巡检管理</div><a class="sub-item" href="15-巡检项目管理.html">巡检项目</a><a class="sub-item" href="11-巡检点管理.html">巡检点</a><a class="sub-item" href="25-巡检路线管理.html">巡检路线</a><a class="sub-item active" href="12-巡检计划管理.html">巡检计划</a><a class="sub-item" href="13-巡检任务管理.html">巡检任务</a><a class="sub-item" href="14-巡检明细.html">巡检明细</a><a class="sub-item" href="24-巡检报表.html">巡检报表</a></aside>
+<section class="workspace"><div class="toast-wrap" id="toastWrap"></div>
+<section class="panel"><div class="panel-head"><span>巡检计划管理</span><div class="btn-row"><a class="btn" href="12a-新增巡检计划.html">＋ 添加</a></div></div><div class="panel-body">
+<div class="filters"><div class="input"><input id="fId" placeholder="计划ID" style="border:0;outline:0;width:100%;background:transparent" oninput="doFilter()"></div><div class="input"><input id="fName" placeholder="计划名称" style="border:0;outline:0;width:100%;background:transparent" oninput="doFilter()"></div><div class="input"><input id="fStaff" placeholder="巡检人" style="border:0;outline:0;width:100%;background:transparent" oninput="doFilter()"></div><div class="select"><select id="fState" style="border:0;outline:0;width:100%;background:transparent;color:inherit" onchange="doFilter()"><option value="">状态</option><option value="启用">启用</option><option value="停用">停用</option></select></div><div></div><button class="btn" onclick="doFilter()">搜索</button><button class="btn gray" onclick="doReset()">重置</button></div>
+<table style="min-width:1400px"><thead><tr><th>计划名称</th><th>计划路线</th><th>计划周期</th><th>签到方式</th><th>日期范围</th><th>时间范围</th><th>提前(分)</th><th>制定人</th><th>制定时间</th><th>状态</th><th>巡检人员</th><th style="width:220px">操作</th></tr></thead><tbody id="tableBody"></tbody></table>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px;color:var(--muted)"><span>共 <b id="totalCount">0</b> 条</span><div><span style="cursor:pointer" onclick="prevPage()">‹</span> <b id="pageNum">1</b> <span style="cursor:pointer" onclick="nextPage()">›</span></div><span>前往 <input style="width:40px;height:28px;border:1px solid var(--line);border-radius:4px;text-align:center" id="goPage" value="1" onkeydown="if(event.key==='Enter')goToPage()"> 页</span></div>
+<div class="alert-box" style="margin-top:14px"><p class="dim">提示：请确保巡检计划配置正确，巡检任务将根据计划每晚自动生成。</p></div>
+</div></section></section></main>
+
+<!-- 添加/编辑弹窗 -->
+<div class="modal-overlay" id="modal-edit"><div class="modal wide"><div class="modal-head"><span id="modalTitle">添加巡检计划</span><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body">
+  <!-- Row 1 -->
+  <div style="display:flex;gap:20px;margin-bottom:14px">
+    <div style="flex:1"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">计划名称</label><div class="input"><input id="eName" style="border:0;outline:0;width:100%;background:transparent" placeholder="请输入计划名称"></div></div>
+    <div style="flex:1"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">巡检路线</label><div class="select"><select id="eRoute" style="border:0;outline:0;width:100%;background:transparent;color:inherit"><option value="">请选择路线</option><option>每月15日柴油发电机测试</option><option>气膜设备</option><option>电梯</option><option>监控设备</option><option>变压器巡检</option><option>污水处理厂</option></select></div></div>
+  </div>
+  <!-- Row 2 -->
+  <div style="display:flex;gap:20px;margin-bottom:14px">
+    <div style="flex:1"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">计划周期</label><div class="select"><select id="ePeriod" style="border:0;outline:0;width:100%;background:transparent;color:inherit" onchange="onPeriodChange()"><option value="">请选择周期</option><option value="2020023">按周</option><option value="2020022">按月</option></select></div></div>
+    <div style="flex:1"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">任务提前</label><div style="display:flex;align-items:center;gap:8px"><div class="input" style="flex:1"><input id="eAdvance" type="number" style="border:0;outline:0;width:100%;background:transparent" value="15"></div><span style="font-size:13px;color:var(--muted);white-space:nowrap">分钟生成</span></div></div>
+  </div>
+  <!-- Period conditional: weeks -->
+  <div id="periodWeek" style="display:none;margin-bottom:14px"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:8px">选择星期</label><div style="display:flex;flex-wrap:wrap;gap:6px" id="weekChecks"></div></div>
+  <!-- Period conditional: months -->
+  <div id="periodMonth" style="display:none;margin-bottom:14px">
+    <label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:8px">选择月份</label><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px" id="monthChecks"></div>
+    <label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:8px">选择日期</label><div style="display:flex;flex-wrap:wrap;gap:6px" id="dayChecks"></div>
+  </div>
+  <!-- Row 3 -->
+  <div style="display:flex;gap:20px;margin-bottom:14px">
+    <div style="flex:1"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">开始日期</label><div class="input"><input id="eStart" style="border:0;outline:0;width:100%;background:transparent" value="2026-01-01"></div></div>
+    <div style="flex:1"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">结束日期</label><div class="input"><input id="eEnd" style="border:0;outline:0;width:100%;background:transparent" value="2026-12-31"></div></div>
+  </div>
+  <!-- Row 4 -->
+  <div style="display:flex;gap:20px;margin-bottom:14px">
+    <div style="flex:1"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">开始时间</label><div class="input"><input id="eStartTime" style="border:0;outline:0;width:100%;background:transparent" value="08:00"></div></div>
+    <div style="flex:1"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">结束时间</label><div class="input"><input id="eEndTime" style="border:0;outline:0;width:100%;background:transparent" value="18:00"></div></div>
+  </div>
+  <!-- Row 5 -->
+  <div style="display:flex;gap:20px;margin-bottom:14px">
+    <div style="flex:1"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">签到方式</label><div class="select"><select id="eSign" style="border:0;outline:0;width:100%;background:transparent;color:inherit"><option>现场拍照</option><option>NFC签到</option><option>扫码签到</option></select></div></div>
+    <div style="flex:1"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">巡检人员</label><div class="input"><input id="eStaffs" style="border:0;outline:0;width:100%;background:transparent" placeholder="多个用中文逗号分隔"></div></div>
+  </div>
+  <!-- Row 6 -->
+  <div style="margin-bottom:14px"><label style="display:block;font-weight:800;font-size:13px;color:#3a4a5c;margin-bottom:6px">备注</label><textarea id="eRemark" style="width:100%;height:60px;resize:vertical;border:1px solid #d7dfeb;border-radius:4px;padding:10px 15px;font-size:14px;font-family:inherit;color:#1f2d3d;outline:none" placeholder="请输入备注"></textarea></div>
+</div><div class="modal-foot"><a class="btn light" onclick="closeModal()">取消</a><a class="btn" onclick="save()">保存</a></div></div></div>
+
+<!-- 删除确认 -->
+<div class="modal-overlay" id="modal-delete"><div class="modal"><div class="modal-head"><span>确认删除</span><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body"><p>确定要删除计划「<b id="delName"></b>」吗？</p></div><div class="modal-foot"><a class="btn light" onclick="closeModal()">取消</a><a class="btn red" onclick="confirmDelete()">确认删除</a></div></div></div>
+
+<!-- 状态切换确认 -->
+<div class="modal-overlay" id="modal-state"><div class="modal"><div class="modal-head"><span>确认操作</span><button class="modal-close" onclick="closeModal()">&times;</button></div><div class="modal-body"><p id="stateMsg">确定要停用该计划吗？</p></div><div class="modal-foot"><a class="btn light" onclick="closeModal()">取消</a><a class="btn" id="stateConfirmBtn" onclick="confirmState()">确认</a></div></div></div>
+
+<script src="common.js"></script>
+<script>
+var allData=[{id:'JH001',name:'柴油发电机巡检',route:'每月15日柴油发电机测试',period:'2020023',periodName:'按周',weeks:[1,2,3,4,5],sign:'现场拍照',start:'2026-01-01',end:'2026-12-31',startTime:'08:00',endTime:'18:00',advance:'30',creator:'测试2',ctime:'2026-01-15',state:'启用',staffs:['测试2','测试3']},{id:'JH002',name:'气膜设备巡检',route:'气膜设备',period:'2020022',periodName:'按月',months:[1,2,3,4,5,6,7,8,9,10,11,12],days:[15],sign:'现场拍照',start:'2026-01-01',end:'2026-12-31',startTime:'08:00',endTime:'18:00',advance:'15',creator:'测试2',ctime:'2026-01-10',state:'启用',staffs:['测试2']},{id:'JH003',name:'电梯巡检',route:'电梯',period:'2020023',periodName:'按周',weeks:[1,2,3,4,5,6,7],sign:'现场拍照',start:'2026-01-01',end:'2026-12-31',startTime:'08:00',endTime:'18:00',advance:'15',creator:'测试2',ctime:'2026-01-08',state:'启用',staffs:['测试2','测试4']},{id:'JH004',name:'监控设备巡检',route:'监控设备',period:'2020023',periodName:'按周',weeks:[1,3,5],sign:'现场拍照',start:'2026-01-01',end:'2026-12-31',startTime:'08:00',endTime:'18:00',advance:'15',creator:'测试2',ctime:'2026-01-05',state:'停用',staffs:['测试2']},{id:'JH005',name:'污水处理厂巡检',route:'污水处理厂',period:'2020023',periodName:'按周',weeks:[1,2,3,4,5],sign:'NFC签到',start:'2026-01-01',end:'2026-12-31',startTime:'08:00',endTime:'18:00',advance:'15',creator:'测试2',ctime:'2026-01-03',state:'启用',staffs:['测试2','测试3']},{id:'JH006',name:'变压器巡检',route:'变压器巡检',period:'2020023',periodName:'按周',weeks:[1,2,3,4,5],sign:'现场拍照',start:'2026-01-01',end:'2026-12-31',startTime:'08:00',endTime:'18:00',advance:'15',creator:'测试2',ctime:'2026-01-01',state:'启用',staffs:['测试2']}];
+var filtered=[],page=1,ps=10,eIdx=-1,dIdx=-1,stateIdx=-1;
+
+function render(){var s=(page-1)*ps,pd=filtered.slice(s,s+ps),h='';pd.forEach(function(d,i){var idx=s+i;h+='<tr><td>'+d.name+'</td><td>'+d.route+'</td><td>'+d.periodName+'</td><td>'+d.sign+'</td><td>'+d.start+'~'+d.end+'</td><td>'+d.startTime+'~'+d.endTime+'</td><td>'+d.advance+'</td><td>'+d.creator+'</td><td>'+d.ctime+'</td><td><span class="status '+(d.state==='启用'?'green':'red')+'">'+d.state+'</span></td><td>'+d.staffs.join('、')+'</td><td><a class="link" onclick="openEdit('+idx+')">修改</a>　<a class="link red-text" onclick="openDel('+idx+')">删除</a>　<a class="link orange-text" onclick="openState('+idx+')">'+(d.state==='启用'?'停用':'启用')+'</a>　<a class="link" href="14-巡检明细.html">详情</a></td></tr>'});if(!pd.length)h='<tr><td colspan="12" style="text-align:center;padding:40px;color:var(--muted)">暂无匹配数据</td></tr>';document.getElementById('tableBody').innerHTML=h;document.getElementById('totalCount').textContent=filtered.length;document.getElementById('pageNum').textContent=page}
+function doFilter(){var id=(document.getElementById('fId').value||'').toLowerCase(),nm=(document.getElementById('fName').value||'').toLowerCase(),stf=(document.getElementById('fStaff').value||'').toLowerCase(),st=document.getElementById('fState').value;filtered=allData.filter(function(d){return(!id||d.id.toLowerCase().indexOf(id)!==-1)&&(!nm||d.name.toLowerCase().indexOf(nm)!==-1)&&(!stf||d.staffs.join(',').toLowerCase().indexOf(stf)!==-1)&&(!st||d.state===st)});page=1;render()}
+function doReset(){document.getElementById('fId').value='';document.getElementById('fName').value='';document.getElementById('fStaff').value='';document.getElementById('fState').value='';doFilter()}
+function prevPage(){if(page>1){page--;render()}}function nextPage(){if(page<Math.ceil(filtered.length/ps)){page++;render()}}function goToPage(){var p=parseInt(document.getElementById('goPage').value);if(p>=1&&p<=Math.ceil(filtered.length/ps)){page=p;render()}}
+var selWeeks=[],selMonths=[],selDays=[];
+function onPeriodChange(){
+  var v=document.getElementById('ePeriod').value;
+  document.getElementById('periodWeek').style.display=v==='2020023'?'':'none';
+  document.getElementById('periodMonth').style.display=v==='2020022'?'':'none';
+  if(v==='2020023'){renderWeekChecks()}
+  if(v==='2020022'){renderMonthDayChecks()}
+}
+function renderWeekChecks(){
+  var days=['周一','周二','周三','周四','周五','周六','周日'],h='';
+  days.forEach(function(d,i){h+='<label style="display:inline-flex;align-items:center;gap:4px;font-size:13px;padding:4px 8px;border:1px solid #d7dfeb;border-radius:4px;cursor:pointer;background:'+(selWeeks.indexOf(i+1)>=0?'#eef5ff':'#fff')+'"><input type="checkbox" value="'+(i+1)+'"'+(selWeeks.indexOf(i+1)>=0?' checked':'')+' onchange="toggleWeek('+(i+1)+',this.checked)" style="accent-color:var(--blue)">'+d+'</label>'});
+  document.getElementById('weekChecks').innerHTML=h;
+}
+function toggleWeek(v,ck){if(ck){selWeeks.push(v)}else{selWeeks=selWeeks.filter(function(x){return x!==v})};renderWeekChecks()}
+function renderMonthDayChecks(){
+  var mh='';for(var i=1;i<=12;i++){mh+='<label style="display:inline-flex;align-items:center;gap:4px;font-size:13px;padding:4px 8px;border:1px solid #d7dfeb;border-radius:4px;cursor:pointer;background:'+(selMonths.indexOf(i)>=0?'#eef5ff':'#fff')+'"><input type="checkbox" value="'+i+'"'+(selMonths.indexOf(i)>=0?' checked':'')+' onchange="toggleMonth('+i+',this.checked)" style="accent-color:var(--blue)">'+i+'月</label>'}
+  document.getElementById('monthChecks').innerHTML=mh;
+  var dh='';for(var i=1;i<=31;i++){dh+='<label style="display:inline-flex;align-items:center;gap:4px;font-size:13px;padding:4px 8px;border:1px solid #d7dfeb;border-radius:4px;cursor:pointer;background:'+(selDays.indexOf(i)>=0?'#eef5ff':'#fff')+'"><input type="checkbox" value="'+i+'"'+(selDays.indexOf(i)>=0?' checked':'')+' onchange="toggleDay('+i+',this.checked)" style="accent-color:var(--blue)">'+i+'日</label>'}
+  document.getElementById('dayChecks').innerHTML=dh;
+}
+function toggleMonth(v,ck){if(ck){selMonths.push(v)}else{selMonths=selMonths.filter(function(x){return x!==v})};renderMonthDayChecks()}
+function toggleDay(v,ck){if(ck){selDays.push(v)}else{selDays=selDays.filter(function(x){return x!==v})};renderMonthDayChecks()}
+
+function openAdd(){eIdx=-1;selWeeks=[];selMonths=[];selDays=[];document.getElementById('modalTitle').textContent='添加巡检计划';document.getElementById('eName').value='';document.getElementById('eRoute').value='';document.getElementById('ePeriod').value='';document.getElementById('eStaffs').value='';document.getElementById('eRemark').value='';onPeriodChange();openM('modal-edit')}
+function openEdit(i){eIdx=i;var d=filtered[i];selWeeks=(d.weeks||[]).slice();selMonths=(d.months||[]).slice();selDays=(d.days||[]).slice();document.getElementById('modalTitle').textContent='编辑巡检计划';document.getElementById('eName').value=d.name;document.getElementById('eRoute').value=d.route;document.getElementById('ePeriod').value=d.period;document.getElementById('eSign').value=d.sign;document.getElementById('eStart').value=d.start;document.getElementById('eEnd').value=d.end;document.getElementById('eStartTime').value=d.startTime;document.getElementById('eEndTime').value=d.endTime;document.getElementById('eAdvance').value=d.advance;document.getElementById('eStaffs').value=d.staffs.join('、');document.getElementById('eRemark').value=d.remark||'';onPeriodChange();openM('modal-edit')}
+function save(){
+  var nm=document.getElementById('eName').value.trim();if(!nm){toast('请输入计划名称','warn');return}
+  var rt=document.getElementById('eRoute').value;if(!rt){toast('请选择路线','warn');return}
+  var pr=document.getElementById('ePeriod').value;if(!pr){toast('请选择周期','warn');return}
+  var d={id:'JH'+String(Date.now()).slice(-5),name:nm,route:rt,period:pr,periodName:pr==='2020023'?'按周':'按月',weeks:selWeeks,months:selMonths,days:selDays,sign:document.getElementById('eSign').value,start:document.getElementById('eStart').value,end:document.getElementById('eEnd').value,startTime:document.getElementById('eStartTime').value,endTime:document.getElementById('eEndTime').value,advance:document.getElementById('eAdvance').value,creator:'测试2',ctime:new Date().toISOString().slice(0,10),state:'启用',staffs:document.getElementById('eStaffs').value.split(/[,，、]/).filter(Boolean),remark:document.getElementById('eRemark').value};
+  if(eIdx<0){allData.unshift(d);toast('巡检计划已添加','ok')}else{Object.assign(filtered[eIdx],d);toast('已修改','ok')}
+  closeModal();doFilter();
+}
+function openDel(i){dIdx=i;document.getElementById('delName').textContent=filtered[i].name;openM('modal-delete')}
+function confirmDelete(){filtered.splice(dIdx,1);closeModal();doFilter();toast('已删除','warn')}
+function openState(i){stateIdx=i;var d=filtered[i];document.getElementById('stateMsg').textContent='确定要'+(d.state==='启用'?'停用':'启用')+'计划「'+d.name+'」吗？'+(d.state==='启用'?'停用后关联任务将不再生成。':'启用后将恢复任务生成。');document.getElementById('stateConfirmBtn').textContent=d.state==='启用'?'确认停用':'确认启用';openM('modal-state')}
+function confirmState(){var d=filtered[stateIdx];d.state=d.state==='启用'?'停用':'启用';closeModal();doFilter();toast('状态已更新','ok')}
+
+function openM(id){document.getElementById(id).classList.add('show')}
+function closeModal(){document.querySelectorAll('.modal-overlay.show').forEach(function(m){m.classList.remove('show')})}
+function toast(msg,kind){var w=document.getElementById('toastWrap');var el=document.createElement('div');el.className='toast'+(kind?' '+kind:'');el.textContent=msg;w.appendChild(el);requestAnimationFrame(function(){el.classList.add('show')});setTimeout(function(){el.classList.remove('show');setTimeout(function(){el.remove()},280)},2500)}
+(function(){var np=sessionStorage.getItem('newPlan');if(np){allData.unshift(JSON.parse(np));sessionStorage.removeItem('newPlan')}})();
+doFilter();document.addEventListener('click',function(e){if(e.target.classList.contains('modal-overlay')&&e.target.classList.contains('show'))e.target.classList.remove('show')});
+</script>
+</body></html>

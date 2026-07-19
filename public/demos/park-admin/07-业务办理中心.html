@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>业务办理中心</title><link rel="stylesheet" href="common.css" /></head>
+<body>
+  <header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+  <main class="layout">
+    <aside class="primary-side"><a class="primary-item active" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside>
+    <aside class="sub-side"><div class="sub-title">企业台账</div><a class="sub-item" href="01-厂房空间管理.html">厂房空间管理</a><a class="sub-item" href="02-企业入驻-基本信息.html">企业入驻</a><a class="sub-item" href="05-企业管理总览.html">企业管理</a><a class="sub-item" href="06-企业详情总览.html">企业详情</a><a class="sub-item active" href="07-业务办理中心.html">业务办理</a><a class="sub-item" href="08-费用收缴概览.html">费用收缴</a><a class="sub-item" href="09-资源授权.html">进出记录</a><a class="sub-item" href="10-历史归档.html">历史归档</a><div class="sub-title">巡检管理</div><a class="sub-item" href="15-巡检项目管理.html">巡检项目</a><a class="sub-item" href="11-巡检点管理.html">巡检点</a><a class="sub-item" href="12-巡检计划管理.html">巡检计划</a><a class="sub-item" href="13-巡检任务管理.html">巡检任务</a><a class="sub-item" href="14-巡检明细.html">巡检明细</a><a class="sub-item" href="24-巡检报表.html">巡检报表</a></aside>
+    <section class="workspace">
+      <div class="toast-wrap" id="toastWrap"></div>
+
+      <section class="panel">
+        <div class="panel-head"><span>业务办理中心</span><div class="btn-row"><a class="btn light" href="06-企业详情总览.html">返回企业详情</a></div></div>
+        <div class="panel-body">
+          <div class="two-col mb-14">
+            <div class="box"><div class="box-title">当前企业</div><div class="kv"><div class="k">企业名称</div><div class="v">江西盛源数码印花有限公司</div><div class="k">绑定厂房</div><div class="v">1-1-101、1-1-106</div><div class="k">入驻状态</div><div class="v green-text" id="enterpriseStatus">已入驻</div><div class="k">合同状态</div><div class="v orange-text" id="contractStatus">56天后到期</div></div></div>
+            <div class="box"><div class="box-title">快速操作</div><div class="checklist"><div class="check"><span><i class="dot"></i>合同续签</span><b><a class="link" onclick="openModal('modal-renew')">立即办理</a></b></div><div class="check"><span><i class="dot red"></i>费用催缴</span><b>欠费 ￥21,392　<a class="link" onclick="openPay('江西盛源数码印花有限公司','1-1-101','21392')">立即缴费</a></b></div><div class="check"><span><i class="dot"></i>资源变更</span><b>随时可办理</b></div><div class="check"><span><i class="dot orange"></i>退租结算</span><b>合同到期前30天可办</b></div></div></div>
+          </div>
+
+          <!-- ===== 合同管理 ===== -->
+          <div class="box mb-14">
+            <div class="box-title">合同管理 <span class="dim">当前合同</span></div>
+            <div class="panel-body">
+              <div class="form-grid">
+                <div class="form-item"><label>合同编号</label><div class="input" id="curContractNo">HT-2026-00126</div></div>
+                <div class="form-item"><label>合同类型</label><div class="select">厂房租赁合同 <i class="chev"></i></div></div>
+                <div class="form-item"><label>合同状态</label><div class="select" id="curContractStatus">即将到期 <i class="chev"></i></div></div>
+                <div class="form-item"><label>开始日期</label><div class="input" id="curStart">2026-06-01</div></div>
+                <div class="form-item"><label>结束日期</label><div class="input" id="curEnd">2029-05-31</div></div>
+                <div class="form-item"><label>租金单价</label><div class="input" id="curRent">15 元/㎡/月</div></div>
+              </div>
+              <div class="btn-row mt-14">
+                <a class="btn" onclick="openModal('modal-renew')">合同续签</a>
+                <a class="btn light" onclick="openModal('modal-change')">合同变更</a>
+                <a class="btn red" onclick="openModal('modal-terminate')">合同终止</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== 历史合同 ===== -->
+          <div class="box mb-14">
+            <div class="box-title">历史合同 <span class="dim">共 2 份</span></div>
+            <div class="panel-body" style="padding:0">
+              <table><thead><tr><th>合同编号</th><th>合同类型</th><th>开始日期</th><th>结束日期</th><th>租金单价</th><th>计租面积</th><th>状态</th><th>操作</th></tr></thead><tbody>
+              <tr><td>HT-2023-00089</td><td>厂房租赁合同</td><td>2023-06-01</td><td>2026-05-31</td><td>12 元/㎡/月</td><td>1,337㎡</td><td><span class="status green">已完结</span></td><td><a class="link" onclick="openContractDetail('HT-2023-00089')">查看</a>　<a class="link" onclick="openModal('modal-archive')">归档</a></td></tr>
+              <tr><td>HT-2020-00045</td><td>厂房租赁合同</td><td>2020-06-01</td><td>2023-05-31</td><td>10 元/㎡/月</td><td>980㎡</td><td><span class="status green">已完结</span></td><td><a class="link" onclick="openContractDetail('HT-2020-00045')">查看</a>　<a class="link" onclick="openModal('modal-archive')">归档</a></td></tr>
+              </tbody></table>
+            </div>
+          </div>
+
+          <!-- ===== 企业信息变更 ===== -->
+          <div class="box mb-14">
+            <div class="box-title">企业信息变更</div>
+            <div class="panel-body">
+              <div class="form-grid" id="enterpriseForm">
+                <div class="form-item"><label>企业名称</label><div class="input" contenteditable="true">江西盛源数码印花有限公司</div></div>
+                <div class="form-item"><label>法定代表人</label><div class="input" contenteditable="true">秦建文</div></div>
+                <div class="form-item"><label>企业负责人</label><div class="input" contenteditable="true">秦建文</div></div>
+                <div class="form-item"><label>负责人电话</label><div class="input" contenteditable="true">17770086276</div></div>
+                <div class="form-item"><label>财务联系人</label><div class="input" contenteditable="true">肖会计 136****0713</div></div>
+                <div class="form-item"><label>行业类型</label><div class="select">纺织印花 <i class="chev"></i></div></div>
+              </div>
+              <div class="btn-row mt-14">
+                <a class="btn" onclick="toast('企业信息变更已保存','ok')">保存变更</a>
+                <a class="btn light" onclick="resetEnterpriseForm()">重置</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== 厂房变更 + 退租结算 ===== -->
+          <div class="two-col">
+            <div class="box">
+              <div class="box-title">厂房变更</div>
+              <div class="panel-body">
+                <div class="form-item" style="margin-bottom:12px"><label>选择厂房</label><div class="select" id="factorySelect" onchange="updateFactoryInfo()">1-1-101 / 1,337㎡ <i class="chev"></i></div></div>
+                <div class="kv"><div class="k">当前厂房</div><div class="v" id="currentFactoryInfo">1-1-101 / 1号楼1层 / 1,337㎡</div><div class="k">可选厂房</div><div class="v">5间空置可选</div></div>
+                <div class="btn-row mt-14">
+                  <a class="btn light" href="01-厂房空间管理.html">查看可选厂房</a>
+                  <a class="btn" onclick="openModal('modal-factory')">申请变更</a>
+                </div>
+              </div>
+            </div>
+            <div class="box">
+              <div class="box-title">退租结算</div>
+              <div class="panel-body">
+                <div class="checklist"><div class="check"><span><i class="dot orange"></i>费用清算</span><b>当前欠费 ￥21,392</b></div><div class="check"><span><i class="dot"></i>资源解绑</span><b>停车3 / 门禁18 / 表2</b></div><div class="check"><span><i class="dot orange"></i>押金退还</span><b>￥20,000.00</b></div></div>
+                <div class="btn-row mt-14">
+                  <a class="btn red" onclick="openModal('modal-refund')">发起退租结算</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- ===== 催缴收款弹窗 ===== -->
+  <div class="modal-overlay" id="modal-pay">
+    <div class="modal">
+      <div class="modal-head"><span>催缴收款</span><button class="modal-close" onclick="closeModal('modal-pay')">&times;</button></div>
+      <div class="modal-body">
+        <div class="alert-box warn"><p>该企业存在欠费，请选择缴费方式完成收款。</p></div>
+        <div class="box mb-14">
+          <div class="box-title">企业信息</div>
+          <div class="kv"><div class="k">企业名称</div><div class="v" id="payName07">--</div><div class="k">厂房编号</div><div class="v" id="payRoom07">--</div></div>
+        </div>
+        <div class="box mb-14">
+          <div class="box-title">欠费明细</div>
+          <div class="panel-body" style="padding:0">
+            <table><thead><tr><th>费用类型</th><th>账期</th><th>应收金额</th><th>逾期月数</th></tr></thead><tbody>
+              <tr><td>租金</td><td>2026-04</td><td>￥20,055</td><td>2</td></tr>
+              <tr><td>物业费</td><td>2026-04</td><td>￥1,337</td><td>2</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+        <div class="summary-row"><span class="sl">欠费合计</span><span class="sr red-text" style="font-size:18px" id="payTotal07">￥21,392</span></div>
+        <div class="form-grid col2 mt-14">
+          <div class="form-item"><label>缴费方式</label><div class="select">银行转账 <i class="chev"></i></div></div>
+          <div class="form-item"><label>实收金额</label><div class="input" id="payAmount07" contenteditable="true">21,392</div></div>
+          <div class="form-item"><label>收款日期</label><div class="input" contenteditable="true">2026-05-22</div></div>
+          <div class="form-item"><label>经手人</label><div class="input" contenteditable="true">罗主管</div></div>
+          <div class="form-item full"><label>备注</label><div class="input" contenteditable="true">催缴收款，已全额结清</div></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-pay')">取消</a>
+        <a class="btn" onclick="confirmPay07()">确认收款</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 合同详情弹窗 ===== -->
+  <div class="modal-overlay" id="modal-contract-detail">
+    <div class="modal wide">
+      <div class="modal-head"><span>历史合同详情</span><button class="modal-close" onclick="closeModal('modal-contract-detail')">&times;</button></div>
+      <div class="modal-body">
+        <div class="box mb-14">
+          <div class="box-title">合同信息</div>
+          <div class="kv"><div class="k">合同编号</div><div class="v" id="cdNo">--</div><div class="k">合同类型</div><div class="v">厂房租赁合同</div><div class="k">合同状态</div><div class="v green-text">已完结</div><div class="k">开始日期</div><div class="v" id="cdStart">--</div><div class="k">结束日期</div><div class="v" id="cdEnd">--</div><div class="k">租金单价</div><div class="v" id="cdRent">--</div><div class="k">计租面积</div><div class="v" id="cdArea">--</div></div>
+        </div>
+        <div class="box">
+          <div class="box-title">费用结算记录</div>
+          <div class="panel-body" style="padding:0">
+            <table><thead><tr><th>账期</th><th>应收租金</th><th>实收</th><th>状态</th></tr></thead><tbody id="cdRecords"></tbody></table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-contract-detail')">关闭</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 归档确认弹窗 ===== -->
+  <div class="modal-overlay" id="modal-archive">
+    <div class="modal">
+      <div class="modal-head"><span>归档确认</span><button class="modal-close" onclick="closeModal('modal-archive')">&times;</button></div>
+      <div class="modal-body">
+        <div class="alert-box info"><p>确认将该历史合同移入历史归档？</p><p>归档后可在「历史归档」页面查看。</p></div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-archive')">取消</a>
+        <a class="btn" onclick="confirmArchive()">确认归档</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 退租结算 ===== -->
+  <div class="modal-overlay" id="modal-refund">
+    <div class="modal wide">
+      <div class="modal-head"><span>退租结算 — 江西盛源数码印花有限公司</span><button class="modal-close" onclick="closeModal('modal-refund')">&times;</button></div>
+      <div class="modal-body">
+        <div class="alert-box warn"><p>退租结算后将自动解绑全部资源并归档，此操作不可撤销。</p></div>
+        <ol class="step-list mb-14">
+          <li class="done"><span>合同状态确认 — 当前合同 2029-05-31 到期</span></li>
+          <li><span>费用清算 — 当前欠费 <b class="red-text">￥21,392</b>，押金可退 <b>￥20,000</b></span></li>
+          <li><span>资源解绑 — 停车 3 辆 / 门禁 18 人 / 水表 1 / 电表 1</span></li>
+          <li><span>归档 — 所有资料移入历史归档</span></li>
+        </ol>
+        <div class="box">
+          <div class="box-title">结算明细</div>
+          <div class="panel-body">
+            <div class="summary-row"><span class="sl">应退押金</span><span class="sr">+￥20,000</span></div>
+            <div class="summary-row"><span class="sl">未缴费用</span><span class="sr red-text">-￥21,392</span></div>
+            <div class="summary-row"><span class="sl">违约金</span><span class="sr">￥0</span></div>
+            <div class="summary-row"><span class="sl">应补缴金额</span><span class="sr red-text" style="font-size:18px">￥1,392</span></div>
+          </div>
+        </div>
+        <div class="form-item full mt-14"><label>退租原因</label><div class="select">合同到期不续租 <i class="chev"></i></div></div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-refund')">取消</a>
+        <a class="btn red" onclick="confirmRefund()">确认退租结算</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 合同续签 ===== -->
+  <div class="modal-overlay" id="modal-renew">
+    <div class="modal">
+      <div class="modal-head"><span>合同续签</span><button class="modal-close" onclick="closeModal('modal-renew')">&times;</button></div>
+      <div class="modal-body">
+        <div class="alert-box info"><p>当前合同：HT-2026-00126 | 2026-06-01 至 2029-05-31 | 15 元/㎡/月</p></div>
+        <div class="form-grid col2">
+          <div class="form-item"><label>新合同编号</label><div class="input">HT-2029-00188</div></div>
+          <div class="form-item"><label>合同类型</label><div class="select">厂房租赁合同 <i class="chev"></i></div></div>
+          <div class="form-item"><label>开始日期</label><div class="input" id="renewStart" contenteditable="true">2029-06-01</div></div>
+          <div class="form-item"><label>结束日期</label><div class="input" id="renewEnd" contenteditable="true">2032-05-31</div></div>
+          <div class="form-item"><label>租金单价（元/㎡/月）</label><div class="input" id="renewRent" contenteditable="true">18</div></div>
+          <div class="form-item"><label>付款周期</label><div class="select">月付 <i class="chev"></i></div></div>
+          <div class="form-item"><label>押金金额</label><div class="input" contenteditable="true">24,000.00</div></div>
+          <div class="form-item"><label>经办人</label><div class="input" contenteditable="true">罗主管</div></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-renew')">取消</a>
+        <a class="btn" onclick="confirmRenew()">确认续签</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 合同变更 ===== -->
+  <div class="modal-overlay" id="modal-change">
+    <div class="modal">
+      <div class="modal-head"><span>合同变更</span><button class="modal-close" onclick="closeModal('modal-change')">&times;</button></div>
+      <div class="modal-body">
+        <div class="alert-box info"><p>变更合同 HT-2026-00126 条款，变更后原合同标记为「已变更」，新条款即时生效。</p></div>
+        <div class="form-grid col2">
+          <div class="form-item"><label>租金单价（原 15 元/㎡/月）</label><div class="input" id="changeRent" contenteditable="true">16</div></div>
+          <div class="form-item"><label>计租面积（原 1,337㎡）</label><div class="input" id="changeArea" contenteditable="true">1,337</div></div>
+          <div class="form-item"><label>新结束日期（原 2029-05-31）</label><div class="input" id="changeEnd" contenteditable="true">2029-05-31</div></div>
+          <div class="form-item"><label>付款周期</label><div class="select">月付 <i class="chev"></i></div></div>
+          <div class="form-item full"><label>变更事由</label><div class="input" contenteditable="true">租金单价调整</div></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-change')">取消</a>
+        <a class="btn" onclick="confirmChange()">确认变更</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 合同终止 ===== -->
+  <div class="modal-overlay" id="modal-terminate">
+    <div class="modal">
+      <div class="modal-head"><span>合同终止</span><button class="modal-close" onclick="closeModal('modal-terminate')">&times;</button></div>
+      <div class="modal-body">
+        <div class="alert-box warn"><p>⚠ 合同终止将立即触发退租流程：</p><p>1. 企业状态变更为「已退租」</p><p>2. 厂房 1-1-101 状态变更为「空置」</p><p>3. 所有资源自动解绑</p></div>
+        <div class="form-grid col2">
+          <div class="form-item"><label>终止日期</label><div class="input" contenteditable="true">2026-05-22</div></div>
+          <div class="form-item"><label>终止类型</label><div class="select">协商终止 <i class="chev"></i></div></div>
+          <div class="form-item full"><label>终止事由</label><div class="input" contenteditable="true">双方协商一致提前终止</div></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-terminate')">取消</a>
+        <a class="btn red" onclick="confirmTerminate()">确认终止合同</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 厂房变更 ===== -->
+  <div class="modal-overlay" id="modal-factory">
+    <div class="modal wide">
+      <div class="modal-head"><span>厂房变更申请</span><button class="modal-close" onclick="closeModal('modal-factory')">&times;</button></div>
+      <div class="modal-body">
+        <div class="alert-box info"><p>当前厂房：1-1-101 / 1号楼1层 / 1,337㎡</p></div>
+        <div class="box mb-14">
+          <div class="box-title">可选厂房</div>
+          <div class="panel-body">
+            <div class="space-grid" id="factoryOptions">
+              <div class="space" onclick="selectFactory(this,'1-1-104')"><b>1-1-104</b><span>空置 / 1,337㎡</span></div>
+              <div class="space" onclick="selectFactory(this,'1-1-106')"><b>1-1-106</b><span>空置 / 1,337㎡</span></div>
+              <div class="space" onclick="selectFactory(this,'2-1-201')"><b>2-1-201</b><span>空置 / 980㎡</span></div>
+              <div class="space" onclick="selectFactory(this,'3-1-301')"><b>3-1-301</b><span>空置 / 1,500㎡</span></div>
+              <div class="space orange" onclick="selectFactory(this,'1-1-103')"><b>1-1-103</b><span>即将空出 / 1,337㎡</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <div class="box-title">变更确认</div>
+          <div class="kv">
+            <div class="k">当前厂房</div><div class="v">1-1-101 / 1,337㎡</div>
+            <div class="k">目标厂房</div><div class="v green-text" id="targetFactory">未选择</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-factory')">取消</a>
+        <a class="btn" onclick="confirmFactory()" id="btnConfirmFactory">确认变更</a>
+      </div>
+    </div>
+  </div>
+
+<script src="common.js"></script>
+<script>
+function toast(msg, kind) {
+  var w = document.getElementById('toastWrap');
+  var el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = msg;
+  w.appendChild(el);
+  requestAnimationFrame(function(){ el.classList.add('show'); });
+  setTimeout(function(){ el.classList.remove('show'); setTimeout(function(){ el.remove(); }, 280); }, 2500);
+}
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+// ===== 催缴收款 =====
+function openPay(name, room, amount) {
+  document.getElementById('payName07').textContent = name;
+  document.getElementById('payRoom07').textContent = room;
+  document.getElementById('payTotal07').textContent = '￥' + Number(amount).toLocaleString();
+  document.getElementById('payAmount07').textContent = amount;
+  openModal('modal-pay');
+}
+function confirmPay07() {
+  closeModal('modal-pay');
+  toast('欠费已全额结清 — 收款成功','ok');
+}
+
+// ===== 合同详情 =====
+var contractData = {
+  'HT-2023-00089': { start:'2023-06-01', end:'2026-05-31', rent:'12 元/㎡/月', area:'1,337㎡', records:[
+    ['2023-06','全部','已缴'],['2024-06','全部','已缴'],['2025-06','全部','已缴'],['2026-01','全部','已缴']
+  ]},
+  'HT-2020-00045': { start:'2020-06-01', end:'2023-05-31', rent:'10 元/㎡/月', area:'980㎡', records:[
+    ['2020-06','全部','已缴'],['2021-06','全部','已缴'],['2022-06','全部','已缴']
+  ]}
+};
+function openContractDetail(no) {
+  var d = contractData[no];
+  if (!d) return;
+  document.getElementById('cdNo').textContent = no;
+  document.getElementById('cdStart').textContent = d.start;
+  document.getElementById('cdEnd').textContent = d.end;
+  document.getElementById('cdRent').textContent = d.rent;
+  document.getElementById('cdArea').textContent = d.area;
+  var tbody = document.getElementById('cdRecords');
+  tbody.innerHTML = '';
+  d.records.forEach(function(r){
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[1]+'</td><td><span class="status green">'+r[2]+'</span></td>';
+    tbody.appendChild(tr);
+  });
+  openModal('modal-contract-detail');
+}
+
+// ===== 归档 =====
+function confirmArchive() {
+  closeModal('modal-archive');
+  toast('合同已归档至历史档案','ok');
+}
+
+// ===== 退租结算 =====
+function confirmRefund() {
+  closeModal('modal-refund');
+  document.getElementById('enterpriseStatus').textContent = '已退租';
+  document.getElementById('enterpriseStatus').className = 'red-text';
+  document.getElementById('contractStatus').textContent = '已终止';
+  document.getElementById('contractStatus').className = 'red-text';
+  document.getElementById('curContractStatus').textContent = '已终止';
+  toast('退租结算完成 — 企业已退租，厂房 1-1-101 已空置，资料已归档','ok');
+}
+function confirmRenew() {
+  // ===== 优化新增：欠费校验 =====
+  var hasArrear = document.querySelector('.checklist .dot.red') !== null;
+  if (hasArrear) {
+    closeModal('modal-renew');
+    openModal('modal-arrear-block');
+    return;
+  }
+  closeModal('modal-renew');
+  var s = document.getElementById('renewStart').textContent.trim();
+  var e = document.getElementById('renewEnd').textContent.trim();
+  var r = document.getElementById('renewRent').textContent.trim();
+  document.getElementById('curStart').textContent = s;
+  document.getElementById('curEnd').textContent = e;
+  document.getElementById('curRent').textContent = r + ' 元/㎡/月';
+  document.getElementById('curContractNo').textContent = 'HT-2029-00188';
+  document.getElementById('curContractStatus').textContent = '正常';
+  document.getElementById('contractStatus').textContent = '正常';
+  document.getElementById('contractStatus').className = 'green-text';
+  toast('合同续签成功','ok');
+}
+function confirmChange() {
+  closeModal('modal-change');
+  var r = document.getElementById('changeRent').textContent.trim();
+  var e = document.getElementById('changeEnd').textContent.trim();
+  document.getElementById('curRent').textContent = r + ' 元/㎡/月';
+  document.getElementById('curEnd').textContent = e;
+  document.getElementById('curContractStatus').textContent = '正常';
+  toast('合同已变更','ok');
+}
+function confirmTerminate() {
+  // ===== 优化新增：二次确认 =====
+  closeModal('modal-terminate');
+  openModal('modal-terminate-confirm');
+}
+function executeTerminate() {
+  closeModal('modal-terminate-confirm');
+  document.getElementById('curContractStatus').textContent = '已终止';
+  document.getElementById('contractStatus').textContent = '已终止';
+  document.getElementById('contractStatus').className = 'red-text';
+  document.getElementById('enterpriseStatus').textContent = '已退租';
+  document.getElementById('enterpriseStatus').className = 'red-text';
+  toast('合同已终止，企业已退租','warn');
+}
+
+// ===== 厂房信息（多间） =====
+var factoryRooms = [
+  { code:'1-1-101', area:'1,337㎡', loc:'1号楼/1层', type:'生产' },
+  { code:'1-1-106', area:'980㎡', loc:'1号楼/1层', type:'仓储' }
+];
+function updateFactoryInfo() {
+  var sel = document.getElementById('factorySelect');
+  var t = sel.textContent.trim();
+  var found = factoryRooms.find(function(r){ return t.indexOf(r.code) !== -1; });
+  if (found) {
+    document.getElementById('currentFactoryInfo').textContent = found.code + ' / ' + found.loc + ' / ' + found.area;
+  }
+}
+// Init factory select options for dropdown
+(function(){
+  var sel = document.getElementById('factorySelect');
+  if (!sel) return;
+  // Remove default behavior and add options
+  sel.addEventListener('mousedown', function(e){
+    e.stopPropagation();
+    var menu = sel.querySelector('.dropdown-menu');
+    if (menu && menu.classList.contains('show')) return;
+    // Create menu
+    if (!menu) {
+      menu = document.createElement('ul');
+      menu.className = 'dropdown-menu';
+      factoryRooms.forEach(function(r){
+        var li = document.createElement('li');
+        li.className = 'dropdown-option';
+        li.textContent = r.code + ' / ' + r.area + '（' + r.type + '）';
+        li.addEventListener('mousedown', function(ev){
+          ev.preventDefault(); ev.stopPropagation();
+          sel.childNodes[0].textContent = r.code + ' / ' + r.area + ' ';
+          updateFactoryInfo();
+          menu.classList.remove('show');
+        });
+        menu.appendChild(li);
+      });
+      sel.appendChild(menu);
+    }
+    menu.classList.toggle('show');
+  });
+})();
+
+var selectedFactory = '';
+function selectFactory(el, code) {
+  document.querySelectorAll('#factoryOptions .space').forEach(function(x){ x.classList.remove('active'); });
+  el.classList.add('active');
+  selectedFactory = code;
+  document.getElementById('targetFactory').textContent = code;
+}
+function confirmFactory() {
+  if (!selectedFactory) { toast('请先选择目标厂房','warn'); return; }
+  closeModal('modal-factory');
+  toast('厂房变更申请已提交 — 目标厂房 ' + selectedFactory + '，待园区审核','ok');
+}
+function resetEnterpriseForm() {
+  var fields = ['江西盛源数码印花有限公司','秦建文','秦建文','17770086276','肖会计 136****0713'];
+  var inputs = document.querySelectorAll('#enterpriseForm .input[contenteditable]');
+  inputs.forEach(function(el, i){ if (fields[i]) el.textContent = fields[i]; });
+  toast('表单已重置');
+}
+document.addEventListener('click', function(e){
+  if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('show')) {
+    e.target.classList.remove('show');
+  }
+});
+</script>
+
+<!-- 优化新增：续签欠费拦截弹窗 -->
+<div class="modal-overlay" id="modal-arrear-block">
+  <div class="modal">
+    <div class="modal-head"><span>⚠ 无法续签 — 存在欠费</span><button class="modal-close" onclick="closeModal('modal-arrear-block')">&times;</button></div>
+    <div class="modal-body">
+      <div class="alert-box warn"><p>该企业当前欠费 <b>￥21,392</b>，请先结清欠费后再办理合同续签。</p></div>
+      <div class="summary-row"><span class="sl">当前欠费</span><span class="sr red-text">￥21,392</span></div>
+      <div class="summary-row"><span class="sl">欠费月数</span><span class="sr">2 个月</span></div>
+    </div>
+    <div class="modal-foot">
+      <a class="btn light" onclick="closeModal('modal-arrear-block')">取消续签</a>
+      <a class="btn red" href="08-费用收缴概览.html">立即缴费</a>
+    </div>
+  </div>
+</div>
+
+<!-- 优化新增：合同终止二次确认弹窗 -->
+<div class="modal-overlay" id="modal-terminate-confirm">
+  <div class="modal">
+    <div class="modal-head"><span>⚠ 确认终止合同</span><button class="modal-close" onclick="closeModal('modal-terminate-confirm')">&times;</button></div>
+    <div class="modal-body">
+      <div class="alert-box warn"><p>此操作不可撤销，确定终止合同吗？</p></div>
+      <p class="dim">终止后企业状态将变为「已退租」，已绑定的厂房将恢复为「空置」状态。</p>
+    </div>
+    <div class="modal-foot">
+      <a class="btn light" onclick="closeModal('modal-terminate-confirm')">取消</a>
+      <a class="btn red" onclick="executeTerminate()">确认终止</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>历史归档</title><link rel="stylesheet" href="common.css" /></head>
+<body>
+  <header class="topbar"><div class="top-left"><div class="brand">盛源印花</div><nav class="top-menu"><span class="active">首页</span><span>业务受理</span><span>物联网</span><span>常用菜单</span><span>设置</span><span>搜索</span></nav></div><div class="top-user"><span>盛源印花产业园 <i class="chev"></i></span><span>测试2 <i class="chev"></i></span><span>v1.9</span></div></header>
+  <main class="layout"><aside class="primary-side"><a class="primary-item active" href="01-厂房空间管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>房产</a><a class="primary-item" href="08-费用收缴概览.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>费用</a><a class="primary-item" href="09-资源授权.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>物联</a><a class="primary-item" href="11-巡检点管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>巡检</a><a class="primary-item" href="16-合同类型管理.html"><span class="grid-icon"><span></span><span></span><span></span><span></span></span>合同</a></aside><aside class="sub-side"><div class="sub-title">企业台账</div><a class="sub-item" href="01-厂房空间管理.html">厂房空间管理</a><a class="sub-item" href="02-企业入驻-基本信息.html">企业入驻</a><a class="sub-item" href="05-企业管理总览.html">企业管理</a><a class="sub-item" href="06-企业详情总览.html">企业详情</a><a class="sub-item" href="07-业务办理中心.html">业务办理</a><a class="sub-item" href="08-费用收缴概览.html">费用收缴</a><a class="sub-item" href="09-资源授权.html">进出记录</a><a class="sub-item active" href="10-历史归档.html">历史归档</a><div class="sub-title">巡检管理</div><a class="sub-item" href="15-巡检项目管理.html">巡检项目</a><a class="sub-item" href="11-巡检点管理.html">巡检点</a><a class="sub-item" href="12-巡检计划管理.html">巡检计划</a><a class="sub-item" href="13-巡检任务管理.html">巡检任务</a><a class="sub-item" href="14-巡检明细.html">巡检明细</a><a class="sub-item" href="24-巡检报表.html">巡检报表</a></aside>
+    <section class="workspace">
+      <div class="toast-wrap" id="toastWrap"></div>
+
+      <section class="panel"><div class="panel-head"><span>历史归档</span><div class="btn-row"><a class="btn light" href="05-企业管理总览.html">返回企业管理</a><a class="btn light" onclick="exportArchive()">导出历史档案</a></div></div><div class="panel-body">
+      <table><thead><tr><th>历史企业</th><th>原厂房</th><th>租赁周期</th><th>退租日期</th><th>费用结清</th><th>资源解绑</th><th>合同附件</th><th>归档状态</th><th>操作</th></tr></thead><tbody><tr><td>赣州旧租户服饰厂</td><td>1-1-401</td><td>2023-01-01 至 2025-12-31</td><td>2025-12-31</td><td><span class="status green">已结清</span></td><td><span class="status green">已解绑</span></td><td>已归档</td><td><span class="status green">完成</span></td><td><a class="link" onclick="openArchiveDetail()">查看</a></td></tr><tr><td>江西盛源数码印花有限公司</td><td>1-1-101</td><td>2026-06-01 至 2029-05-31</td><td>-</td><td><span class="status orange">未退租</span></td><td>-</td><td>已归档</td><td><span class="status blue">在园</span></td><td><a class="link" href="06-企业详情总览.html">企业详情</a></td></tr></tbody></table>
+    </div></section></section>
+  </main>
+
+  <!-- ===== 导出弹窗 ===== -->
+  <div class="modal-overlay" id="modal-export"><div class="modal"><div class="modal-head"><span>导出历史档案</span><button class="modal-close" onclick="closeModal('modal-export')">&times;</button></div><div class="modal-body"><p>即将导出历史档案数据为 Excel 文件。</p><p class="dim" style="margin-top:8px">包含企业信息、租赁记录、费用结算、合同附件等全部归档数据。</p></div><div class="modal-foot"><a class="btn light" onclick="closeModal('modal-export')">取消</a><a class="btn" onclick="closeModal('modal-export')">确认导出</a></div></div></div>
+<!-- ===== 归档详情弹窗 ===== -->
+  <div class="modal-overlay" id="modal-archive-detail">
+    <div class="modal wide">
+      <div class="modal-head"><span>归档详情 — 赣州旧租户服饰厂</span><button class="modal-close" onclick="closeModal('modal-archive-detail')">&times;</button></div>
+      <div class="modal-body">
+        <div class="two-col mb-14">
+          <div class="box"><div class="box-title">企业信息</div><div class="kv"><div class="k">企业名称</div><div class="v">赣州旧租户服饰厂</div><div class="k">统一社会信用代码</div><div class="v">9136**********3F1P</div><div class="k">行业类型</div><div class="v">服饰加工</div><div class="k">入驻日期</div><div class="v">2023-01-01</div><div class="k">退租日期</div><div class="v">2025-12-31</div></div></div>
+          <div class="box"><div class="box-title">归档状态</div><div class="kv"><div class="k">费用结清</div><div class="v green-text">已结清</div><div class="k">资源解绑</div><div class="v green-text">已解绑</div><div class="k">合同归档</div><div class="v green-text">已归档</div><div class="k">归档时间</div><div class="v">2026-01-15</div><div class="k">归档编号</div><div class="v">GD-2026-0001</div></div></div>
+        </div>
+        <div class="box mb-14">
+          <div class="box-title">租赁合同</div>
+          <div class="kv"><div class="k">合同编号</div><div class="v">HT-2023-00012</div><div class="k">合同类型</div><div class="v">厂房租赁合同</div><div class="k">租赁周期</div><div class="v">2023-01-01 至 2025-12-31</div><div class="k">租金单价</div><div class="v">12 元/㎡/月</div><div class="k">计租面积</div><div class="v">1,200㎡</div></div>
+        </div>
+        <div class="box">
+          <div class="box-title">费用结算记录</div>
+          <div class="panel-body" style="padding:0">
+            <table><thead><tr><th>账期</th><th>应收租金</th><th>实收</th><th>状态</th></tr></thead><tbody>
+            <tr><td>2025-12</td><td>￥14,400</td><td>￥14,400</td><td><span class="status green">已结清</span></td></tr>
+            <tr><td>2025-06</td><td>￥14,400</td><td>￥14,400</td><td><span class="status green">已结清</span></td></tr>
+            <tr><td>2024-12</td><td>￥14,400</td><td>￥14,400</td><td><span class="status green">已结清</span></td></tr>
+            <tr><td>2023-12</td><td>￥14,400</td><td>￥14,400</td><td><span class="status green">已结清</span></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <a class="btn light" onclick="closeModal('modal-archive-detail')">关闭</a>
+      </div>
+    </div>
+  </div>
+
+<script src="common.js"></script>
+<script>
+function toast(msg, kind) {
+  var w = document.getElementById('toastWrap');
+  var el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = msg;
+  w.appendChild(el);
+  requestAnimationFrame(function(){ el.classList.add('show'); });
+  setTimeout(function(){ el.classList.remove('show'); setTimeout(function(){ el.remove(); }, 280); }, 2500);
+}
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function exportArchive(){openModal('modal-export')}
+function openArchiveDetail() { openModal('modal-archive-detail'); }
+document.addEventListener('click', function(e){
+  if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('show')) {
+    e.target.classList.remove('show');
+  }
+});
+</script>
+</body>
+</html>

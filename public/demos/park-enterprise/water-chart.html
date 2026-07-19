@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>用量分析 · 智慧园区企业端</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    .analysis-hero {
+      background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%);
+      color: #fff;
+      padding: 14px 16px 22px;
+      border-radius: 0 0 16px 16px;
+      margin-bottom: 12px;
+    }
+    .analysis-hero .top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px;
+    }
+    .analysis-hero .top .name { font-size: 13px; opacity: 0.95; }
+    .analysis-hero .top .period { font-size: 12px; opacity: 0.85; }
+
+    .metric-switch {
+      display: flex;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(6px);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 14px;
+    }
+    .metric-switch .opt {
+      flex: 1;
+      text-align: center;
+      padding: 7px 0;
+      font-size: 13px;
+      border-radius: 7px;
+      color: rgba(255,255,255,0.85);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .metric-switch .opt.active {
+      background: #fff;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .summary-row .cell {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(6px);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .summary-row .cell .l { font-size: 11px; opacity: 0.85; }
+    .summary-row .cell .v {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    .summary-row .cell .v .unit { font-size: 11px; opacity: 0.85; font-weight: normal; margin-left: 2px; }
+    .summary-row .cell .delta {
+      font-size: 10px;
+      margin-top: 2px;
+      opacity: 0.9;
+    }
+    .summary-row .cell .delta.up::before { content: '↑ '; }
+    .summary-row .cell .delta.down::before { content: '↓ '; }
+
+    .chart-card {
+      margin: 0 12px 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .chart-card .hd {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .chart-card .hd .ttl { font-size: 14px; font-weight: 600; color: var(--text-1); }
+    .chart-card .hd .sub { font-size: 11px; color: var(--text-3); }
+    .chart-card .chart { height: 220px; }
+    .chart-card .chart-tall { height: 240px; }
+
+    /* 对比卡 */
+    .compare-card {
+      margin: 0 12px 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .compare-card .ttl {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-1);
+      margin-bottom: 12px;
+    }
+    .compare-card .bar-row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 10px;
+    }
+    .compare-card .bar-row:last-child { margin-bottom: 0; }
+    .compare-card .bar-label {
+      width: 64px;
+      font-size: 12px;
+      color: var(--text-2);
+      flex-shrink: 0;
+    }
+    .compare-card .bar-track {
+      flex: 1;
+      height: 18px;
+      background: #f5f5f5;
+      border-radius: 9px;
+      position: relative;
+      overflow: hidden;
+    }
+    .compare-card .bar-fill {
+      height: 100%;
+      border-radius: 9px;
+      transition: width 0.5s ease;
+    }
+    .compare-card .bar-fill.water { background: linear-gradient(90deg, #1677ff, #4096ff); }
+    .compare-card .bar-fill.elec { background: linear-gradient(90deg, #ff9500, #ffb049); }
+    .compare-card .bar-value {
+      width: 70px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-1);
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* 节能建议 */
+    .tips-card {
+      margin: 0 12px 14px;
+      background: linear-gradient(135deg, #e6f9f1 0%, #ffffff 100%);
+      border-radius: var(--radius);
+      padding: 14px;
+      border: 1px solid #b7eed1;
+    }
+
+    /* 余额提示 */
+    .balance-tip {
+      margin: -4px 12px 12px;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, #fff7e6 0%, #fff 100%);
+      border: 1px solid #ffd591;
+      border-radius: var(--radius);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--warning);
+    }
+    .balance-tip.show { display: flex; }
+    .balance-tip svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .balance-tip .action {
+      color: var(--warning);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tips-card .hd {
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 10px;
+    }
+    .tips-card .hd svg { width: 18px; height: 18px; color: var(--success); }
+    .tips-card .hd .ttl { font-size: 14px; font-weight: 600; color: var(--success); }
+    .tips-card .tip-item {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 12px;
+      color: var(--text-2);
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+    .tips-card .tip-item:last-child { margin-bottom: 0; }
+    .tips-card .tip-item .num {
+      flex-shrink: 0;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--success);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div id="topbar"></div>
+
+    <div class="analysis-hero">
+      <div class="top">
+        <span class="name" id="heroName">蓝海科技</span>
+        <span class="period">2026-06 当月</span>
+      </div>
+      <div class="metric-switch" id="metricSwitch">
+        <div class="opt active" data-value="all">综合</div>
+        <div class="opt" data-value="water">用水</div>
+        <div class="opt" data-value="electricity">用电</div>
+      </div>
+      <div class="summary-row" id="summaryRow"></div>
+    </div>
+
+    <!-- 余额提示 -->
+    <div class="balance-tip" id="balanceTip" onclick="location.href='water-list.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <div style="flex:1;">预存余额仅剩 <span id="balanceTipNum" style="font-weight:600;"></span>，建议及时充值</div>
+      <span class="action">去充值 ›</span>
+    </div>
+
+    <!-- 月度趋势 -->
+    <div class="chart-card">
+      <div class="hd">
+        <div class="ttl" id="trendTitle">6 个月用量趋势</div>
+        <div class="sub">单位：吨/度</div>
+      </div>
+      <div class="chart" id="chartTrend"></div>
+    </div>
+
+    <!-- 当月每日 -->
+    <div class="chart-card">
+      <div class="hd">
+        <div class="ttl">当月每日用量</div>
+        <div class="sub">2026-06</div>
+      </div>
+      <div class="chart chart-tall" id="chartDaily"></div>
+    </div>
+
+    <!-- 6 月对比 -->
+    <div class="compare-card">
+      <div class="ttl">月度对比</div>
+      <div id="compareList"></div>
+    </div>
+
+    <!-- 节能建议 -->
+    <div class="tips-card">
+      <div class="hd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6m0 0a2 2 0 100 4m0-4a2 2 0 110 4m0 0v10m-5-7h10"/></svg>
+        <div class="ttl">用量分析与节能建议</div>
+      </div>
+      <div class="tip-item">
+        <div class="num">1</div>
+        <div id="tipPeak">本月日均用电高峰出现在 06-15 (73 度)，可能与会议密集相关</div>
+      </div>
+      <div class="tip-item">
+        <div class="num">2</div>
+        <div>建议下班前关闭空调和办公设备，仅夜间空调每月可节省 8-12% 电费</div>
+      </div>
+      <div class="tip-item">
+        <div class="num">3</div>
+        <div>当前用电环比上月下降 6.6%，节能成效显著，继续保持 👍</div>
+      </div>
+    </div>
+
+    <div id="tabbar"></div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.getElementById('topbar').outerHTML = renderTopBar('用量分析');
+    document.getElementById('tabbar').outerHTML = renderTabBar('water');
+
+    const t = getCurrentTenant();
+    document.getElementById('heroName').textContent = t.shortName;
+
+    // 余额不足提示
+    const acc = MOCK.utilityAccount;
+    if (acc.balance < acc.lowBalanceThreshold) {
+      document.getElementById('balanceTipNum').textContent = '¥' + acc.balance.toFixed(2);
+      document.getElementById('balanceTip').classList.add('show');
+    }
+
+    let metric = 'all';
+    let chartTrend, chartDaily;
+
+    // 顶部汇总数据
+    function renderSummary() {
+      const u = MOCK.utilityCurrent;
+      const target = document.getElementById('summaryRow');
+      const waterDelta = u.water - u.waterPrev;
+      const elecDelta = u.electricity - u.electricityPrev;
+
+      if (metric === 'all') {
+        target.innerHTML = `
+          <div class="cell"><div class="l">💧 用水</div><div class="v">${u.water}<span class="unit">吨</span></div></div>
+          <div class="cell"><div class="l">⚡ 用电</div><div class="v">${u.electricity}<span class="unit">度</span></div></div>
+          <div class="cell"><div class="l">💰 费用</div><div class="v">¥${u.total.toFixed(0)}</div></div>
+        `;
+      } else if (metric === 'water') {
+        target.innerHTML = `
+          <div class="cell"><div class="l">本月用水</div><div class="v">${u.water}<span class="unit">吨</span></div><div class="delta ${waterDelta > 0 ? 'up' : 'down'}">${Math.abs(waterDelta)} 吨</div></div>
+          <div class="cell"><div class="l">日均</div><div class="v">${(u.water / 30).toFixed(1)}<span class="unit">吨</span></div></div>
+          <div class="cell"><div class="l">水费</div><div class="v">¥${u.waterFee.toFixed(0)}</div></div>
+        `;
+      } else {
+        target.innerHTML = `
+          <div class="cell"><div class="l">本月用电</div><div class="v">${u.electricity}<span class="unit">度</span></div><div class="delta ${elecDelta > 0 ? 'up' : 'down'}">${Math.abs(elecDelta)} 度</div></div>
+          <div class="cell"><div class="l">日均</div><div class="v">${(u.electricity / 30).toFixed(0)}<span class="unit">度</span></div></div>
+          <div class="cell"><div class="l">电费</div><div class="v">¥${u.electricityFee.toFixed(0)}</div></div>
+        `;
+      }
+    }
+
+    // 6 个月趋势图
+    function renderTrendChart() {
+      const data = MOCK.utilityTrend;
+      if (!chartTrend) chartTrend = echarts.init(document.getElementById('chartTrend'));
+      const opt = Object.assign({}, chartBaseOption(), {
+        legend: { data: [], top: 0, textStyle: { fontSize: 11 } },
+        grid: { left: 36, right: 30, top: 30, bottom: 24 },
+        xAxis: {
+          type: 'category',
+          data: data.months.map(m => m.slice(5)),
+          axisLine: { lineStyle: { color: '#d9d9d9' } },
+          axisLabel: { color: '#8c8c8c', fontSize: 10 }
+        }
+      });
+
+      if (metric === 'all') {
+        opt.legend.data = ['用水(吨)', '用电(度/10)'];
+        opt.yAxis = [{
+          type: 'value', name: '吨', axisLine: { show: false }, splitLine: { lineStyle: { color: '#f0f0f0', type: 'dashed' } }, axisLabel: { color: '#8c8c8c', fontSize: 10 }, nameTextStyle: { color: '#8c8c8c', fontSize: 10 }
+        }];
+        opt.series = [
+          { name: '用水(吨)', type: 'bar', data: data.water, barWidth: 14, itemStyle: { color: '#1677ff', borderRadius: [4, 4, 0, 0] } },
+          { name: '用电(度/10)', type: 'line', data: data.electricity.map(e => Math.round(e / 10)), smooth: true, symbol: 'circle', symbolSize: 6, lineStyle: { width: 2, color: '#ff9500' }, itemStyle: { color: '#ff9500' } }
+        ];
+      } else if (metric === 'water') {
+        opt.legend.data = ['用水(吨)', '水费(元)'];
+        opt.yAxis = [{
+          type: 'value', name: '吨', axisLine: { show: false }, splitLine: { lineStyle: { color: '#f0f0f0', type: 'dashed' } }, axisLabel: { color: '#8c8c8c', fontSize: 10 }
+        }, {
+          type: 'value', name: '元', axisLine: { show: false }, splitLine: { show: false }, axisLabel: { color: '#8c8c8c', fontSize: 10 }
+        }];
+        opt.series = [
+          { name: '用水(吨)', type: 'bar', data: data.water, barWidth: 18, itemStyle: { color: '#1677ff', borderRadius: [4, 4, 0, 0] } },
+          { name: '水费(元)', type: 'line', yAxisIndex: 1, data: data.waterFee, smooth: true, lineStyle: { color: '#722ed1' }, itemStyle: { color: '#722ed1' } }
+        ];
+      } else {
+        opt.legend.data = ['用电(度)', '电费(元)'];
+        opt.yAxis = [{
+          type: 'value', name: '度', axisLine: { show: false }, splitLine: { lineStyle: { color: '#f0f0f0', type: 'dashed' } }, axisLabel: { color: '#8c8c8c', fontSize: 10 }
+        }, {
+          type: 'value', name: '元', axisLine: { show: false }, splitLine: { show: false }, axisLabel: { color: '#8c8c8c', fontSize: 10 }
+        }];
+        opt.series = [
+          { name: '用电(度)', type: 'bar', data: data.electricity, barWidth: 18, itemStyle: { color: '#ff9500', borderRadius: [4, 4, 0, 0] } },
+          { name: '电费(元)', type: 'line', yAxisIndex: 1, data: data.electricityFee, smooth: true, lineStyle: { color: '#722ed1' }, itemStyle: { color: '#722ed1' } }
+        ];
+      }
+
+      chartTrend.setOption(opt, true);
+    }
+
+    // 当月每日图
+    function renderDailyChart() {
+      const data = MOCK.utilityDaily;
+      if (!chartDaily) chartDaily = echarts.init(document.getElementById('chartDaily'));
+      const opt = Object.assign({}, chartBaseOption(), {
+        legend: { data: [], top: 0, textStyle: { fontSize: 11 } },
+        grid: { left: 36, right: 16, top: 30, bottom: 30 },
+        xAxis: {
+          type: 'category',
+          data: data.days.map(d => d.split('-')[1]),
+          axisLine: { lineStyle: { color: '#d9d9d9' } },
+          axisLabel: { color: '#8c8c8c', fontSize: 10, interval: 2 }
+        },
+        yAxis: [{
+          type: 'value', axisLine: { show: false }, splitLine: { lineStyle: { color: '#f0f0f0', type: 'dashed' } }, axisLabel: { color: '#8c8c8c', fontSize: 10 }
+        }]
+      });
+
+      if (metric === 'all' || metric === 'water') {
+        opt.yAxis.push({ type: 'value', show: false });
+        opt.legend.data = metric === 'all' ? ['用水(吨)', '用电(度)'] : ['用水(吨)'];
+        opt.series = metric === 'all' ? [
+          { name: '用水(吨)', type: 'line', data: data.water, smooth: true, symbol: 'none', lineStyle: { color: '#1677ff', width: 2 }, areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(22,119,255,0.3)' }, { offset: 1, color: 'rgba(22,119,255,0)' }] } } },
+          { name: '用电(度)', type: 'line', yAxisIndex: 1, data: data.electricity, smooth: true, symbol: 'none', lineStyle: { color: '#ff9500', width: 2 } }
+        ] : [
+          { name: '用水(吨)', type: 'line', data: data.water, smooth: true, symbol: 'circle', symbolSize: 5, lineStyle: { color: '#1677ff', width: 2 }, itemStyle: { color: '#1677ff' }, areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(22,119,255,0.35)' }, { offset: 1, color: 'rgba(22,119,255,0)' }] } } }
+        ];
+      } else {
+        opt.legend.data = ['用电(度)'];
+        opt.series = [
+          { name: '用电(度)', type: 'line', data: data.electricity, smooth: true, symbol: 'circle', symbolSize: 5, lineStyle: { color: '#ff9500', width: 2 }, itemStyle: { color: '#ff9500' }, areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(255,149,0,0.35)' }, { offset: 1, color: 'rgba(255,149,0,0)' }] } } }
+        ];
+      }
+
+      chartDaily.setOption(opt, true);
+    }
+
+    // 月度对比柱
+    function renderCompare() {
+      const data = MOCK.utilityTrend;
+      const target = document.getElementById('compareList');
+      const series = metric === 'water' ? data.water :
+                     metric === 'electricity' ? data.electricity :
+                     data.water.map((w, i) => w + data.electricity[i] / 10);
+      const unit = metric === 'water' ? '吨' :
+                   metric === 'electricity' ? '度' : '综合';
+      const max = Math.max(...series);
+      const className = metric === 'electricity' ? 'elec' : 'water';
+      target.innerHTML = data.months.map((m, i) => {
+        const v = series[i];
+        const pct = Math.round((v / max) * 100);
+        return `
+          <div class="bar-row">
+            <div class="bar-label">${m.slice(5)}</div>
+            <div class="bar-track">
+              <div class="bar-fill ${className}" style="width:${pct}%;"></div>
+            </div>
+            <div class="bar-value">${metric === 'electricity' ? Math.round(v) : v.toFixed(1)} ${unit}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAll() {
+      renderSummary();
+      renderTrendChart();
+      renderDailyChart();
+      renderCompare();
+    }
+
+    document.getElementById('metricSwitch').querySelectorAll('.opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('#metricSwitch .opt').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        metric = opt.dataset.value;
+        renderAll();
+      });
+    });
+
+    renderAll();
+    window.addEventListener('resize', () => {
+      chartTrend && chartTrend.resize();
+      chartDaily && chartDaily.resize();
+    });
+  </script>
+</body>
+</html>

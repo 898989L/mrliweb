@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智慧园区员工端 · 原型 v1 · 全部页面</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/nav.css">
+  <style>
+    body { background: #f4f6fa; }
+    .landing { max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; }
+    .landing-header { text-align: center; margin-bottom: 32px; }
+    .landing-title { font-size: 28px; font-weight: 700; color: var(--c-text); margin-bottom: 8px; }
+    .landing-sub { color: var(--c-text-sub); font-size: var(--fs-md); }
+    .landing-tip { display: inline-block; margin-top: 12px; padding: 6px 14px; background: var(--c-primary-soft); color: var(--c-primary); border-radius: var(--r-pill); font-size: var(--fs-sm); }
+
+    .role-overview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+    .role-card { background: #fff; border-radius: var(--r-md); padding: 16px; box-shadow: var(--sh-sm); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.15s; }
+    .role-card:hover { transform: translateY(-2px); box-shadow: var(--sh-md); }
+    .role-card-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--c-primary), var(--c-primary-light)); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; flex-shrink: 0; }
+    .role-card-name { font-size: var(--fs-md); font-weight: 600; color: var(--c-text); }
+    .role-card-desc { font-size: var(--fs-xs); color: var(--c-text-sub); margin-top: 2px; }
+
+    .page-group { background: #fff; border-radius: var(--r-md); padding: 16px 20px; margin-bottom: 16px; box-shadow: var(--sh-sm); }
+    .page-group-title { font-size: var(--fs-md); font-weight: 600; color: var(--c-text); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--c-line-soft); }
+    .page-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .page-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--c-bg); border-radius: var(--r-sm); color: var(--c-text); text-decoration: none; font-size: var(--fs-sm); transition: background 0.15s; }
+    .page-link:hover { background: var(--c-primary-soft); color: var(--c-primary); }
+    .page-link-icon { width: 28px; height: 28px; background: var(--c-primary); color: #fff; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+    .page-link-text { flex: 1; min-width: 0; }
+    .page-link-title { font-weight: 500; }
+    .page-link-sub { font-size: 11px; color: var(--c-text-sub); margin-top: 1px; }
+
+    @media (max-width: 720px) {
+      .role-overview { grid-template-columns: repeat(2, 1fr); }
+      .page-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="landing">
+    <div class="landing-header">
+      <div class="landing-title">智慧园区员工端 · 原型 v1</div>
+      <div class="landing-sub">基于 PRD v1 · 共 39 个独立 HTML 页面</div>
+      <div class="landing-tip">点击任意卡片进入对应页面 · 顶部有页面 / 角色 / 园区切换器</div>
+    </div>
+
+    <!-- 角色快速切换 -->
+    <div class="role-overview" id="roleOverview"></div>
+
+    <!-- 主 Tab 4 个 -->
+    <div class="page-group">
+      <div class="page-group-title">📱 主 Tab(4 个)</div>
+      <div class="page-grid">
+        <a class="page-link" href="pages/home.html"><div class="page-link-icon">首</div><div class="page-link-text"><div class="page-link-title">首页</div><div class="page-link-sub">关键数据 + 常用模块 + 待办</div></div></a>
+        <a class="page-link" href="pages/business.html"><div class="page-link-icon">业</div><div class="page-link-text"><div class="page-link-title">业务</div><div class="page-link-sub">按角色分组的模块入口</div></div></a>
+        <a class="page-link" href="pages/message.html"><div class="page-link-icon">消</div><div class="page-link-text"><div class="page-link-title">消息</div><div class="page-link-sub">待审批 / 待办 / 通知</div></div></a>
+        <a class="page-link" href="pages/me.html"><div class="page-link-icon">我</div><div class="page-link-text"><div class="page-link-title">我的</div><div class="page-link-sub">账户 / 业务 / 设置</div></div></a>
+      </div>
+    </div>
+
+    <!-- M03 巡检 -->
+    <div class="page-group">
+      <div class="page-group-title">🔍 M03 巡检(5 个)</div>
+      <div class="page-grid">
+        <a class="page-link" href="pages/inspection-list.html"><div class="page-link-icon" style="background:#2d5191;">巡</div><div class="page-link-text"><div class="page-link-title">任务列表</div><div class="page-link-sub">全部 / 待执行 / 已逾期</div></div></a>
+        <a class="page-link" href="pages/inspection-detail.html?id=i01"><div class="page-link-icon" style="background:#2d5191;">详</div><div class="page-link-text"><div class="page-link-title">任务详情</div><div class="page-link-sub">检查项 / 处理流水</div></div></a>
+        <a class="page-link" href="pages/inspection-execute.html?id=i01"><div class="page-link-icon" style="background:#2d5191;">录</div><div class="page-link-text"><div class="page-link-title">执行巡检</div><div class="page-link-sub">逐项录入结果 · 异常自动建工单</div></div></a>
+        <a class="page-link" href="pages/inspection-create.html"><div class="page-link-icon" style="background:#2d5191;">+</div><div class="page-link-text"><div class="page-link-title">新建巡检</div><div class="page-link-sub">选择类型 + 位置 + 时间</div></div></a>
+        <a class="page-link" href="pages/inspection-summary.html"><div class="page-link-icon" style="background:#2d5191;">汇</div><div class="page-link-text"><div class="page-link-title">巡检结果汇总</div><div class="page-link-sub">日/周/月 · 完成率 · 排名</div></div></a>
+      </div>
+    </div>
+
+    <!-- M04 工单 -->
+    <div class="page-group">
+      <div class="page-group-title">🛠️ M04 报修工单(3 个)</div>
+      <div class="page-grid">
+        <a class="page-link" href="pages/workorder-list.html"><div class="page-link-icon" style="background:#b22222;">单</div><div class="page-link-text"><div class="page-link-title">工单列表</div><div class="page-link-sub">按状态筛选</div></div></a>
+        <a class="page-link" href="pages/workorder-detail.html?id=w01"><div class="page-link-icon" style="background:#b22222;">详</div><div class="page-link-text"><div class="page-link-title">工单详情</div><div class="page-link-sub">接单 / 派单 / 处理 / 转单 / 催办</div></div></a>
+        <a class="page-link" href="pages/workorder-create.html"><div class="page-link-icon" style="background:#b22222;">+</div><div class="page-link-text"><div class="page-link-title">新建工单</div><div class="page-link-sub">租户报修登记</div></div></a>
+      </div>
+    </div>
+
+    <!-- M05 费用 -->
+    <div class="page-group">
+      <div class="page-group-title">💰 M05 费用(4 个)</div>
+      <div class="page-grid">
+        <a class="page-link" href="pages/fee-dashboard.html"><div class="page-link-icon" style="background:#d97706;">总</div><div class="page-link-text"><div class="page-link-title">费用中心</div><div class="page-link-sub">收缴率 + 催收排行</div></div></a>
+        <a class="page-link" href="pages/fee-bill-list.html"><div class="page-link-icon" style="background:#d97706;">票</div><div class="page-link-text"><div class="page-link-title">账单明细</div><div class="page-link-sub">全部 / 欠费 / 已结清</div></div></a>
+        <a class="page-link" href="pages/fee-bill-detail.html?id=b01"><div class="page-link-icon" style="background:#d97706;">详</div><div class="page-link-text"><div class="page-link-title">账单详情</div><div class="page-link-sub">催缴 + 录收款</div></div></a>
+        <a class="page-link" href="pages/fee-dunning-list.html"><div class="page-link-icon" style="background:#d97706;">流</div><div class="page-link-text"><div class="page-link-title">催缴流水</div><div class="page-link-sub">历史催收记录</div></div></a>
+      </div>
+    </div>
+
+    <!-- M06 水电 -->
+    <div class="page-group">
+      <div class="page-group-title">⚡ M06 水电(6 个)</div>
+      <div class="page-grid">
+        <a class="page-link" href="pages/utility-dashboard.html"><div class="page-link-icon" style="background:#0e7490;">总</div><div class="page-link-text"><div class="page-link-title">水电总览</div><div class="page-link-sub">当月 Hero + 8 家企业排名</div></div></a>
+        <a class="page-link" href="pages/utility-analysis.html"><div class="page-link-icon" style="background:#0e7490;">析</div><div class="page-link-text"><div class="page-link-title">水电分析</div><div class="page-link-sub">12 月预缴 vs 实际 + 水/电趋势 + 极值</div></div></a>
+        <a class="page-link" href="pages/utility-daily.html"><div class="page-link-icon" style="background:#0e7490;">日</div><div class="page-link-text"><div class="page-link-title">每日使用明细</div><div class="page-link-sub">近 30 天每日水/电 + 当日企业用量</div></div></a>
+        <a class="page-link" href="pages/utility-prepaid.html"><div class="page-link-icon" style="background:#0e7490;">预</div><div class="page-link-text"><div class="page-link-title">预缴管理</div><div class="page-link-sub">水/电使用 + 预缴余额 + 余额预警</div></div></a>
+        <a class="page-link" href="pages/utility-company.html"><div class="page-link-icon" style="background:#0e7490;">企</div><div class="page-link-text"><div class="page-link-title">企业用量</div><div class="page-link-sub">6 月趋势 + 预缴 vs 实际</div></div></a>
+        <a class="page-link" href="pages/utility-company-detail.html?id=c01"><div class="page-link-icon" style="background:#0e7490;">详</div><div class="page-link-text"><div class="page-link-title">企业用量详情</div><div class="page-link-sub">饼图 + 30 天 + 6 月趋势</div></div></a>
+      </div>
+    </div>
+
+    <!-- M07 合同 -->
+    <div class="page-group">
+      <div class="page-group-title">📄 M07 合同(4 个)</div>
+      <div class="page-grid">
+        <a class="page-link" href="pages/contract-list.html"><div class="page-link-icon" style="background:#7c3aed;">单</div><div class="page-link-text"><div class="page-link-title">合同列表</div><div class="page-link-sub">待审批 / 生效中 / 即将到期</div></div></a>
+        <a class="page-link" href="pages/contract-detail.html?id=ct01"><div class="page-link-icon" style="background:#7c3aed;">详</div><div class="page-link-text"><div class="page-link-title">合同详情</div><div class="page-link-sub">经理可审批 / 商务可续约</div></div></a>
+        <a class="page-link" href="pages/contract-create.html"><div class="page-link-icon" style="background:#7c3aed;">+</div><div class="page-link-text"><div class="page-link-title">新建合同</div><div class="page-link-sub">商务提交审批</div></div></a>
+        <a class="page-link" href="pages/contract-renewal.html"><div class="page-link-icon" style="background:#7c3aed;">提</div><div class="page-link-text"><div class="page-link-title">续约提醒</div><div class="page-link-sub">60/30/15/7 天节点</div></div></a>
+      </div>
+    </div>
+
+    <!-- M08 企业 -->
+    <div class="page-group">
+      <div class="page-group-title">🏢 M08 企业入驻(2 个)</div>
+      <div class="page-grid">
+        <a class="page-link" href="pages/company-list.html"><div class="page-link-icon" style="background:#138a3f;">列</div><div class="page-link-text"><div class="page-link-title">企业列表</div><div class="page-link-sub">8 家入驻企业 + 状态筛选</div></div></a>
+        <a class="page-link" href="pages/company-detail.html?id=c01"><div class="page-link-icon" style="background:#138a3f;">详</div><div class="page-link-text"><div class="page-link-title">企业详情</div><div class="page-link-sub">基本信息 + 合同 + 账单</div></div></a>
+      </div>
+    </div>
+
+    <!-- M09 单据 -->
+    <div class="page-group">
+      <div class="page-group-title">📋 M09 OA(6 个)</div>
+      <div class="page-grid">
+        <a class="page-link" href="pages/form-list.html"><div class="page-link-icon" style="background:#2d5191;">列</div><div class="page-link-text"><div class="page-link-title">单据列表</div><div class="page-link-sub">请假 / 报销 / 用印 筛选</div></div></a>
+        <a class="page-link" href="pages/form-detail.html?id=f01"><div class="page-link-icon" style="background:#2d5191;">详</div><div class="page-link-text"><div class="page-link-title">单据详情</div><div class="page-link-sub">流程时间线 + 当前节点审批</div></div></a>
+        <a class="page-link" href="pages/form-new.html"><div class="page-link-icon" style="background:#2d5191;">+</div><div class="page-link-text"><div class="page-link-title">新建单据</div><div class="page-link-sub">选择单据类型</div></div></a>
+        <a class="page-link" href="pages/form-leave.html"><div class="page-link-icon" style="background:#2d5191;">请</div><div class="page-link-text"><div class="page-link-title">请假申请</div><div class="page-link-sub">事假 / 病假 / 年假 / 调休</div></div></a>
+        <a class="page-link" href="pages/form-expense.html"><div class="page-link-icon" style="background:#2d5191;">报</div><div class="page-link-text"><div class="page-link-title">报销申请</div><div class="page-link-sub">差旅 / 日常 / 招待</div></div></a>
+        <a class="page-link" href="pages/form-seal.html"><div class="page-link-icon" style="background:#2d5191;">印</div><div class="page-link-text"><div class="page-link-title">用印申请</div><div class="page-link-sub">公章 / 合同章 / 法人章</div></div></a>
+      </div>
+    </div>
+
+    <!-- M10 会议 -->
+    <div class="page-group">
+      <div class="page-group-title">📅 M10 会议管理(3 个)</div>
+      <div class="page-grid">
+        <a class="page-link" href="pages/meeting-list.html"><div class="page-link-icon" style="background:#7c3aed;">列</div><div class="page-link-text"><div class="page-link-title">会议列表</div><div class="page-link-sub">即将开始 / 已结束</div></div></a>
+        <a class="page-link" href="pages/meeting-detail.html?id=m01"><div class="page-link-icon" style="background:#7c3aed;">详</div><div class="page-link-text"><div class="page-link-title">会议详情</div><div class="page-link-sub">确认 / 请假 / 取消</div></div></a>
+        <a class="page-link" href="pages/meeting-book.html"><div class="page-link-icon" style="background:#7c3aed;">+</div><div class="page-link-text"><div class="page-link-title">预定会议</div><div class="page-link-sub">主题 + 时间 + 会议室</div></div></a>
+      </div>
+    </div>
+
+    <!-- M11 停车 -->
+    <div class="page-group">
+      <div class="page-group-title">🚗 M11 停车记录(2 个)</div>
+      <div class="page-grid">
+        <a class="page-link" href="pages/parking-list.html"><div class="page-link-icon" style="background:#6b7280;">车</div><div class="page-link-text"><div class="page-link-title">停车记录</div><div class="page-link-sub">在场 / 已缴 / 欠费 筛选</div></div></a>
+        <a class="page-link" href="pages/parking-detail.html?id=p06"><div class="page-link-icon" style="background:#6b7280;">详</div><div class="page-link-text"><div class="page-link-title">停车详情</div><div class="page-link-sub">基础信息 + 关联企业 + 收款/催办</div></div></a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script>
+    /* 渲染 6 角色卡片 */
+    const ul = document.getElementById('roleOverview');
+    ul.innerHTML = ROLE_ORDER.map(rid => {
+      const r = ROLES[rid];
+      return `
+        <div class="role-card" onclick="setRole('${rid}')">
+          <div class="role-card-avatar">${r.short}</div>
+          <div>
+            <div class="role-card-name">${r.name}</div>
+            <div class="role-card-desc">${r.user} · ${r.focus}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    function setRole(rid) {
+      localStorage.setItem('roleId', rid);
+      window.location.href = 'pages/home.html';
+    }
+  </script>
+</body>
+</html>

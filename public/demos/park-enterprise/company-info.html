@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>入驻信息 · 智慧园区企业端</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .company-hero {
+      background: linear-gradient(135deg, #722ed1 0%, #9254de 100%);
+      color: #fff;
+      padding: 18px 16px 22px;
+      border-radius: 0 0 20px 20px;
+      margin-bottom: 12px;
+    }
+    .company-hero .row1 {
+      display: flex; gap: 12px; align-items: center;
+      margin-bottom: 12px;
+    }
+    .company-hero .logo {
+      width: 52px; height: 52px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+    .company-hero .name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .company-hero .sub-tags { display: flex; gap: 6px; align-items: center; }
+    .company-hero .sub-tags .tag-w {
+      background: rgba(255,255,255,0.25);
+      padding: 1px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      backdrop-filter: blur(4px);
+    }
+    .company-hero .sub-tags .tag-active {
+      background: rgba(0,181,120,0.9);
+      padding: 1px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+    .company-hero .room-line {
+      font-size: 13px;
+      opacity: 0.95;
+      display: flex; align-items: center; gap: 14px;
+      margin-top: 4px;
+    }
+    .company-hero .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .company-hero .stats .cell {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(6px);
+      border-radius: 10px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .company-hero .stats .cell .v {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .company-hero .stats .cell .v .unit { font-size: 11px; opacity: 0.85; font-weight: normal; margin-left: 2px; }
+    .company-hero .stats .cell .l { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+
+    .info-section {
+      margin: 0 12px 12px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+    .info-section .section-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .info-section .section-hd .ttl {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-1);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .info-section .section-hd .ttl::before {
+      content: '';
+      width: 3px; height: 14px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    .info-section .section-hd .edit {
+      font-size: 12px;
+      color: var(--primary);
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      padding: 8px 0;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .label {
+      width: 90px;
+      color: var(--text-3);
+      flex-shrink: 0;
+    }
+    .info-row .value {
+      flex: 1;
+      color: var(--text-1);
+      font-weight: 500;
+      word-break: break-all;
+    }
+    .info-row .value.code {
+      font-family: -apple-system, monospace;
+      font-size: 12px;
+    }
+    .info-row .value .tag-s {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: var(--primary-light);
+      color: var(--primary);
+      margin-left: 4px;
+    }
+    .info-row .action {
+      color: var(--primary);
+      font-size: 12px;
+    }
+
+    /* 合同进度卡 */
+    .contract-progress {
+      background: linear-gradient(135deg, #fff8e6 0%, #fffefa 100%);
+      border-radius: var(--radius);
+      padding: 14px;
+      border: 1px solid #ffe7a6;
+      margin-top: 12px;
+    }
+    .contract-progress .row1 {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px;
+    }
+    .contract-progress .row1 .l { font-size: 12px; color: var(--text-2); }
+    .contract-progress .row1 .v { font-size: 13px; font-weight: 600; color: var(--warning); }
+    .contract-progress .bar {
+      height: 8px;
+      background: #fff;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .contract-progress .bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--warning), #ffb049);
+      border-radius: 4px;
+      transition: width 0.6s;
+    }
+    .contract-progress .legend {
+      display: flex; justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-3);
+    }
+
+    .action-row {
+      display: flex; gap: 10px;
+      margin: 0 12px 12px;
+    }
+    .action-row .btn { flex: 1; padding: 11px 0; font-size: 14px; }
+
+    /* 通用 sheet/modal */
+    .sheet-mask {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1100;
+      display: none;
+      align-items: flex-end; justify-content: center;
+    }
+    .sheet-mask.show { display: flex; }
+    .sheet {
+      width: 100%; max-width: 750px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 16px 16px 0 0;
+      padding: 18px 18px calc(24px + 60px + env(safe-area-inset-bottom));
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .sheet .hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .sheet .hd .ttl { font-size: 17px; font-weight: 600; color: var(--text-1); }
+    .sheet .hd .close { color: var(--text-3); font-size: 24px; cursor: pointer; line-height: 1; }
+    .sheet .field { margin-bottom: 14px; }
+    .sheet .field .l { font-size: 13px; color: var(--text-2); margin-bottom: 6px; display: flex; align-items: center; }
+    .sheet .field .l .req { color: var(--danger); margin-right: 2px; }
+    .sheet .field .l .v { color: var(--text-1); font-weight: 500; }
+    .sheet .field input,
+    .sheet .field textarea,
+    .sheet .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-1);
+      background: var(--white);
+      font-family: inherit;
+    }
+    .sheet .field textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+    .sheet .field input:focus,
+    .sheet .field textarea:focus,
+    .sheet .field select:focus { border-color: var(--primary); outline: none; }
+    .sheet .submit-btn {
+      width: 100%; padding: 13px 0;
+      font-size: 15px; font-weight: 600;
+      margin-top: 6px;
+    }
+
+    /* 联系物业 sheet */
+    .contact-list { margin-top: 4px; }
+    .contact-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-row:last-child { border-bottom: none; }
+    .contact-row .icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .contact-row .icon svg { width: 18px; height: 18px; }
+    .contact-row .icon.blue { background: var(--primary-light); color: var(--primary); }
+    .contact-row .icon.orange { background: var(--warning-light); color: var(--warning); }
+    .contact-row .icon.green { background: var(--success-light); color: var(--success); }
+    .contact-row .body { flex: 1; min-width: 0; line-height: 1.5; }
+    .contact-row .body .l { font-size: 12px; color: var(--text-3); }
+    .contact-row .body .v {
+      font-size: 14px; color: var(--text-1); font-weight: 500;
+      margin-top: 2px; word-break: break-all;
+    }
+    .contact-row .go {
+      color: var(--primary); font-size: 13px;
+      flex-shrink: 0; margin-top: 18px;
+    }
+
+    /* 合同详情 sheet */
+    .contract-detail .row {
+      display: flex; justify-content: space-between;
+      padding: 11px 0;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+    }
+    .contract-detail .row:last-child { border-bottom: none; }
+    .contract-detail .row .l { color: var(--text-3); }
+    .contract-detail .row .v { color: var(--text-1); font-weight: 500; text-align: right; max-width: 60%; }
+    .contract-detail .clause {
+      margin-top: 14px; padding: 12px;
+      background: #fafafa; border-radius: 8px;
+      font-size: 12px; color: var(--text-2);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div id="topbar"></div>
+
+    <!-- Hero -->
+    <div class="company-hero">
+      <div class="row1">
+        <div class="logo" id="logoChar">蓝</div>
+        <div style="flex:1;">
+          <div class="name" id="companyName"></div>
+          <div class="sub-tags">
+            <span class="tag-w" id="industryTag"></span>
+            <span class="tag-active">已入驻</span>
+          </div>
+        </div>
+      </div>
+      <div class="room-line">
+        <span>🏢 <span id="park"></span></span>
+        <span>🚪 <span id="room"></span></span>
+      </div>
+      <div class="stats">
+        <div class="cell">
+          <div class="v" id="area">320<span class="unit">㎡</span></div>
+          <div class="l">租赁面积</div>
+        </div>
+        <div class="cell">
+          <div class="v" id="headcount">45<span class="unit">人</span></div>
+          <div class="l">员工人数</div>
+        </div>
+        <div class="cell">
+          <div class="v" id="months">22<span class="unit">月</span></div>
+          <div class="l">入驻时长</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 企业基本信息 -->
+    <div class="info-section">
+      <div class="section-hd">
+        <div class="ttl">企业基本信息</div>
+        <a href="javascript:void(0)" class="edit" onclick="openApplySheet('企业信息变更', '企业信息变更')">变更申请</a>
+      </div>
+      <div class="info-row">
+        <div class="label">企业全称</div>
+        <div class="value" id="fullName"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">信用代码</div>
+        <div class="value code" id="creditCode"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">所属行业</div>
+        <div class="value" id="industry"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">企业类型</div>
+        <div class="value" id="enterpriseType"></div>
+      </div>
+    </div>
+
+    <!-- 房源信息 -->
+    <div class="info-section">
+      <div class="section-hd">
+        <div class="ttl">房源信息</div>
+      </div>
+      <div class="info-row">
+        <div class="label">所在园区</div>
+        <div class="value" id="parkInfo"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">房间号</div>
+        <div class="value" id="roomInfo"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">使用面积</div>
+        <div class="value" id="areaInfo"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">用房用途</div>
+        <div class="value" id="typeInfo"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">入驻日期</div>
+        <div class="value" id="moveInDate"></div>
+      </div>
+    </div>
+
+    <!-- 联系信息 -->
+    <div class="info-section">
+      <div class="section-hd">
+        <div class="ttl">联系信息</div>
+        <a href="javascript:void(0)" class="edit" onclick="openApplySheet('修改联系信息', '联系信息修改')">修改</a>
+      </div>
+      <div class="info-row">
+        <div class="label">法定代表人</div>
+        <div class="value">
+          <span id="applicant"></span>
+          <span class="tag-s" id="applicantRole"></span>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="label">联系电话</div>
+        <div class="value" id="phone"></div>
+        <a href="javascript:void(0)" class="action" id="callPhone">拨打</a>
+      </div>
+      <div class="info-row">
+        <div class="label">联系邮箱</div>
+        <div class="value" id="email"></div>
+      </div>
+    </div>
+
+    <!-- 合同信息 -->
+    <div class="info-section">
+      <div class="section-hd">
+        <div class="ttl">合同信息</div>
+        <a href="javascript:void(0)" class="edit" onclick="openContractSheet()">查看合同</a>
+      </div>
+      <div class="info-row">
+        <div class="label">合同名称</div>
+        <div class="value" id="contractName"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">合同类型</div>
+        <div class="value" id="contractType"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">月租金</div>
+        <div class="value" id="contractRent"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">押金</div>
+        <div class="value" id="contractDeposit"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">支付方式</div>
+        <div class="value" id="paymentTerm"></div>
+      </div>
+      <div class="info-row">
+        <div class="label">合同期</div>
+        <div class="value" id="contractPeriod"></div>
+      </div>
+
+      <div class="contract-progress" id="contractProgress"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-outline" onclick="openApplySheet('合同续签', '续签申请')">续签申请</button>
+      <button class="btn btn-primary" onclick="openContactSheet()">联系物业</button>
+    </div>
+
+    <div style="height:12px;"></div>
+
+    <div id="tabbar"></div>
+  </div>
+
+  <!-- 联系物业 sheet -->
+  <div class="sheet-mask" id="contactMask" onclick="closeSheet('contactMask', event)">
+    <div class="sheet" onclick="event.stopPropagation()">
+      <div class="hd">
+        <div class="ttl">联系物业</div>
+        <span class="close" onclick="closeSheet('contactMask')">×</span>
+      </div>
+      <div class="contact-list">
+        <a href="tel:02112345678" class="contact-row">
+          <div class="icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div class="body"><div class="l">客服热线</div><div class="v">021-12345678</div></div>
+          <span class="go">拨打 ›</span>
+        </a>
+        <a href="mailto:service@smartpark.com" class="contact-row">
+          <div class="icon orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="body"><div class="l">物业邮箱</div><div class="v">service@smartpark.com</div></div>
+          <span class="go">发送 ›</span>
+        </a>
+        <div class="contact-row">
+          <div class="icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="body"><div class="l">办公地址</div><div class="v">上海市浦东新区张江高科技园区 100 号 A 座 3 楼</div></div>
+        </div>
+        <div class="contact-row">
+          <div class="icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="body"><div class="l">工作时间</div><div class="v">周一至周五 9:00-18:00</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 申请 sheet（变更/修改/续签 通用） -->
+  <div class="sheet-mask" id="applyMask" onclick="closeSheet('applyMask', event)">
+    <div class="sheet" onclick="event.stopPropagation()">
+      <div class="hd">
+        <div class="ttl" id="applyTitle">申请</div>
+        <span class="close" onclick="closeSheet('applyMask')">×</span>
+      </div>
+      <div class="field">
+        <div class="l">申请类型</div>
+        <div class="v" id="applyType" style="padding:8px 0;font-size:14px;">—</div>
+      </div>
+      <div class="field">
+        <div class="l"><span class="req">*</span>变更说明</div>
+        <textarea id="applyDesc" placeholder="请详细描述您的需求或变更内容（不少于 10 字）"></textarea>
+      </div>
+      <div class="field">
+        <div class="l"><span class="req">*</span>联系人</div>
+        <input type="text" id="applyContact" placeholder="联系人姓名">
+      </div>
+      <div class="field">
+        <div class="l"><span class="req">*</span>联系电话</div>
+        <input type="tel" id="applyPhone" placeholder="11 位手机号" maxlength="11">
+      </div>
+      <div class="field">
+        <div class="l">期望处理时间</div>
+        <input type="date" id="applyDate">
+      </div>
+      <button class="btn btn-primary btn-block btn-lg submit-btn" onclick="submitApply()">提交申请</button>
+    </div>
+  </div>
+
+  <!-- 合同详情 sheet -->
+  <div class="sheet-mask" id="contractMask" onclick="closeSheet('contractMask', event)">
+    <div class="sheet contract-detail" onclick="event.stopPropagation()">
+      <div class="hd">
+        <div class="ttl">合同详情</div>
+        <span class="close" onclick="closeSheet('contractMask')">×</span>
+      </div>
+      <div class="row"><span class="l">合同名称</span><span class="v" id="ctName"></span></div>
+      <div class="row"><span class="l">合同编号</span><span class="v" id="ctNo"></span></div>
+      <div class="row"><span class="l">合同类型</span><span class="v" id="ctType"></span></div>
+      <div class="row"><span class="l">甲方（出租方）</span><span class="v">智慧园区管理有限公司</span></div>
+      <div class="row"><span class="l">乙方（承租方）</span><span class="v" id="ctParty"></span></div>
+      <div class="row"><span class="l">租赁面积</span><span class="v" id="ctArea"></span></div>
+      <div class="row"><span class="l">月租金</span><span class="v" id="ctRent"></span></div>
+      <div class="row"><span class="l">押金</span><span class="v" id="ctDeposit"></span></div>
+      <div class="row"><span class="l">支付方式</span><span class="v" id="ctTerm"></span></div>
+      <div class="row"><span class="l">合同期</span><span class="v" id="ctPeriod"></span></div>
+      <div class="row"><span class="l">签订日期</span><span class="v" id="ctSign"></span></div>
+      <div class="clause">
+        <strong>主要条款：</strong><br>
+        1. 乙方应于每月 5 日前向甲方支付当月租金，逾期支付的，按日加收 0.5‰ 滞纳金。<br>
+        2. 租赁期内，水费、电费、网络费等公共事业费用由乙方承担。<br>
+        3. 乙方如需对房屋进行装修或改造，应提前 15 日书面通知甲方并取得书面同意。<br>
+        4. 合同期满，乙方应在 7 日内将房屋恢复原状交还甲方，逾期未交还按日租金 2 倍收取占用费。<br>
+        5. 任何一方提前解除合同，应提前 30 日书面通知对方，并支付相当于 2 个月租金的违约金。
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.getElementById('topbar').outerHTML = renderTopBar('入驻信息');
+    document.getElementById('tabbar').outerHTML = renderTabBar('');
+
+    const t = getCurrentTenant();
+    const c = MOCK.contract;
+
+    document.getElementById('logoChar').textContent = t.avatar;
+    document.getElementById('companyName').textContent = t.name;
+    document.getElementById('industryTag').textContent = t.industry;
+    document.getElementById('park').textContent = t.park;
+    document.getElementById('room').textContent = t.room;
+    document.getElementById('area').innerHTML = `${t.area}<span class="unit">㎡</span>`;
+    document.getElementById('headcount').innerHTML = `${t.headcount}<span class="unit">人</span>`;
+
+    // 计算入驻月数
+    const moveIn = new Date(t.moveIn);
+    const today = new Date('2026-06-02');
+    const months = Math.round((today - moveIn) / (1000 * 60 * 60 * 24 * 30));
+    document.getElementById('months').innerHTML = `${months}<span class="unit">月</span>`;
+
+    document.getElementById('fullName').textContent = t.name;
+    document.getElementById('creditCode').textContent = t.credit;
+    document.getElementById('industry').textContent = t.industry;
+    document.getElementById('enterpriseType').textContent = '有限责任公司';
+
+    document.getElementById('parkInfo').textContent = t.park;
+    document.getElementById('roomInfo').textContent = t.room;
+    document.getElementById('areaInfo').textContent = `${t.area} ㎡`;
+    document.getElementById('typeInfo').textContent = t.type;
+    document.getElementById('moveInDate').textContent = `${t.moveIn}（已入驻 ${months} 个月）`;
+
+    document.getElementById('applicant').textContent = t.applicant;
+    document.getElementById('applicantRole').textContent = t.role;
+    document.getElementById('phone').textContent = t.phone;
+    document.getElementById('email').textContent = t.email;
+
+    document.getElementById('contractName').textContent = c.name;
+    document.getElementById('contractType').textContent = c.type;
+    document.getElementById('contractRent').textContent = `${formatMoney(c.monthlyRent)} / 月`;
+    document.getElementById('contractDeposit').textContent = formatMoney(c.deposit);
+    document.getElementById('paymentTerm').textContent = c.paymentTerm;
+    document.getElementById('contractPeriod').textContent = `${c.start} 至 ${c.end}`;
+
+    // 合同进度
+    const start = new Date(c.start);
+    const end = new Date(c.end);
+    const totalDays = Math.round((end - start) / (1000 * 60 * 60 * 24));
+    const usedDays = Math.round((today - start) / (1000 * 60 * 60 * 24));
+    const leftDays = totalDays - usedDays;
+    const pct = Math.round(usedDays / totalDays * 100);
+    document.getElementById('contractProgress').innerHTML = `
+      <div class="row1">
+        <span class="l">合同剩余</span>
+        <span class="v">${leftDays} 天（约 ${Math.round(leftDays/30)} 个月）</span>
+      </div>
+      <div class="bar"><div class="fill" style="width:${pct}%;"></div></div>
+      <div class="legend">
+        <span>${c.start}</span>
+        <span>已使用 ${pct}%</span>
+        <span>${c.end}</span>
+      </div>
+    `;
+
+    // 拨打：真实 tel 链接
+    document.getElementById('callPhone').href = 'tel:' + t.phone;
+
+    // ========== Sheet 交互 ==========
+    function openSheet(id) { document.getElementById(id).classList.add('show'); }
+    function closeSheet(id, e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById(id).classList.remove('show');
+    }
+
+    // 联系物业
+    function openContactSheet() { openSheet('contactMask'); }
+
+    // 申请（变更/修改/续签 通用）
+    function openApplySheet(title, type) {
+      document.getElementById('applyTitle').textContent = title;
+      document.getElementById('applyType').textContent = type;
+      document.getElementById('applyContact').value = t.applicant;
+      document.getElementById('applyPhone').value = t.phone;
+      document.getElementById('applyDesc').value = '';
+      document.getElementById('applyDate').value = '';
+      openSheet('applyMask');
+    }
+
+    function submitApply() {
+      const desc = document.getElementById('applyDesc').value.trim();
+      const contact = document.getElementById('applyContact').value.trim();
+      const phone = document.getElementById('applyPhone').value.trim();
+      if (desc.length < 10) { showToast('变更说明请详细描述（不少于 10 字）'); return; }
+      if (!contact) { showToast('请填写联系人'); return; }
+      if (!/^1[3-9]\d{9}$/.test(phone)) { showToast('请填写正确的手机号'); return; }
+      const btn = document.querySelector('#applyMask .submit-btn');
+      btn.disabled = true; btn.textContent = '提交中...';
+      setTimeout(() => {
+        closeSheet('applyMask');
+        btn.disabled = false; btn.textContent = '提交申请';
+        showToast('申请已提交，物业将在 24h 内受理');
+      }, 800);
+    }
+
+    // 合同详情
+    function openContractSheet() {
+      document.getElementById('ctName').textContent = c.name;
+      document.getElementById('ctNo').textContent = c.no;
+      document.getElementById('ctType').textContent = c.type;
+      document.getElementById('ctParty').textContent = t.name;
+      document.getElementById('ctArea').textContent = `${t.area} ㎡`;
+      document.getElementById('ctRent').textContent = `${formatMoney(c.monthlyRent)} / 月`;
+      document.getElementById('ctDeposit').textContent = formatMoney(c.deposit);
+      document.getElementById('ctTerm').textContent = c.paymentTerm;
+      document.getElementById('ctPeriod').textContent = `${c.start} 至 ${c.end}`;
+      document.getElementById('ctSign').textContent = c.start;
+      openSheet('contractMask');
+    }
+  </script>
+</body>
+</html>

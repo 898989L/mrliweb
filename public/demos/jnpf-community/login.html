@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智慧社区 - 登录</title>
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <style>
+    .login-page {
+      min-height: 100vh;
+      background: linear-gradient(180deg, #1677ff 0%, #4096ff 35%, #F5F6F8 35%);
+      display: flex;
+      flex-direction: column;
+    }
+    .login-top {
+      padding: 80px 32px 40px;
+      text-align: center;
+      color: white;
+    }
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      background: white;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      color: var(--color-primary);
+    }
+    .login-logo svg { width: 44px; height: 44px; }
+    .login-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .login-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .login-content {
+      flex: 1;
+      padding: 0 32px;
+    }
+    .welcome-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      margin-bottom: 24px;
+    }
+    .welcome-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 12px;
+    }
+    .welcome-desc {
+      font-size: 14px;
+      color: var(--color-text-sub);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .btn-wechat {
+      width: 100%;
+      height: 48px;
+      background: #07C160;
+      color: white;
+      border-radius: 24px;
+      border: none;
+      font-size: 16px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(7, 193, 96, 0.3);
+    }
+    .btn-wechat:active { opacity: 0.85; }
+    .login-agreement {
+      text-align: center;
+      font-size: 12px;
+      color: var(--color-text-weak);
+      line-height: 1.6;
+    }
+    .login-agreement a {
+      color: var(--color-primary);
+    }
+    .features {
+      display: flex;
+      justify-content: space-around;
+      padding: 0 16px;
+    }
+    .feature-item {
+      text-align: center;
+      color: var(--color-text-sub);
+    }
+    .feature-item .icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 8px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    .feature-item .icon svg { width: 24px; height: 24px; }
+    .feature-item .icon.feat-blue { background: linear-gradient(135deg, #1677ff, #4096ff); }
+    .feature-item .icon.feat-orange { background: linear-gradient(135deg, #ff9500, #ffb049); }
+    .feature-item .icon.feat-cyan { background: linear-gradient(135deg, #13c2c2, #36cfc9); }
+    .feature-item .icon.feat-purple { background: linear-gradient(135deg, #722ed1, #9254de); }
+    .feature-item .label {
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame no-tab" style="margin: 24px auto;">
+    <div class="login-page">
+      <div class="login-top">
+        <div class="login-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"/><path d="M2 22h20"/><path d="M6 12h4"/><path d="M6 16h4"/><path d="M14 9h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
+        </div>
+        <div class="login-title">阳光花园智慧社区</div>
+        <div class="login-subtitle">您的社区生活好帮手</div>
+      </div>
+
+      <div class="login-content">
+        <div class="welcome-card">
+          <div class="welcome-text">欢迎使用</div>
+          <div class="welcome-desc">登录后即可查看社区通告、参与活动报名、办理社区事务、查询便民服务等。</div>
+          <button class="btn-wechat" onclick="doLogin()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M9.5 4C5.36 4 2 6.69 2 10c0 1.81 1 3.44 2.59 4.53L4 17l2.71-1.41c.85.21 1.76.34 2.71.36-.07-.31-.12-.63-.12-.95 0-3.31 3.13-6 7-6 .26 0 .51.02.76.04C16.4 6.41 13.21 4 9.5 4zm-2.5 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm5 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM16.5 10c-3.31 0-6 2.24-6 5s2.69 5 6 5c.6 0 1.18-.07 1.73-.2L20 21l-.39-1.71C21.34 18.34 22.5 16.78 22.5 15c0-2.76-2.69-5-6-5zm-2 3.5a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5zm4 0a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5z"/></svg>
+            微信一键登录
+          </button>
+        </div>
+
+        <div class="features">
+          <div class="feature-item">
+            <div class="icon feat-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            </div>
+            <div class="label">信息通知</div>
+          </div>
+          <div class="feature-item">
+            <div class="icon feat-orange">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>
+            </div>
+            <div class="label">活动参与</div>
+          </div>
+          <div class="feature-item">
+            <div class="icon feat-cyan">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>
+            </div>
+            <div class="label">事项办理</div>
+          </div>
+          <div class="feature-item">
+            <div class="icon feat-purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M8 9V5"/><path d="M16 9V5"/><path d="M3 9h18"/></svg>
+            </div>
+            <div class="label">便民服务</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 24px;">
+        <div class="login-agreement">
+          登录即表示已阅读并同意<br>
+          <a href="javascript:;">《用户服务协议》</a> 和 <a href="javascript:;">《隐私政策》</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script>
+    function doLogin() {
+      showToast('登录中...', 1200);
+      setTimeout(() => {
+        showToast('登录成功');
+        setTimeout(() => location.href = 'index.html', 600);
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
