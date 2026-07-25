@@ -11,30 +11,20 @@ export interface ExperienceItem {
 export const experiences: ExperienceItem[] = [
   {
     id: 'wansi',
-    period: '2025.08 — 至今',
-    company: '江西万思信息科技有限公司',
+    period: '2023.09 — 至今',
+    company: '万思信息技术有限公司',
     role: 'Java 后端 / AI 开发',
-    summary: '以 Java 业务落地为主，结合 Cursor / Claude 提升从需求到联调的交付效率。',
+    summary:
+      '负责 Java 业务落地与多端联调，参与 JNPF 数字政务 / 智慧社区、事件中心等交付；结合 Cursor / Claude 提升从需求到联调的效率。',
     bullets: [
-      '负责后端接口与联调，关键路径（事务、权限、兼容）人工把关',
-      '使用 AI Agent 辅助原型/需求到代码的实现，缩短迭代周期',
-      '按交付目标拆分任务，支撑兼职与项目制协作',
-    ],
-    stack: ['Java', 'Spring Boot', 'Cursor', 'Claude Code', '接口联调'],
-  },
-  {
-    id: 'youhuogan',
-    period: '2023.09 — 2025.08',
-    company: '福建省有活干数字科技股份有限公司',
-    role: 'Java 后端开发',
-    summary: '参与 JNPF 数字政务 / 智慧社区、事件中心等，完成低代码二次开发与业务模块落地。',
-    bullets: [
-      '参与智慧社区模块：党建、志愿、办事预约等 sc_* 业务与居民端 API',
+      '参与智慧社区模块：党建、志愿、办事预约等业务与居民端 API',
       '居民端按手机号鉴权查询个人数据，与 PC 低代码共用 PostgreSQL',
       '参与事件中心受理、分派、催办等流转及大屏/地图相关联调',
       '落地 Flowable 审批、onlineDev 表单与组织权限在项目中的配置与对接',
+      '负责后端接口与联调，关键路径（事务、权限、兼容）人工把关',
+      '使用 AI Agent 辅助原型/需求到代码的实现，缩短迭代周期',
     ],
-    stack: ['JNPF', 'Spring Boot', 'Flowable', 'PostgreSQL', 'uni-app', 'Vue3'],
+    stack: ['Java', 'Spring Boot', 'JNPF', 'Flowable', 'PostgreSQL', 'Cursor', 'Claude Code'],
   },
   {
     id: 'yitong',
