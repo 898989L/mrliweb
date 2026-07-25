@@ -12,6 +12,7 @@ import DeliveryNotes from './components/DeliveryNotes'
 import Strengths from './components/Strengths'
 import Contact from './components/Contact'
 import WaterRipple from './components/WaterRipple'
+import SmoothScrollbar from './components/SmoothScrollbar'
 import './App.css'
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
           <Contact />
         </main>
         <WaterRipple />
+        <SmoothScrollbar />
       </AccessGate>
     </>
   )

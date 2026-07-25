@@ -4,6 +4,9 @@
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  contain: strict;
+  transform: translateZ(0);
+  background: var(--bg-deep);
 }
 
 .video-bg__layer {
@@ -14,8 +17,8 @@
   object-fit: cover;
   opacity: 0;
   transition: opacity 2.2s ease;
-  filter: saturate(1.15) contrast(1.08) brightness(0.72);
-  transform: scale(1.04);
+  /* 亮度/对比交给 overlay，避免 video 上挂 CSS filter */
+  transform: translateZ(0) scale(1.04);
 }
 
 .video-bg__layer.is-active {
@@ -28,7 +31,7 @@
   background:
     radial-gradient(ellipse 70% 50% at 50% -10%, rgba(0, 212, 255, 0.16) 0%, transparent 55%),
     radial-gradient(ellipse 50% 40% at 90% 80%, rgba(56, 189, 248, 0.1) 0%, transparent 50%),
-    linear-gradient(180deg, rgba(5, 7, 12, 0.35) 0%, rgba(5, 7, 12, 0.55) 48%, rgba(5, 7, 12, 0.78) 100%);
+    linear-gradient(180deg, rgba(5, 7, 12, 0.45) 0%, rgba(5, 7, 12, 0.62) 48%, rgba(5, 7, 12, 0.84) 100%);
 }
 
 .video-bg__grid {
@@ -44,13 +47,11 @@
 
 .video-bg__glow {
   position: absolute;
-  width: 720px;
-  height: 720px;
-  top: -240px;
-  right: -140px;
+  width: 900px;
+  height: 900px;
+  top: -300px;
+  right: -200px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.16) 0%, transparent 68%);
-  filter: blur(50px);
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.18) 0%, rgba(0, 212, 255, 0.05) 35%, transparent 68%);
   opacity: 0.85;
 }
-

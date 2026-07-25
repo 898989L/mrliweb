@@ -78,7 +78,7 @@ export const archSystems: ArchSystem[] = [
     flows: [
       'PC 低代码维护 sc_* ↔ 小程序 /api/smartcommunity/app/** 一表互通',
       '事件受理 → 分派 → 反馈 → 归档/催办，ExternalEvent 外部接入',
-      'Mars3D 地图模式 + pureLargeScreen 态势大屏',
+      '地图展示端 + 事件/网格调度 + 图层资源后台（演示样例）',
     ],
   },
   {

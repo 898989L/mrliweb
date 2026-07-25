@@ -15,17 +15,14 @@
 }
 
 .project-card.glass {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02) 55%, rgba(0, 212, 255, 0.05));
+  background: linear-gradient(160deg, rgba(18, 24, 38, 0.94), rgba(10, 14, 24, 0.9) 55%, rgba(8, 22, 32, 0.92));
   border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
 }
 
 .project-card {
   border-radius: var(--radius);
   overflow: hidden;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease;
-  will-change: transform;
 }
 
 .project-card:hover {
@@ -53,11 +50,10 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   color: #4ade80;
-  background: rgba(8, 20, 14, 0.75);
+  background: rgba(8, 20, 14, 0.92);
   border: 1px solid rgba(74, 222, 128, 0.4);
   border-radius: 999px;
   padding: 4px 9px;
-  backdrop-filter: blur(6px);
 }
 
 .project-card__intranet {
@@ -69,23 +65,21 @@
   font-weight: 600;
   letter-spacing: 0.04em;
   color: #fbbf24;
-  background: rgba(28, 20, 8, 0.78);
+  background: rgba(28, 20, 8, 0.92);
   border: 1px solid rgba(251, 191, 36, 0.35);
   border-radius: 999px;
   padding: 4px 9px;
-  backdrop-filter: blur(6px);
 }
 
 .project-card__glow {
   position: absolute;
-  top: 20%;
+  top: 8%;
   left: 50%;
   transform: translateX(-50%);
-  width: 60%;
-  height: 120px;
-  background: var(--accent, #00d4ff);
-  opacity: 0.12;
-  filter: blur(60px);
+  width: 80%;
+  height: 180px;
+  background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.22) 0%, transparent 70%);
+  opacity: 0.7;
   pointer-events: none;
 }
 

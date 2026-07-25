@@ -124,8 +124,20 @@ export default function WaterRipple() {
     let heightField: Float32Array | null = null
     let heightPixels: Uint8Array | null = null
     let frameId = 0
+    let idleTimer = 0
     let lastMouse = { x: -1, y: -1, t: 0 }
+    let scrolling = false
+    let scrollTimer = 0
+    let idle = false
     const startTime = performance.now()
+
+    const scheduleTick = () => {
+      frameId = requestAnimationFrame(tick)
+    }
+
+    const scheduleIdlePoll = () => {
+      idleTimer = window.setTimeout(scheduleTick, 48)
+    }
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -228,17 +240,46 @@ export default function WaterRipple() {
       lastMouse = { x: touch.clientX, y: touch.clientY, t: now }
     }
 
+    const onScroll = () => {
+      scrolling = true
+      idle = false
+      window.clearTimeout(scrollTimer)
+      scrollTimer = window.setTimeout(() => {
+        scrolling = false
+      }, 80)
+    }
+
     const tick = () => {
       if (!heightField || !heightPixels) {
-        frameId = requestAnimationFrame(tick)
+        scheduleTick()
         return
       }
 
+      // 拖动滚动条时跳过 WebGL 绘制，避免与页面滚动抢帧
+      if (scrolling) {
+        scheduleTick()
+        return
+      }
+
+      let energy = 0
       for (let i = 0; i < heightField.length; i++) {
         heightField[i] *= DECAY
         if (Math.abs(heightField[i]) < 0.4) heightField[i] = 0
+        else energy += Math.abs(heightField[i])
       }
 
+      // 无波纹时降到低频轮询，不上传纹理
+      if (energy < 0.5) {
+        if (!idle) {
+          idle = true
+          gl.clearColor(0, 0, 0, 0)
+          gl.clear(gl.COLOR_BUFFER_BIT)
+        }
+        scheduleIdlePoll()
+        return
+      }
+
+      idle = false
       const maxH = 150
       for (let idx = 0; idx < heightField.length; idx++) {
         const norm = Math.min(255, Math.max(0, ((heightField[idx] / maxH) + 0.5) * 255))
@@ -266,19 +307,23 @@ export default function WaterRipple() {
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
 
-      frameId = requestAnimationFrame(tick)
+      scheduleTick()
     }
 
     resize()
-    tick()
+    scheduleTick()
 
     window.addEventListener('resize', resize)
+    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('touchmove', onTouchMove, { passive: true })
 
     return () => {
       cancelAnimationFrame(frameId)
+      window.clearTimeout(idleTimer)
+      window.clearTimeout(scrollTimer)
       window.removeEventListener('resize', resize)
+      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('touchmove', onTouchMove)
     }

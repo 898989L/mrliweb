@@ -1,11 +1,9 @@
 .main-content {
-
   position: relative;
-
   z-index: 2;
-
   overflow-x: clip;
-
+  /* 独立合成层，减轻拖动滚动条时与固定背景抢绘制 */
+  transform: translateZ(0);
 }
 
 

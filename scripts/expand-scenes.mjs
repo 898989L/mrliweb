@@ -85,10 +85,10 @@ const reactScenePacks = {
       ],
 `,
   'jnpf-event': `scenes: [
-        { id: 'dash', label: '态势总览', reactId: 'jnpf-event' },
-        { id: 'map', label: '地图模式', reactId: 'jnpf-event-map' },
-        { id: 'work', label: '工单处理', reactId: 'jnpf-event-work' },
-        { id: 'stats', label: '统计分析', reactId: 'jnpf-event-stats' },
+        { id: 'view', label: '地图展示', reactId: 'jnpf-event' },
+        { id: 'event', label: '事件管理', reactId: 'jnpf-event-work' },
+        { id: 'grid', label: '网格管理', reactId: 'jnpf-event-map' },
+        { id: 'admin', label: '图层后台', reactId: 'jnpf-event-stats' },
       ],
 `,
   'tally-book': `scenes: [

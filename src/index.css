@@ -18,7 +18,7 @@
   --font-display: 'Kanit', 'Space Grotesk', 'Noto Sans SC', sans-serif;
   --font-body: 'Noto Sans SC', 'Kanit', 'Space Grotesk', sans-serif;
   --font-art: 'PortfolioNameArt', 'STKaiti', 'KaiTi', 'SimKai', serif;
-  --glass-blur: blur(18px) saturate(160%);
+  /* 不用 backdrop-filter：会迫使主线程滚动，拖动滚动条必然跟不上鼠标 */
   --glass-shine: inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
@@ -35,8 +35,16 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   background: var(--bg-deep);
+  /* 隐藏原生滚动条，改用跟手的自定义滑块（与滚轮同一套即时滚动） */
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 html[data-motion='reduced'] *,
@@ -45,12 +53,6 @@ html[data-motion='reduced'] *::after {
   animation-duration: 0.01ms !important;
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html:not([data-motion='full']) {
-    scroll-behavior: auto;
-  }
 }
 
 :focus {
@@ -132,6 +134,8 @@ img {
   position: relative;
   z-index: 2;
   padding: 120px 0;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
 }
 
 .section--curve {
@@ -182,10 +186,13 @@ img {
 
 .glass {
   position: relative;
-  background: var(--bg-card);
+  background: linear-gradient(
+    155deg,
+    rgba(18, 24, 38, 0.92) 0%,
+    rgba(10, 14, 24, 0.88) 48%,
+    rgba(8, 18, 28, 0.9) 100%
+  );
   border: 1px solid var(--border);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   box-shadow:
     var(--glass-shine),
     0 18px 50px rgba(0, 0, 0, 0.28);
@@ -244,8 +251,7 @@ img {
   font-weight: 500;
   color: #e8f1f7;
   border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.08);
   letter-spacing: 0.06em;
   transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
 }
@@ -254,23 +260,6 @@ img {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(0, 212, 255, 0.45);
   transform: translateY(-1px);
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 212, 255, 0.35);
 }
 
 @media (max-width: 768px) {

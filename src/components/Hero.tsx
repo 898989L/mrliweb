@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { profile } from '../data/profile'
 import { asset } from '../utils/asset'
+import { smoothScrollToHash } from '../utils/smoothScroll'
 import SplitText from './SplitText'
 import RoleRotator from './RoleRotator'
 import './Hero.css'
@@ -64,11 +65,19 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.88, duration: 0.55 }}
           >
-            <a href="#projects" className="btn-primary hero__btn-glow">
+            <a
+              href="#projects"
+              className="btn-primary hero__btn-glow"
+              onClick={(e) => smoothScrollToHash('#projects', e)}
+            >
               查看项目
               <span aria-hidden="true">→</span>
             </a>
-            <a href="#contact" className="btn-ghost">
+            <a
+              href="#contact"
+              className="btn-ghost"
+              onClick={(e) => smoothScrollToHash('#contact', e)}
+            >
               联系我
             </a>
             {profile.links.resumePdf && (

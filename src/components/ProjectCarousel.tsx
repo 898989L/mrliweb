@@ -8,6 +8,7 @@ import './ProjectCarousel.css'
 
 const projectImages: Record<string, string> = {
   renyixuan: 'project-renyixuan.jpg',
+  'jnpf-event': 'project-jnpf-event.png',
 }
 
 const CARD_SPREAD = 440

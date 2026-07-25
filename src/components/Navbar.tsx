@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type MouseEvent } from 'react'
 import { profile } from '../data/profile'
+import { smoothScrollToHash } from '../utils/smoothScroll'
 import './Navbar.css'
 
 const navItems = [
@@ -17,7 +18,15 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    let last = window.scrollY > 40
+    setScrolled(last)
+    const onScroll = () => {
+      const next = window.scrollY > 40
+      if (next !== last) {
+        last = next
+        setScrolled(next)
+      }
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -31,10 +40,15 @@ export default function Navbar() {
 
   const closeMenu = () => setMenuOpen(false)
 
+  const onNavClick = (href: string) => (e: MouseEvent<HTMLAnchorElement>) => {
+    smoothScrollToHash(href, e)
+    closeMenu()
+  }
+
   return (
     <header className={`navbar ${scrolled ? 'is-scrolled' : ''} ${menuOpen ? 'is-open' : ''}`}>
       <div className="container navbar__inner">
-        <a href="#" className="navbar__brand" onClick={closeMenu}>
+        <a href="#" className="navbar__brand" onClick={onNavClick('#')}>
           <span className="navbar__brand-dot" />
           <span className="font-name navbar__brand-name">{profile.name}</span>
           <span className="navbar__brand-tag">{profile.brandTag}</span>
@@ -42,14 +56,14 @@ export default function Navbar() {
 
         <nav className="navbar__nav" aria-label="页面导航">
           {navItems.map((item) => (
-            <a key={item.href} href={item.href} className="navbar__link">
+            <a key={item.href} href={item.href} className="navbar__link" onClick={onNavClick(item.href)}>
               {item.label}
             </a>
           ))}
         </nav>
 
         <div className="navbar__right">
-          <a href="#contact" className="navbar__cta" onClick={closeMenu}>
+          <a href="#contact" className="navbar__cta" onClick={onNavClick('#contact')}>
             联系我
           </a>
           <button
@@ -74,11 +88,16 @@ export default function Navbar() {
       >
         <nav className="navbar__drawer-nav" aria-label="移动端导航">
           {navItems.map((item) => (
-            <a key={item.href} href={item.href} className="navbar__drawer-link" onClick={closeMenu}>
+            <a
+              key={item.href}
+              href={item.href}
+              className="navbar__drawer-link"
+              onClick={onNavClick(item.href)}
+            >
               {item.label}
             </a>
           ))}
-          <a href="#contact" className="navbar__drawer-cta" onClick={closeMenu}>
+          <a href="#contact" className="navbar__drawer-cta" onClick={onNavClick('#contact')}>
             联系我
           </a>
         </nav>

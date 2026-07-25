@@ -4,40 +4,41 @@
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
+  contain: strict;
+  transform: translateZ(0);
 }
 
+/* 用更大羽化渐变代替 filter:blur，避免拖动滚动条走主线程 */
 .atmosphere__orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
   opacity: 0.55;
-  will-change: transform;
 }
 
 .atmosphere__orb--a {
-  width: min(52vw, 680px);
-  height: min(52vw, 680px);
-  top: -12%;
-  left: -8%;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.45) 0%, rgba(0, 212, 255, 0) 70%);
+  width: min(72vw, 920px);
+  height: min(72vw, 920px);
+  top: -22%;
+  left: -16%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.38) 0%, rgba(0, 212, 255, 0.12) 28%, rgba(0, 212, 255, 0) 68%);
   animation: atmosphereFloatA 18s ease-in-out infinite;
 }
 
 .atmosphere__orb--b {
-  width: min(42vw, 520px);
-  height: min(42vw, 520px);
-  top: 28%;
-  right: -10%;
-  background: radial-gradient(circle, rgba(34, 211, 238, 0.28) 0%, rgba(14, 165, 233, 0) 70%);
+  width: min(60vw, 760px);
+  height: min(60vw, 760px);
+  top: 22%;
+  right: -18%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.24) 0%, rgba(14, 165, 233, 0.08) 32%, rgba(14, 165, 233, 0) 68%);
   animation: atmosphereFloatB 22s ease-in-out infinite;
 }
 
 .atmosphere__orb--c {
-  width: min(36vw, 420px);
-  height: min(36vw, 420px);
-  bottom: 4%;
-  left: 32%;
-  background: radial-gradient(circle, rgba(125, 211, 252, 0.18) 0%, transparent 70%);
+  width: min(50vw, 620px);
+  height: min(50vw, 620px);
+  bottom: -4%;
+  left: 26%;
+  background: radial-gradient(circle, rgba(125, 211, 252, 0.16) 0%, transparent 68%);
   animation: atmosphereFloatC 26s ease-in-out infinite;
 }
 
@@ -48,12 +49,11 @@
   background: linear-gradient(
     105deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.03) 42%,
-    rgba(0, 212, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.03) 58%,
+    rgba(255, 255, 255, 0.02) 42%,
+    rgba(0, 212, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.02) 58%,
     transparent 100%
   );
-  filter: blur(28px);
   animation: atmosphereBeam 14s ease-in-out infinite;
 }
 
@@ -89,4 +89,3 @@ html[data-motion='reduced'] .atmosphere__orb,
 html[data-motion='reduced'] .atmosphere__beam {
   animation: none;
 }
-

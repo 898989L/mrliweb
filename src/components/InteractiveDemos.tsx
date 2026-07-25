@@ -307,163 +307,454 @@ export function JnpfGovInteDemo() {
   )
 }
 
-/* ========== 事件中心 ========== */
-const EVENT_LIST = [
-  { id: 'e1', title: '城管 · 占道经营', grid: '东城网格 A3', status: '已分派', level: '一般' },
-  { id: 'e2', title: '环保 · 噪声投诉', grid: '西城网格 B1', status: '催办中', level: '紧急' },
-  { id: 'e3', title: '市政 · 井盖破损', grid: '南城网格 C2', status: '反馈中', level: '一般' },
-  { id: 'e4', title: '安监 · 施工围挡', grid: '北城网格 D4', status: '待受理', level: '紧急' },
+/* ========== 城市事件中心 GIS（虚构演示数据，已脱敏） ========== */
+const ASSET_PARCELS = [
+  { id: 'a1', name: '示范区厂房组团 A', type: '经营性资产', area: '2.4 万㎡', value: '¥1,280 万', cls: 'gold', style: { left: '18%', top: '28%', width: '22%', height: '18%' } },
+  { id: 'a2', name: '中心农贸市场', type: '商铺资产', area: '0.8 万㎡', value: '¥620 万', cls: 'green', style: { left: '48%', top: '36%', width: '18%', height: '14%' } },
+  { id: 'a3', name: '滨河生态林地', type: '资源林地', area: '5.1 万㎡', value: '¥960 万', cls: 'cyan', style: { left: '36%', top: '54%', width: '26%', height: '16%' } },
+  { id: 'a4', name: '社区光伏电站', type: '能源资产', area: '1.2 万㎡', value: '¥410 万', cls: 'purple', style: { left: '62%', top: '22%', width: '16%', height: '12%' } },
 ]
 
+const VIEW_LAYERS = [
+  { id: 'l1', name: '影像底图', on: true },
+  { id: 'l2', name: '行政区划', on: true },
+  { id: 'l3', name: '资产标绘', on: true },
+  { id: 'l4', name: '网格边界', on: true },
+  { id: 'l5', name: '在建工程', on: false },
+  { id: 'l6', name: '视频点位', on: false },
+]
+
+const EVENT_ROWS = [
+  { id: 'EV-2401', name: '占道经营劝导', type: '城管', time: '2026-07-25 09:12', status: '已分派', handler: '陈涛', level: '一般', grid: '东区 A3' },
+  { id: 'EV-2402', name: '夜间噪声投诉', type: '环保', time: '2026-07-25 08:40', status: '催办中', handler: '刘敏', level: '紧急', grid: '西区 B1' },
+  { id: 'EV-2403', name: '井盖破损上报', type: '市政', time: '2026-07-24 17:22', status: '反馈中', handler: '赵强', level: '一般', grid: '南区 C2' },
+  { id: 'EV-2404', name: '施工围挡倾倒', type: '安监', time: '2026-07-24 15:05', status: '待受理', handler: '—', level: '紧急', grid: '北区 D4' },
+  { id: 'EV-2405', name: '河道漂浮物清理', type: '水务', time: '2026-07-24 11:30', status: '已办结', handler: '陈涛', level: '一般', grid: '东区 A1' },
+]
+
+const GRID_WORKERS = [
+  { id: 'w1', name: '陈涛', grid: '东区网格 A3', phone: '138****6210', status: '在岗', tasks: 3 },
+  { id: 'w2', name: '刘敏', grid: '西区网格 B1', phone: '139****8842', status: '处置中', tasks: 5 },
+  { id: 'w3', name: '赵强', grid: '南区网格 C2', phone: '137****1056', status: '在岗', tasks: 2 },
+  { id: 'w4', name: '周倩', grid: '北区网格 D4', phone: '136****3391', status: '休假', tasks: 0 },
+]
+
+const LAYER_ROWS = [
+  { id: '1', name: '示范区 2024 影像', cat: '基础地理', path: '/tiles/demo-2024/{z}/{x}/{y}', owner: '运维', time: '2024-11-02', on: true },
+  { id: '2', name: '资产标绘矢量', cat: '专题数据', path: '/geojson/asset-parcels', owner: '运维', time: '2025-03-18', on: true },
+  { id: '3', name: '综治网格边界', cat: '行政区划', path: '/geojson/grid-boundary', owner: '系统', time: '2025-01-09', on: true },
+  { id: '4', name: '历史影像 2019', cat: '基础地理', path: '/tiles/demo-2019/{z}/{x}/{y}', owner: '运维', time: '2023-08-21', on: false },
+  { id: '5', name: '在建工程单体', cat: '专题数据', path: '/geojson/construction', owner: '工程办', time: '2026-02-14', on: false },
+]
+
+const SCENE_PAGES = [
+  { id: 's1', name: '资产统览页', scene: '资产云图', pages: 3 },
+  { id: 's2', name: '社区概况-网格', scene: '示范城区', pages: 4 },
+  { id: 's3', name: '民生监测', scene: '示范城区', pages: 2 },
+]
+
+/** 地图展示端（虚构色块 + 图层树） */
 export function JnpfEventDemo() {
   const { toast, show } = useToast()
-  const [filter, setFilter] = useState('全部')
-  const stats = [
-    { label: '今日事件', value: 86 },
-    { label: '已办结', value: 61 },
-    { label: '催办中', value: 7 },
-    { label: '网格员在线', value: 18 },
-  ]
+  const [theme, setTheme] = useState('资产云图')
+  const [layers, setLayers] = useState(VIEW_LAYERS)
+  const [picked, setPicked] = useState<string | null>('a1')
+  const [tool, setTool] = useState('漫游')
+  const asset = ASSET_PARCELS.find((a) => a.id === picked)
+  const showParcels = layers.find((l) => l.id === 'l3')?.on
 
   return (
-    <div className="idemo idemo--screen">
-      <header className="idemo__screen-head">
-        <h3>态势总览</h3>
-        <div className="idemo__seg dark">
-          {['全部', '紧急', '一般'].map((f) => (
-            <button key={f} type="button" className={filter === f ? 'is-active' : ''} onClick={() => setFilter(f)}>{f}</button>
-          ))}
+    <div className="idemo idemo--yitu">
+      <header className="idemo__yitu-head">
+        <div className="idemo__yitu-brand">
+          <span className="idemo__yitu-logo" />
+          <div>
+            <strong>示范城区 · 事件中心</strong>
+            <em>地图展示（演示）</em>
+          </div>
         </div>
+        <nav className="idemo__yitu-nav">
+          {['资产云图', '社区概况', '民生监测', '党建服务', '治安巡防'].map((t) => (
+            <button key={t} type="button" className={theme === t ? 'is-active' : ''} onClick={() => { setTheme(t); show(`已切换专题：${t}`) }}>{t}</button>
+          ))}
+        </nav>
+        <time>演示时间 · 脱敏样例</time>
       </header>
-      <div className="idemo__screen-body">
-        <div className="idemo__stats dark">
-          {stats.map((s) => (
-            <button key={s.label} type="button" className="idemo__stat-btn" onClick={() => show(`${s.label}：下钻明细已打开`)}>
-              <b>{s.value}</b><span>{s.label}</span>
+
+      <div className="idemo__yitu-body">
+        <aside className="idemo__yitu-side">
+          <h4>图层区</h4>
+          {layers.map((l) => (
+            <label key={l.id} className="idemo__yitu-layer">
+              <input
+                type="checkbox"
+                checked={l.on}
+                onChange={() => {
+                  setLayers((prev) => prev.map((x) => (x.id === l.id ? { ...x, on: !x.on } : x)))
+                  show(`${l.name} 已${l.on ? '关闭' : '开启'}`)
+                }}
+              />
+              <span>{l.name}</span>
+            </label>
+          ))}
+          <h4>工具区</h4>
+          <div className="idemo__yitu-tools">
+            {['漫游', '测量', '标注', '对比'].map((t) => (
+              <button key={t} type="button" className={tool === t ? 'is-active' : ''} onClick={() => { setTool(t); show(`工具：${t}`) }}>{t}</button>
+            ))}
+          </div>
+        </aside>
+
+        <div className="idemo__yitu-map">
+          <div className="idemo__yitu-sat" aria-hidden="true" />
+          {showParcels && ASSET_PARCELS.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              className={`idemo__parcel idemo__parcel--${p.cls} ${picked === p.id ? 'is-active' : ''}`}
+              style={p.style}
+              onClick={() => { setPicked(p.id); show(`已定位：${p.name}`) }}
+              title={p.name}
+            />
+          ))}
+          <div className="idemo__yitu-foot">
+            {['资产详情', '资源详情', '资产分布'].map((b) => (
+              <button key={b} type="button" onClick={() => show(`${b}面板已打开`)}>{b}</button>
+            ))}
+          </div>
+        </div>
+
+        <aside className="idemo__yitu-panel">
+          <div className="idemo__yitu-kpi">
+            <button type="button" onClick={() => show('资产总数下钻')}>
+              <b>128</b><span>标绘资产</span>
             </button>
-          ))}
-        </div>
-        <div className="idemo__chart-row">
-          {[40, 72, 55, 88, 60, 75, 48].map((h, i) => (
-            <button key={i} type="button" className="idemo__bar" style={{ height: `${h}%` }} onClick={() => show(`第 ${i + 1} 日：${h} 件`)} />
-          ))}
-        </div>
-        <div className="idemo__list dark-list">
-          {EVENT_LIST.filter((e) => filter === '全部' || e.level === filter).map((e) => (
-            <button key={e.id} type="button" className="idemo__row" onClick={() => show(`已定位到 ${e.grid}`)}>
-              <div><strong>{e.title}</strong><span>{e.grid}</span></div>
-              <em className="warn">{e.status}</em>
+            <button type="button" onClick={() => show('本月新增下钻')}>
+              <b>16</b><span>本月新增</span>
             </button>
-          ))}
-        </div>
+          </div>
+          <h4>{theme} · 列表</h4>
+          <div className="idemo__yitu-list">
+            {ASSET_PARCELS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                className={`idemo__yitu-item ${picked === p.id ? 'is-active' : ''}`}
+                onClick={() => setPicked(p.id)}
+              >
+                <i className={`dot ${p.cls}`} />
+                <div>
+                  <strong>{p.name}</strong>
+                  <span>{p.type} · {p.area}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+          {asset && (
+            <div className="idemo__yitu-detail">
+              <h5>{asset.name}</h5>
+              <p>类别：{asset.type}</p>
+              <p>面积：{asset.area}</p>
+              <p>估值：{asset.value}</p>
+              <p className="muted">虚构示意色块 · 按资产类别区分</p>
+              <button type="button" className="idemo__btn primary" onClick={() => show(`已打开 ${asset.name} 档案`)}>查看档案</button>
+            </div>
+          )}
+        </aside>
       </div>
       <ToastBar toast={toast} />
     </div>
   )
 }
 
+/** 网格员 / 网格化管理（演示） */
 export function JnpfEventMapDemo() {
   const { toast, show } = useToast()
-  const [picked, setPicked] = useState<string | null>(null)
-  const [worker, setWorker] = useState('网格员 · 陈涛')
+  const [workers, setWorkers] = useState(GRID_WORKERS)
+  const [picked, setPicked] = useState('w1')
+  const [task, setTask] = useState('井盖巡查复核')
+  const cur = workers.find((w) => w.id === picked)
 
   return (
-    <div className="idemo idemo--screen">
-      <header className="idemo__screen-head"><h3>地图模式 · Mars3D</h3></header>
-      <div className="idemo__map">
-        <div className="idemo__map-layer">三维底图 · 点击钉点分派</div>
-        {EVENT_LIST.map((e, i) => (
-          <button
-            key={e.id}
-            type="button"
-            className={`idemo__pin idemo__pin--${(i % 3) + 1} ${picked === e.id ? 'is-active' : ''}`}
-            onClick={() => setPicked(e.id)}
-          >
-            {e.title.split(' · ')[0]}
-          </button>
-        ))}
-      </div>
-      {picked && (
-        <div className="idemo__card dark-card">
-          <h4>{EVENT_LIST.find((e) => e.id === picked)?.title}</h4>
-          <label className="idemo__label light">分派给</label>
-          <select className="idemo__input dark" value={worker} onChange={(e) => setWorker(e.target.value)}>
-            <option>网格员 · 陈涛</option>
-            <option>网格员 · 刘敏</option>
-            <option>网格员 · 赵强</option>
-          </select>
-          <div className="idemo__actions">
-            <button type="button" className="idemo__btn primary" onClick={() => { show(`已分派给 ${worker}`); setPicked(null) }}>确认分派</button>
-            <button type="button" className="idemo__btn" onClick={() => setPicked(null)}>取消</button>
+    <div className="idemo idemo--admin idemo--gov">
+      <aside className="idemo__side">
+        <div className="idemo__brand">事件中心</div>
+        <div className="idemo__nav">事件大厅</div>
+        <div className="idemo__nav is-active">网格化管理</div>
+        <div className="idemo__nav is-active soft">网格员管理</div>
+        <div className="idemo__nav muted">指挥调度</div>
+        <div className="idemo__nav muted">地图展示</div>
+      </aside>
+      <main className="idemo__main">
+        <div className="idemo__toolbar">
+          <h3>网格员管理</h3>
+          <span className="idemo__badge">在岗 {workers.filter((w) => w.status !== '休假').length}</span>
+        </div>
+        <div className="idemo__split idemo__split--grid">
+          <div className="idemo__map idemo__map--grid">
+            <div className="idemo__map-layer">综治网格 · 点击网格员定位</div>
+            {workers.map((w, i) => (
+              <button
+                key={w.id}
+                type="button"
+                className={`idemo__pin idemo__pin--${(i % 3) + 1} ${picked === w.id ? 'is-active' : ''}`}
+                onClick={() => { setPicked(w.id); show(`已定位 ${w.name} · ${w.grid}`) }}
+              >
+                {w.name}
+              </button>
+            ))}
+          </div>
+          <div className="idemo__card">
+            <table className="idemo__table">
+              <thead>
+                <tr>
+                  <th>姓名</th><th>网格</th><th>状态</th><th>在办</th>
+                </tr>
+              </thead>
+              <tbody>
+                {workers.map((w) => (
+                  <tr key={w.id} className={picked === w.id ? 'is-active' : ''} onClick={() => setPicked(w.id)}>
+                    <td>{w.name}</td>
+                    <td>{w.grid}</td>
+                    <td><em className={w.status === '休假' ? 'muted' : w.status === '处置中' ? 'warn' : 'ok'}>{w.status}</em></td>
+                    <td>{w.tasks}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {cur && (
+              <div className="idemo__dispatch">
+                <h4>调度 · {cur.name}</h4>
+                <p>{cur.grid} · {cur.phone}</p>
+                <label className="idemo__label">下发任务</label>
+                <input className="idemo__input" value={task} onChange={(e) => setTask(e.target.value)} />
+                <div className="idemo__actions">
+                  <button
+                    type="button"
+                    className="idemo__btn primary"
+                    onClick={() => {
+                      setWorkers((p) => p.map((x) => (x.id === picked ? { ...x, status: '处置中', tasks: x.tasks + 1 } : x)))
+                      show(`已向 ${cur.name} 下发：${task}`)
+                    }}
+                  >
+                    确认调度
+                  </button>
+                  <button type="button" className="idemo__btn" onClick={() => show(`已呼叫 ${cur.phone}`)}>一键呼叫</button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </main>
       <ToastBar toast={toast} />
     </div>
   )
 }
 
+/** 事件管理 / 事件详情（演示） */
 export function JnpfEventWorkDemo() {
   const { toast, show } = useToast()
-  const [list, setList] = useState(EVENT_LIST)
-  const [id, setId] = useState<string | null>('e2')
+  const [list, setList] = useState(EVENT_ROWS)
+  const [filter, setFilter] = useState('全部')
+  const [id, setId] = useState<string | null>(null)
+  const [worker, setWorker] = useState('陈涛')
   const [note, setNote] = useState('')
+  const filtered = list.filter((e) => filter === '全部' || e.status === filter || e.level === filter)
   const cur = list.find((e) => e.id === id)
 
+  if (cur) {
+    return (
+      <div className="idemo idemo--admin idemo--gov">
+        <aside className="idemo__side">
+          <div className="idemo__brand">事件中心</div>
+          <div className="idemo__nav is-active">事件大厅</div>
+          <div className="idemo__nav muted">数据面板</div>
+          <div className="idemo__nav muted">智能调度</div>
+          <div className="idemo__nav muted">系统设置</div>
+        </aside>
+        <main className="idemo__main">
+          <button type="button" className="idemo__back" onClick={() => setId(null)}>← 返回事件列表</button>
+          <h3>事件详情 · {cur.id}</h3>
+          <div className="idemo__card">
+            <div className="idemo__kv">
+              <p><b>事件名称</b>{cur.name}</p>
+              <p><b>类型</b>{cur.type}</p>
+              <p><b>发生时间</b>{cur.time}</p>
+              <p><b>所属网格</b>{cur.grid}</p>
+              <p><b>紧急程度</b>{cur.level}</p>
+              <p><b>当前状态</b>{cur.status}</p>
+            </div>
+            <label className="idemo__label">分派网格员</label>
+            <select className="idemo__input" value={worker} onChange={(e) => setWorker(e.target.value)}>
+              {GRID_WORKERS.map((w) => <option key={w.id}>{w.name}</option>)}
+            </select>
+            <label className="idemo__label">处理意见</label>
+            <textarea className="idemo__textarea" rows={3} value={note} onChange={(e) => setNote(e.target.value)} placeholder="填写现场核查与处置说明…" />
+            <div className="idemo__actions">
+              <button type="button" className="idemo__btn primary" onClick={() => { setList((p) => p.map((x) => x.id === id ? { ...x, status: '已分派', handler: worker } : x)); show(`已分派给 ${worker}`); setId(null) }}>确认分派</button>
+              <button type="button" className="idemo__btn" onClick={() => { setList((p) => p.map((x) => x.id === id ? { ...x, status: '催办中' } : x)); show('已发起催办') }}>催办</button>
+              <button type="button" className="idemo__btn" onClick={() => { setList((p) => p.map((x) => x.id === id ? { ...x, status: '已办结' } : x)); show('已办结归档'); setId(null) }}>办结</button>
+            </div>
+          </div>
+        </main>
+        <ToastBar toast={toast} />
+      </div>
+    )
+  }
+
   return (
-    <div className="idemo idemo--screen">
-      <header className="idemo__screen-head"><h3>工单处理</h3></header>
-      <div className="idemo__split">
-        <div className="idemo__list dark-list">
-          {list.map((e) => (
-            <button key={e.id} type="button" className={`idemo__row ${id === e.id ? 'selected' : ''}`} onClick={() => setId(e.id)}>
-              <div><strong>{e.title}</strong><span>{e.grid}</span></div>
-              <em className="warn">{e.status}</em>
-            </button>
+    <div className="idemo idemo--admin idemo--gov">
+      <aside className="idemo__side">
+        <div className="idemo__brand">事件中心</div>
+        <div className="idemo__nav is-active">事件大厅</div>
+        <div className="idemo__nav muted">数据面板</div>
+        <div className="idemo__nav muted">智能调度</div>
+        <div className="idemo__nav muted">系统设置</div>
+      </aside>
+      <main className="idemo__main">
+        <div className="idemo__topnav">
+          {['首页', '工作台', '数据统计', '智能调度', '系统设置'].map((n, i) => (
+            <span key={n} className={i === 1 ? 'is-active' : ''}>{n}</span>
           ))}
         </div>
-        <div className="idemo__card dark-card">
-          <h4>{cur?.title}</h4>
-          <p>状态机：受理 → 分派 → 反馈 → 归档 / 催办 / 挂起</p>
-          <label className="idemo__label light">处理意见</label>
-          <textarea className="idemo__textarea dark" value={note} onChange={(e) => setNote(e.target.value)} placeholder="填写现场反馈…" rows={3} />
-          <div className="idemo__actions">
-            <button type="button" className="idemo__btn primary" onClick={() => { setList((p) => p.map((x) => x.id === id ? { ...x, status: '已办结' } : x)); show('已办结归档') }}>办结</button>
-            <button type="button" className="idemo__btn" onClick={() => { setList((p) => p.map((x) => x.id === id ? { ...x, status: '催办中' } : x)); show('已发起催办') }}>催办</button>
-            <button type="button" className="idemo__btn" onClick={() => { setList((p) => p.map((x) => x.id === id ? { ...x, status: '已挂起' } : x)); show('已挂起') }}>挂起</button>
+        <div className="idemo__toolbar">
+          <h3>事件管理</h3>
+          <div className="idemo__seg">
+            {['全部', '紧急', '待受理', '催办中', '已办结'].map((f) => (
+              <button key={f} type="button" className={filter === f ? 'is-active' : ''} onClick={() => setFilter(f)}>{f}</button>
+            ))}
           </div>
         </div>
-      </div>
+        <div className="idemo__table-wrap">
+          <table className="idemo__table">
+            <thead>
+              <tr>
+                <th>编号</th><th>事件名称</th><th>类型</th><th>发生时间</th><th>状态</th><th>处理人</th><th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((e) => (
+                <tr key={e.id}>
+                  <td>{e.id}</td>
+                  <td>{e.name}</td>
+                  <td>{e.type}</td>
+                  <td>{e.time}</td>
+                  <td><em className={e.status === '已办结' ? 'ok' : e.status === '催办中' || e.level === '紧急' ? 'warn' : 'muted'}>{e.status}</em></td>
+                  <td>{e.handler}</td>
+                  <td>
+                    <button type="button" className="idemo__link" onClick={() => setId(e.id)}>查看</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="idemo__tip">共 {filtered.length} 条 · 虚构演示数据</p>
+      </main>
       <ToastBar toast={toast} />
     </div>
   )
 }
 
+/** 图层资源 + 场景页面（演示） */
 export function JnpfEventStatsDemo() {
   const { toast, show } = useToast()
-  const [dim, setDim] = useState('按网格')
-  const rows = dim === '按网格'
-    ? [['东城 A3', '22'], ['西城 B1', '18'], ['南城 C2', '15'], ['北城 D4', '11']]
-    : [['城管', '30'], ['环保', '21'], ['市政', '19'], ['安监', '16']]
+  const [tab, setTab] = useState<'layer' | 'scene'>('layer')
+  const [layers, setLayers] = useState(LAYER_ROWS)
+  const [q, setQ] = useState('')
+  const rows = layers.filter((l) => !q || l.name.includes(q) || l.cat.includes(q))
 
   return (
-    <div className="idemo idemo--screen">
-      <header className="idemo__screen-head">
-        <h3>统计分析</h3>
-        <div className="idemo__seg dark">
-          {['按网格', '按类型'].map((d) => (
-            <button key={d} type="button" className={dim === d ? 'is-active' : ''} onClick={() => setDim(d)}>{d}</button>
-          ))}
-        </div>
-      </header>
-      <div className="idemo__list dark-list">
-        {rows.map(([k, v]) => (
-          <button key={k} type="button" className="idemo__row" onClick={() => show(`${k}：导出明细 ${v} 条`)}>
-            <div><strong>{k}</strong><span>{dim}统计</span></div>
-            <em className="ok">{v} 件</em>
+    <div className="idemo idemo--admin idemo--gov">
+      <aside className="idemo__side">
+        <div className="idemo__brand">图层后台</div>
+        <button type="button" className={`idemo__nav ${tab === 'layer' ? 'is-active' : ''}`} onClick={() => setTab('layer')}>图层资源管理</button>
+        <button type="button" className={`idemo__nav ${tab === 'scene' ? 'is-active' : ''}`} onClick={() => setTab('scene')}>场景页面设计</button>
+        <div className="idemo__nav muted">标绘图层管理</div>
+        <div className="idemo__nav muted">大文件图层</div>
+        <div className="idemo__nav muted">样式配置</div>
+      </aside>
+      <main className="idemo__main">
+        <div className="idemo__toolbar">
+          <h3>{tab === 'layer' ? '图层资源管理' : '场景页面设计'}</h3>
+          {tab === 'layer' && (
+            <input
+              className="idemo__input compact"
+              placeholder="搜索图层 / 分类"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+            />
+          )}
+          <button
+            type="button"
+            className="idemo__btn primary"
+            onClick={() => show(tab === 'layer' ? '打开：新增图层资源（大/小文件）' : '打开：创建场景向导')}
+          >
+            {tab === 'layer' ? '新增图层' : '创建场景'}
           </button>
-        ))}
-      </div>
+        </div>
+
+        {tab === 'layer' ? (
+          <div className="idemo__table-wrap">
+            <table className="idemo__table">
+              <thead>
+                <tr>
+                  <th>序号</th><th>图层名称</th><th>内容分类</th><th>资源路径</th><th>创建人</th><th>创建时间</th><th>状态</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((l) => (
+                  <tr key={l.id}>
+                    <td>{l.id}</td>
+                    <td>{l.name}</td>
+                    <td>{l.cat}</td>
+                    <td className="mono">{l.path}</td>
+                    <td>{l.owner}</td>
+                    <td>{l.time}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className={`idemo__switch ${l.on ? 'on' : ''}`}
+                        onClick={() => {
+                          setLayers((p) => p.map((x) => (x.id === l.id ? { ...x, on: !x.on } : x)))
+                          show(`${l.name} 已${l.on ? '停用' : '启用'}`)
+                        }}
+                      >
+                        {l.on ? '启用' : '停用'}
+                      </button>
+                    </td>
+                    <td>
+                      <button type="button" className="idemo__link" onClick={() => show(`编辑：${l.name}`)}>编辑</button>
+                      {' · '}
+                      <button type="button" className="idemo__link" onClick={() => show(`预览：${l.path}`)}>预览</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="idemo__scene-grid">
+            {SCENE_PAGES.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className="idemo__scene-card"
+                onClick={() => show(`进入场景设计：${s.name}（支持多页面与图层交互）`)}
+              >
+                <strong>{s.name}</strong>
+                <span>所属场景 · {s.scene}</span>
+                <em>{s.pages} 个页面编排</em>
+              </button>
+            ))}
+            <button type="button" className="idemo__scene-card add" onClick={() => show('复制页面 / 页面命名 / 图层交互事件')}>
+              <strong>+ 添加页面</strong>
+              <span>一场景多页面 · 图层交互</span>
+            </button>
+          </div>
+        )}
+        <p className="idemo__tip">虚构演示：图层资源、场景编排与样式配置能力示意</p>
+      </main>
       <ToastBar toast={toast} />
     </div>
   )
