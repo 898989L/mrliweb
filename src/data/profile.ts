@@ -20,7 +20,7 @@ export const profile = {
     gitee: '',
     resumePdf: '/resume.pdf',
     /** 浏览器下载时使用的文件名 */
-    resumeFileName: '李龙飞简历.pdf',
+    resumeFileName: 'Java开发工程师简历--李龙飞.pdf',
   },
   experienceYears: 4,
   intro: `我是一名兼具视觉设计思维与工程落地能力的创作者。从 UI/UX 到 Java 微服务后端，再到 Cursor、Claude Code 等 AI Agent 驱动的 Vibe Coding 开发，我习惯用设计驱动产品、用代码验证想法、用 AI 放大效率。`,
