@@ -90,7 +90,7 @@ export const profile = {
   name: '李龙飞',
   siteTitle: '李龙飞 | 资深Java后端 · 全栈交付 · AI开发',
   location: '江西 · 南昌',
-  phone: '15565040817',
+  phone: '17679319213',
   email: '15565040817@163.com',
   // timeline、stats、intro、bio ...
 }

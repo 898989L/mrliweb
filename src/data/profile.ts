@@ -12,7 +12,7 @@ export const profile = {
   tagline: '设计感知 · AI 驱动 · 工程落地',
   heroHighlight: '4 年 Java 微服务 · JNPF 低代码 · Claude Vibe Coding',
   location: '江西 · 南昌',
-  phone: '15565040817',
+  phone: '17679319213',
   email: '15565040817@163.com',
   /** 可选社交；内网项目不依赖 GitHub 证明，空则不显示 */
   links: {
